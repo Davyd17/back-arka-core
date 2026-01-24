@@ -1,0 +1,18 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'back-arka-core'
+
+include(":app-service",
+        ":usecase",
+        ":jpa-repository",
+        ":model")
+
+project(":app-service").projectDir = file("./application/app-service")
+project(":usecase").projectDir = file("./domain/usecase")
+project(":model").projectDir = file("./domain/model")
+project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/jpa-repository")
+

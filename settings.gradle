@@ -9,10 +9,13 @@ rootProject.name = 'back-arka-core'
 include(":app-service",
         ":usecase",
         ":jpa-repository",
-        ":model")
+        ":model",
+        ":api-rest")
 
 project(":app-service").projectDir = file("./application/app-service")
 project(":usecase").projectDir = file("./domain/usecase")
 project(":model").projectDir = file("./domain/model")
 project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/jpa-repository")
+project(":api-rest").projectDir = file("./infrastructure/entry-points/api-rest")
+
 

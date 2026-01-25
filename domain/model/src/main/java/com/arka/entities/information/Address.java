@@ -1,6 +1,6 @@
 package com.arka.entities.information;
 
-import com.arka.enums.AddressType;
+import com.arka.entities.enums.AddressType;
 import lombok.*;
 
 @Getter

@@ -3,7 +3,6 @@ package com.arka.entities.information;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -12,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Contact {
-    private Long id;
+    private Long contactId;
     private String name;
     private String lastName;
     private String company;

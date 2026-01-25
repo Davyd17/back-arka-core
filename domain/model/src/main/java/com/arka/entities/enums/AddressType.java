@@ -1,4 +1,4 @@
-package com.arka.enums;
+package com.arka.entities.enums;
 
 public enum AddressType {
     LOCATION,

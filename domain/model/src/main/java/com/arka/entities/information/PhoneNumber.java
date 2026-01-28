@@ -12,7 +12,7 @@ import java.time.Instant;
 public class PhoneNumber {
     private Long id;
     private String countryCode;
-    private short extension;
+    private String extension;
     private String phone;
     private boolean isActive;
     private Instant created_at;

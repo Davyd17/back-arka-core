@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ProductCategoryGateway {
 
-    Optional<ProductCategory> findProductCategoryByName(String name);
+    Optional<ProductCategory> findProductCategoryBySlug(String slug);
 }

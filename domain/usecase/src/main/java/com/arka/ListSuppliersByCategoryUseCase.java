@@ -15,16 +15,16 @@ public class ListSuppliersByCategoryUseCase {
     private final ProductCategoryGateway productCategoryGateway;
     private final SupplierGateway supplierGateway;
 
-    public List<Supplier> execute(String categoryName){
+    public List<Supplier> execute(String categorySlug){
 
         List<Supplier> foundSuppliers = new ArrayList<>();
 
         productCategoryGateway
-               .findProductCategoryByName(categoryName)
+               .findProductCategoryBySlug(categorySlug)
                .ifPresentOrElse(productCategory -> {
 
                    foundSuppliers.addAll(supplierGateway
-                           .GetSuppliersByProductCategoryId(productCategory.getId()));
+                           .getSuppliersByProductCategoryId(productCategory.getId()));
 
                }, () -> { throw new NotFoundException("Category not found");});
 

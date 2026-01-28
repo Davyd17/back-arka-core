@@ -1,0 +1,22 @@
+package com.arka.product;
+
+import com.arka.entities.product.ProductCategory;
+import com.arka.gateway.ProductCategoryGateway;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class ProductCategoryServiceAdapter implements ProductCategoryGateway {
+
+    private final ProductCategoryRepository repository;
+    private final ProductCategoryMapper mapper;
+
+    @Override
+    public Optional<ProductCategory> findProductCategoryBySlug(String slug) {
+        return repository.findBySlug(slug)
+                .map(mapper::toDomain);
+    }
+}

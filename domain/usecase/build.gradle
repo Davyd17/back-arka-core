@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    // NOTHING
+    implementation project(":model")
 }

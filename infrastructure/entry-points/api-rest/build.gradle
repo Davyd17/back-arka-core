@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(":model")
+    implementation project(":usecase")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
+
+//config to resolve SQL native query parameters
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << '-parameters'
+}

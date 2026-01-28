@@ -29,7 +29,8 @@ spring:
 
   sql:
     init:
-      mode: always
+      #Turn to never ones created the schema and papulated the data to avoid duplication errors
+      mode: never
       schema-locations: classpath:schema.sql
       data-locations: classpath:data.sql
 

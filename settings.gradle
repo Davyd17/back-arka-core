@@ -6,15 +6,15 @@ pluginManagement {
 
 rootProject.name = 'back-arka-core'
 
-include(":app-service",
-        ":usecase",
+include(":boot",
+        ":domain",
         ":jpa-repository",
-        ":model",
+        ":application",
         ":api-rest")
 
-project(":app-service").projectDir = file("./application/app-service")
-project(":usecase").projectDir = file("./domain/usecase")
-project(":model").projectDir = file("./domain/model")
+project(":boot").projectDir = file("./main-app/boot")
+project(":domain").projectDir = file("./core/domain")
+project(":application").projectDir = file("./core/application")
 project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/jpa-repository")
 project(":api-rest").projectDir = file("./infrastructure/entry-points/api-rest")
 

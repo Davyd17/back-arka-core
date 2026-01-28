@@ -1,6 +1,6 @@
 package com.arka.mappers;
 
-import com.arka.entities.product.ProductCategory;
+import com.arka.model.product.ProductCategory;
 import com.arka.response.ProductCategoryResponse;
 import org.mapstruct.Mapper;
 

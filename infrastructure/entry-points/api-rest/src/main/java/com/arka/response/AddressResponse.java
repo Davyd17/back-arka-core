@@ -1,6 +1,6 @@
 package com.arka.response;
 
-import com.arka.entities.enums.AddressType;
+import com.arka.model.enums.AddressType;
 
 public record AddressResponse(
         Long id,

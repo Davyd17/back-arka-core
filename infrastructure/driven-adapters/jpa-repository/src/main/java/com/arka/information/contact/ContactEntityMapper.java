@@ -1,6 +1,6 @@
 package com.arka.information.contact;
 
-import com.arka.entities.information.Contact;
+import com.arka.model.information.Contact;
 import com.arka.information.address.AddressEntityMapper;
 import com.arka.information.phonenumber.PhoneNumberEntityMapper;
 import org.mapstruct.Mapper;

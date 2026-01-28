@@ -1,6 +1,6 @@
 package com.arka.controller;
 
-import com.arka.ListSuppliersByCategoryUseCase;
+import com.arka.usecase.ListSuppliersByCategoryUseCase;
 import com.arka.mappers.SupplierResponseMapper;
 import com.arka.response.SupplierResponse;
 import jakarta.validation.constraints.NotBlank;

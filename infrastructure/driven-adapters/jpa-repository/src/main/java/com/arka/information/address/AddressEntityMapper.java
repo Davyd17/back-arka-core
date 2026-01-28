@@ -1,6 +1,6 @@
 package com.arka.information.address;
 
-import com.arka.entities.information.Address;
+import com.arka.model.information.Address;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

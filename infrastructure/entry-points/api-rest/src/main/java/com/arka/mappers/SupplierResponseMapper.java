@@ -1,6 +1,6 @@
 package com.arka.mappers;
 
-import com.arka.entities.party.Supplier;
+import com.arka.model.party.Supplier;
 import com.arka.response.SupplierResponse;
 import org.mapstruct.Mapper;
 

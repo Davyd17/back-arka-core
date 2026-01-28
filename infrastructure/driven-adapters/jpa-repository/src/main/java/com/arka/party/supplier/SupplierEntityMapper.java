@@ -1,6 +1,6 @@
 package com.arka.party.supplier;
 
-import com.arka.entities.party.Supplier;
+import com.arka.model.party.Supplier;
 import com.arka.information.contact.ContactEntityMapper;
 import org.mapstruct.Mapper;
 

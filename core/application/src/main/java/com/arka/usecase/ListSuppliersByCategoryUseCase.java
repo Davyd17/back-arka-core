@@ -1,6 +1,6 @@
 package com.arka.usecase;
 
-import com.arka.model.party.Supplier;
+import com.arka.model.Company;
 import com.arka.exceptions.NotFoundException;
 import com.arka.gateway.ProductCategoryGateway;
 import com.arka.gateway.SupplierGateway;
@@ -15,20 +15,20 @@ public class ListSuppliersByCategoryUseCase {
     private final ProductCategoryGateway productCategoryGateway;
     private final SupplierGateway supplierGateway;
 
-    public List<Supplier> execute(String categorySlug){
+    public List<Company> execute(String categorySlug){
 
-        List<Supplier> foundSuppliers = new ArrayList<>();
+        List<Company> foundCompanies = new ArrayList<>();
 
         productCategoryGateway
                .findProductCategoryBySlug(categorySlug)
                .ifPresentOrElse(productCategory -> {
 
-                   foundSuppliers.addAll(supplierGateway
+                   foundCompanies.addAll(supplierGateway
                            .getSuppliersByProductCategoryId(productCategory.getId()));
 
                }, () -> { throw new NotFoundException("Category not found");});
 
-        return foundSuppliers;
+        return foundCompanies;
 
     }
 }

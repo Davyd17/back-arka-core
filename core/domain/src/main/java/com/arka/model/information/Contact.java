@@ -14,7 +14,6 @@ public class Contact {
     private Long contactId;
     private String name;
     private String lastName;
-    private String company;
     private String position;
     private String email;
     private List<Address> addresses;

@@ -1,4 +1,4 @@
-package com.arka.party.employee;
+package com.arka.employee;
 
 import com.arka.information.contact.ContactEntity;
 import jakarta.persistence.*;

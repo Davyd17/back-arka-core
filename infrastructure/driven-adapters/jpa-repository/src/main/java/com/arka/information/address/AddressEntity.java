@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "addresses")
-public class AddressesEntity {
+public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class AddressesEntity {
     @Column(nullable = false)
     private boolean isActive;
 
-    public AddressesEntity() {
+    public AddressEntity() {
         this.isActive = true;
     }
 }

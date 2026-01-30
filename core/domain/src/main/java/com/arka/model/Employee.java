@@ -1,4 +1,4 @@
-package com.arka.model.party;
+package com.arka.model;
 
 import com.arka.model.information.Contact;
 import lombok.*;

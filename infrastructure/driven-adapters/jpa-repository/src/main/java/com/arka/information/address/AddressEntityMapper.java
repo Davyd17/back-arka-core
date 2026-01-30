@@ -8,5 +8,5 @@ import org.mapstruct.Mapping;
 public interface AddressEntityMapper {
 
     @Mapping(target = "isActive", constant = "true")
-    Address toDomain(AddressesEntity addressesEntity);
+    Address toDomain(AddressEntity addressEntity);
 }

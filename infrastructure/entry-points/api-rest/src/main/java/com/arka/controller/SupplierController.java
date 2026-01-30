@@ -2,7 +2,7 @@ package com.arka.controller;
 
 import com.arka.usecase.ListSuppliersByCategoryUseCase;
 import com.arka.mappers.SupplierResponseMapper;
-import com.arka.response.SupplierResponse;
+import com.arka.response.CompanyResponse;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ public class SupplierController {
     private final SupplierResponseMapper mapper;
 
     @GetMapping("/categories/{slug}")
-    public List<SupplierResponse> listByCategorySlug(@PathVariable @NotBlank String slug) {
+    public List<CompanyResponse> listByCategorySlug(@PathVariable @NotBlank String slug) {
 
         return listSupplierByCategory.execute(slug)
                         .stream()

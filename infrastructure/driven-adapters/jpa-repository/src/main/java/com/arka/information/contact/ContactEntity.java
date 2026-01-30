@@ -1,7 +1,9 @@
 package com.arka.information.contact;
 
-import com.arka.information.address.AddressesEntity;
+import com.arka.company.CompanyEntity;
+import com.arka.information.address.AddressEntity;
 import com.arka.information.phonenumber.PhoneNumberEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +32,6 @@ public class ContactEntity {
     private String lastName;
 
     @Column(nullable = false)
-    private String company;
-
-    @Column(nullable = false)
     private String position;
 
     @Column(unique = true, nullable = false)
@@ -47,17 +46,17 @@ public class ContactEntity {
     @Column(nullable = false)
     private boolean isActive;
 
-    @Column(nullable = false)
+    @Column(nullable = true, unique = true)
     private Long userId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "addresses_contacts",
-            joinColumns = @JoinColumn(name = "contact_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id",
-            nullable = false)
-    )
-    private List<AddressesEntity> addresses;
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    @JsonBackReference
+    private CompanyEntity company;
+
+    @OneToMany
+    @JoinColumn(name = "contact_id", nullable = false)
+    private List<AddressEntity> addresses;
 
     @OneToMany
     @JoinColumn(name = "contact_id", nullable = false)

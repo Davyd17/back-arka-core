@@ -2,13 +2,15 @@ package com.arka.response;
 
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 
-public record SupplierResponse (
-        Long supplierId,
+public record CompanyResponse(
+        Long id,
+        String name,
         Instant createdAt,
-        ContactResponse contact,
+        List<ContactResponse> contacts,
         Set<ProductCategoryResponse> productCategories
 ){
 

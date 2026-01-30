@@ -1,6 +1,6 @@
-package com.arka.party.supplier;
+package com.arka.company;
 
-import com.arka.model.party.Supplier;
+import com.arka.model.Company;
 import com.arka.gateway.SupplierGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,15 +9,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SupplierServiceAdapter implements SupplierGateway {
+public class CompanyServiceAdapter implements SupplierGateway {
 
-    private final SupplierRepository repository;
-    private final SupplierEntityMapper mapper;
+    private final CompanyRepository repository;
+    private final CompanyEntityMapper mapper;
 
     @Override
-    public List<Supplier> getSuppliersByProductCategoryId(Long categoryId) {
+    public List<Company> getSuppliersByProductCategoryId(Long categoryId) {
 
-        List<SupplierEntity> foundSuppliers =
+        List<CompanyEntity> foundSuppliers =
                 repository.getSuppliersByProductCategoryId(categoryId);
 
         if(!foundSuppliers.isEmpty()) {

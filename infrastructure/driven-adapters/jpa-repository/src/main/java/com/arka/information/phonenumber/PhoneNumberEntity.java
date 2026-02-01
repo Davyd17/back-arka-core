@@ -27,17 +27,17 @@ public class PhoneNumberEntity {
     @Column(nullable = false)
     private String phone;
 
-    @Column(nullable = false)
-    private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean active;
 
     @Column(nullable = false)
-    private Instant created_at;
+    private Instant createdAt;
 
-    @Column(nullable = false)
-    private Instant updated_at;
+    @Column(nullable = true)
+    private Instant updatedAt;
 
     public PhoneNumberEntity() {
-         this.created_at = Instant.now();
+         this.createdAt = Instant.now();
     }
 }
 

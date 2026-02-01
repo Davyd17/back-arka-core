@@ -1,4 +1,4 @@
-package com.arka.response;
+package com.arka.response.get;
 
 
 import java.time.Instant;
@@ -9,9 +9,9 @@ import java.util.Set;
 public record CompanyResponse(
         Long id,
         String name,
-        Instant createdAt,
         List<ContactResponse> contacts,
-        Set<ProductCategoryResponse> productCategories
+        Set<ProductCategoryResponse> productCategories,
+        Instant createdAt
 ){
 
 }

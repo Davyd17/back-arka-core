@@ -1,14 +1,12 @@
-package com.arka.response;
+package com.arka.response.get;
 
 import java.time.Instant;
 
 public record PhoneNumberResponse(
-        Long id,
         String countryCode,
         String extension,
         String phone,
-        boolean isActive,
-        Instant created_at,
-        Instant updated_at
+        boolean active,
+        Instant createdAt
 ) {
 }

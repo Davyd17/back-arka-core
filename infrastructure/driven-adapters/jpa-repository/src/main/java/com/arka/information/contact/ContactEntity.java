@@ -38,13 +38,13 @@ public class ContactEntity {
     private String email;
 
     @Column(nullable = false)
-    private Instant created_at;
+    private Instant createdAt;
 
     @Column(nullable = false)
-    private Instant updated_at;
+    private Instant updatedAt;
 
-    @Column(nullable = false)
-    private boolean isActive;
+    @Column(name = "is_active", nullable = false)
+    private boolean active;
 
     @Column(nullable = true, unique = true)
     private Long userId;

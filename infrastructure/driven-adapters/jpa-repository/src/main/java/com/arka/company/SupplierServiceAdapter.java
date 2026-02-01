@@ -9,9 +9,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CompanyServiceAdapter implements SupplierGateway {
+public class SupplierServiceAdapter implements SupplierGateway {
 
-    private final CompanyRepository repository;
+    private final SupplierRepository repository;
     private final CompanyEntityMapper mapper;
 
     @Override
@@ -21,9 +21,20 @@ public class CompanyServiceAdapter implements SupplierGateway {
                 repository.getSuppliersByProductCategoryId(categoryId);
 
         if(!foundSuppliers.isEmpty()) {
+
             return foundSuppliers.stream()
                     .map(mapper::toDomain)
                     .toList();
+
         } return List.of();
+    }
+
+    @Override
+    public Company createSupplier(Company supplier) {
+
+        CompanyEntity savedEntity = repository
+                .save(mapper.toEntity(supplier));
+
+        return mapper.toDomain(savedEntity);
     }
 }

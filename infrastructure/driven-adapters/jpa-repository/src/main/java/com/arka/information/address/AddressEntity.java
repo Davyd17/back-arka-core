@@ -2,15 +2,13 @@ package com.arka.information.address;
 
 import com.arka.model.enums.AddressType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "addresses")
@@ -39,10 +37,6 @@ public class AddressEntity {
     @Enumerated(EnumType.STRING)
     private AddressType type;
 
-    @Column(nullable = false)
-    private boolean isActive;
-
-    public AddressEntity() {
-        this.isActive = true;
-    }
+    @Column(name = "is_active", nullable = false)
+    private boolean active;
 }

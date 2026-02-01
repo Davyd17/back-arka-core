@@ -1,11 +1,10 @@
-package com.arka.response;
+package com.arka.response.get;
 
 import java.time.Instant;
 
 public record ProductCategoryResponse(
         Long id,
         String name,
-        Instant createdAt,
-        Instant updatedAt
+        Instant createdAt
 ) {
 }

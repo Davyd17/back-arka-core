@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<CompanyEntity, Long> {
+public interface SupplierRepository extends JpaRepository<CompanyEntity, Long> {
 
     @Query(value = """
             SELECT c.*

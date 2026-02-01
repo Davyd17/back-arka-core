@@ -4,18 +4,21 @@ import lombok.*;
 
 import java.time.Instant;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @Builder
-public class ProductCategory {
+public record ProductCategory(
+        Long id,
+        String name,
+        String slug,
+        Instant createdAt) {
 
-    private Long id;
-    private String name;
-    private Instant createdAt;
-    private Instant updatedAt;
-
-    public ProductCategory() {
-        this.createdAt = Instant.now();
+    public static ProductCategory create(
+            String name,
+            String slug
+    ) {
+        return ProductCategory.builder()
+                .name(name)
+                .slug(slug)
+                .createdAt(Instant.now())
+                .build();
     }
 }

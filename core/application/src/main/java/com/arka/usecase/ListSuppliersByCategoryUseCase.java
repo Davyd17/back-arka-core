@@ -24,7 +24,7 @@ public class ListSuppliersByCategoryUseCase {
                .ifPresentOrElse(productCategory -> {
 
                    foundCompanies.addAll(supplierGateway
-                           .getSuppliersByProductCategoryId(productCategory.getId()));
+                           .getSuppliersByProductCategoryId(productCategory.id()));
 
                }, () -> { throw new NotFoundException("Category not found");});
 

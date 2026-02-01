@@ -7,6 +7,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AddressEntityMapper {
 
-    @Mapping(target = "isActive", constant = "true")
     Address toDomain(AddressEntity addressEntity);
+
+    @Mapping(target = "id", ignore = true)
+    AddressEntity addressToEntity(Address domain);
 }

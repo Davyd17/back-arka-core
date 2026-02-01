@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Company {
@@ -21,4 +19,19 @@ public class Company {
     private Instant createdAt;
     private List<Contact> contacts;
     private Set<ProductCategory> productCategories;
+
+    public static Company create(
+            String name,
+            CompanyRelationType relation,
+            List<Contact> contacts,
+            Set<ProductCategory> productCategories
+    ){
+        return Company.builder()
+                .name(name)
+                .relation(relation)
+                .createdAt(Instant.now())
+                .contacts(List.copyOf(contacts))
+                .productCategories(Set.copyOf(productCategories))
+                .build();
+    }
 }

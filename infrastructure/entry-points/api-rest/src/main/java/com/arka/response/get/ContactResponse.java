@@ -1,4 +1,4 @@
-package com.arka.response;
+package com.arka.response.get;
 
 import java.time.Instant;
 import java.util.List;
@@ -11,9 +11,8 @@ public record ContactResponse(
         String email,
         List<AddressResponse> addresses,
         List<PhoneNumberResponse> phoneNumbers,
-        Instant created_at,
-        Instant updated_at,
-        boolean isActive,
+        Instant createdAt,
+        boolean active,
         Long userId
 ) {
 

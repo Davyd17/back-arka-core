@@ -3,18 +3,21 @@ package com.arka.model.information;
 import com.arka.model.enums.AddressType;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Address {
-    private Long id;
-    private String country;
-    private String city;
-    private String zipCode;
-    private String address;
-    private String notes;
-    private AddressType type;
-    private boolean isActive;
+@Builder(toBuilder = true)
+public record Address(
+        String country,
+        String city,
+        String zipCode,
+        String address,
+        String notes,
+        AddressType type,
+        boolean active)
+{
+
+    public static Address createSupplierAddress(Address address) {
+        return address.toBuilder()
+                .active(true)
+                .type(AddressType.SUPPLIER)
+                .build();
+    }
 }

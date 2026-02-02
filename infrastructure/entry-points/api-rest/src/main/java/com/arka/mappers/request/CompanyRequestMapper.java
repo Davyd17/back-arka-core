@@ -1,6 +1,6 @@
 package com.arka.mappers.request;
 
-import com.arka.dto.in.CreateCompany;
+import com.arka.dto.in.CreateCompanyIn;
 import com.arka.request.CreateCompanyRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +16,5 @@ public interface CompanyRequestMapper {
             @Mapping(target = "createdAt", ignore = true),
             @Mapping(target = "relation", ignore = true)
     })
-    CreateCompany toDomain(CreateCompanyRequest request);
+    CreateCompanyIn toDomain(CreateCompanyRequest request);
 }

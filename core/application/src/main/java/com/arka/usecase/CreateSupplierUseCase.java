@@ -1,6 +1,6 @@
 package com.arka.usecase;
 
-import com.arka.dto.in.CreateCompany;
+import com.arka.dto.in.CreateCompanyIn;
 
 import com.arka.gateway.SupplierGateway;
 import com.arka.model.Company;
@@ -23,7 +23,7 @@ public class CreateSupplierUseCase {
 
 
 
-    public Company execute(CreateCompany request) {
+    public Company execute(CreateCompanyIn request) {
 
         return Optional.ofNullable(request)
                 .map(r -> {

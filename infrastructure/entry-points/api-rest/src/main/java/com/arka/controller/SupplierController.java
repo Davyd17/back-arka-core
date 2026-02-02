@@ -4,7 +4,7 @@ import com.arka.mappers.request.CompanyRequestMapper;
 import com.arka.mappers.response.CompanySaveResponseMapper;
 import com.arka.model.Company;
 import com.arka.request.CreateCompanyRequest;
-import com.arka.response.save.CompanySaveResponse;
+import com.arka.response.save.CreateCompanyResponse;
 import com.arka.usecase.CreateSupplierUseCase;
 import com.arka.usecase.ListSuppliersByCategoryUseCase;
 import com.arka.mappers.response.CompanyResponseMapper;
@@ -44,7 +44,7 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<CompanySaveResponse> save(@Valid @RequestBody CreateCompanyRequest request){
+    public ResponseEntity<CreateCompanyResponse> save(@Valid @RequestBody CreateCompanyRequest request){
 
         Company savedSupplier = createSupplierUseCase
                 .execute(requestMapper.toDomain(request));

@@ -1,6 +1,6 @@
 package com.arka.request;
 
-import com.arka.dto.in.SlugProductCategory;
+import com.arka.dto.in.SlugProductCategoryIn;
 import com.arka.exceptions.Required;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,7 +20,7 @@ public record CreateProductRequest (
         Map<String, Object> attributes,
 
         @NotNull(message = "Missing required field: category slug")
-        SlugProductCategory slugCategory
+        SlugProductCategoryIn slugCategory
 ){
 
 }

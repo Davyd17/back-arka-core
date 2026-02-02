@@ -6,9 +6,9 @@ import com.arka.model.information.PhoneNumber;
 import com.arka.response.get.AddressResponse;
 import com.arka.response.get.ContactResponse;
 import com.arka.response.get.PhoneNumberResponse;
-import com.arka.response.save.AddressSaveResponse;
+import com.arka.response.save.CreateAddressResponse;
 import com.arka.response.save.ContactSaveResponse;
-import com.arka.response.save.PhoneNumberSaveResponse;
+import com.arka.response.save.CreatePhoneNumberResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
@@ -18,10 +18,10 @@ public interface ContactResponseMapper {
     ContactSaveResponse toSaveResponse(Contact domain);
 
     PhoneNumberResponse phoneToResponse(PhoneNumber domain);
-    PhoneNumberSaveResponse phoneNumberToSaveResponse(PhoneNumber domain);
+    CreatePhoneNumberResponse phoneNumberToSaveResponse(PhoneNumber domain);
 
     AddressResponse addressToResponse(Address domain);
-    AddressSaveResponse addressToSaveResponse(Address domain);
+    CreateAddressResponse addressToSaveResponse(Address domain);
 
 
 }

@@ -1,6 +1,6 @@
 package com.arka.response.save;
 
-public record AddressSaveResponse(
+public record CreateAddressResponse(
         String country,
         String city,
         String zipCode,

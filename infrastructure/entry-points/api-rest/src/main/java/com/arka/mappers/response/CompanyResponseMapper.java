@@ -2,7 +2,6 @@ package com.arka.mappers.response;
 
 import com.arka.model.Company;
 import com.arka.response.get.CompanyResponse;
-import com.arka.response.save.CompanySaveResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring",

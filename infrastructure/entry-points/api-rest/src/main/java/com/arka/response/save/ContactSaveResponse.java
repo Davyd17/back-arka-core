@@ -7,8 +7,8 @@ public record ContactSaveResponse(
         String lastName,
         String position,
         String email,
-        List<AddressSaveResponse> addresses,
-        List<PhoneNumberSaveResponse> phoneNumbers,
+        List<CreateAddressResponse> addresses,
+        List<CreatePhoneNumberResponse> phoneNumbers,
         Long userId
 ) {
 }

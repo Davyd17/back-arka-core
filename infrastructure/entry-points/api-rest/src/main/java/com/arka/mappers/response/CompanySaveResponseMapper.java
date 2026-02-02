@@ -1,7 +1,7 @@
 package com.arka.mappers.response;
 
 import com.arka.model.Company;
-import com.arka.response.save.CompanySaveResponse;
+import com.arka.response.save.CreateCompanyResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring",
@@ -10,5 +10,5 @@ import org.mapstruct.Mapper;
 
 public interface CompanySaveResponseMapper {
 
-    CompanySaveResponse toSaveResponse(Company domain);
+    CreateCompanyResponse toSaveResponse(Company domain);
 }

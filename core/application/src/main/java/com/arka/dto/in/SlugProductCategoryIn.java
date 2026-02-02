@@ -1,7 +1,7 @@
 package com.arka.dto.in;
 
 
-public record SlugProductCategory(
+public record SlugProductCategoryIn(
         String slug
 ) {
 }

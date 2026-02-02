@@ -1,6 +1,6 @@
 package com.arka.usecase;
 
-import com.arka.dto.in.CreateProduct;
+import com.arka.dto.in.CreateProductIn;
 import com.arka.dto.out.CreateProductOut;
 import com.arka.gateway.ProductGateway;
 import com.arka.mapper.CreateProductOutMapper;
@@ -22,7 +22,7 @@ public class CreateProductUseCase {
     private final CreateProductOutMapper outMapper =
             new CreateProductOutMapperImpl();
 
-    public CreateProductOut execute(CreateProduct request){
+    public CreateProductOut execute(CreateProductIn request){
 
         if(Objects.nonNull(request)){
 

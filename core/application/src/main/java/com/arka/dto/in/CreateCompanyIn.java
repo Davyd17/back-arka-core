@@ -13,12 +13,12 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @Getter
-public class CreateCompany {
+public class CreateCompanyIn {
 
     private String name;
     private CompanyRelationType relation;
     private List<Contact> contacts;
-    private Set<SlugProductCategory> slugProductCategories;
+    private Set<SlugProductCategoryIn> slugProductCategories;
     private Instant createdAt;
 
 }

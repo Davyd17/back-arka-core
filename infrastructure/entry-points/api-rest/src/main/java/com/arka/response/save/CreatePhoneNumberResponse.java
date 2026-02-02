@@ -1,6 +1,6 @@
 package com.arka.response.save;
 
-public record PhoneNumberSaveResponse(
+public record CreatePhoneNumberResponse(
         String countryCode,
         String extension,
         String phone

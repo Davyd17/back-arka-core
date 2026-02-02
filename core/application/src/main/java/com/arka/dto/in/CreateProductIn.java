@@ -2,11 +2,11 @@ package com.arka.dto.in;
 
 import java.util.Map;
 
-public record CreateProduct(
+public record CreateProductIn(
         String sku,
         String name,
         String description,
         Map<String, Object> attributes,
-        SlugProductCategory slugCategory
+        SlugProductCategoryIn slugCategory
 ) {
 }

@@ -1,6 +1,6 @@
 package com.arka.response.save;
 
-public record ProductCategorySaveResponse(
+public record CreateProductCategoryResponse(
         Long id
 ) {
 }

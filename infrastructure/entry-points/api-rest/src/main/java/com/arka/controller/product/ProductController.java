@@ -1,4 +1,4 @@
-package com.arka.controller;
+package com.arka.controller.product;
 
 import com.arka.dto.out.CreateProductOut;
 import com.arka.mappers.response.CreateResponseMapper;

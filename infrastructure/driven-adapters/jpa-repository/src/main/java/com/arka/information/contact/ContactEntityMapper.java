@@ -3,7 +3,6 @@ package com.arka.information.contact;
 import com.arka.model.information.Contact;
 import com.arka.information.address.AddressEntityMapper;
 import com.arka.information.phonenumber.PhoneNumberEntityMapper;
-import com.arka.product.ProductCategoryMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

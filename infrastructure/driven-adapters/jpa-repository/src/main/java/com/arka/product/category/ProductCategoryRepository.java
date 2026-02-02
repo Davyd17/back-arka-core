@@ -1,4 +1,4 @@
-package com.arka.product;
+package com.arka.product.category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

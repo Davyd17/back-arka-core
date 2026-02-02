@@ -1,6 +1,6 @@
 package com.arka.mappers.request;
 
-import com.arka.dto.request.CreateCompany;
+import com.arka.dto.in.CreateCompany;
 import com.arka.request.CreateCompanyRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

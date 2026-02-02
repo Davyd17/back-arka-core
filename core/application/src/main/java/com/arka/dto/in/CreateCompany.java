@@ -1,4 +1,4 @@
-package com.arka.dto.request;
+package com.arka.dto.in;
 
 import com.arka.model.enums.CompanyRelationType;
 import com.arka.model.information.Contact;

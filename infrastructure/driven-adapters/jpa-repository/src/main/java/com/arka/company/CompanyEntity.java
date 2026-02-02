@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.arka.product.ProductCategoryEntity;
+import com.arka.product.category.ProductCategoryEntity;
 
 import java.time.Instant;
 import java.util.List;

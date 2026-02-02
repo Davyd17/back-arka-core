@@ -1,4 +1,4 @@
-package com.arka.dto.request;
+package com.arka.dto.in;
 
 
 public record SlugProductCategory(

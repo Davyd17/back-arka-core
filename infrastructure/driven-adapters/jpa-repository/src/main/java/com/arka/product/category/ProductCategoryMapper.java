@@ -1,4 +1,4 @@
-package com.arka.product;
+package com.arka.product.category;
 
 import com.arka.model.product.ProductCategory;
 import org.mapstruct.Mapper;

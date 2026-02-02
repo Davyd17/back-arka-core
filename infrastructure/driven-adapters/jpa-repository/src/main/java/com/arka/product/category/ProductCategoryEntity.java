@@ -1,4 +1,4 @@
-package com.arka.product;
+package com.arka.product.category;
 
 import jakarta.persistence.*;
 import lombok.*;

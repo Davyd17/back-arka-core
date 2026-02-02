@@ -1,6 +1,6 @@
 package com.arka.usecase;
 
-import com.arka.dto.request.CreateCompany;
+import com.arka.dto.in.CreateCompany;
 
 import com.arka.gateway.SupplierGateway;
 import com.arka.model.Company;

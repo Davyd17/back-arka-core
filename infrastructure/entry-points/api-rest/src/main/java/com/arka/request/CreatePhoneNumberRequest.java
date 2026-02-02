@@ -1,17 +1,17 @@
 package com.arka.request;
 
+import com.arka.exceptions.Required;
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotBlank;
 
 public record CreatePhoneNumberRequest (
 
-        @NotBlank(message = "Country code required")
+        @Required(field = "country code")
         String countryCode,
 
         @Nullable
         String extension,
 
-        @NotBlank(message = "Phone required")
+        @Required(field = "phone")
         String phone
 ){
 }

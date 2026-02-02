@@ -1,13 +1,13 @@
 package com.arka.request;
 
-import jakarta.validation.constraints.NotBlank;
+import com.arka.exceptions.Required;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
 public record CreateCompanyRequest(
 
-        @NotBlank(message = "Missing name") String name,
+        @Required(field = "name") String name,
 
         @NotEmpty(message =
                 "There must be at least one contact")

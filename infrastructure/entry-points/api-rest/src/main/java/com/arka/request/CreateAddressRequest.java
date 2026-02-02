@@ -1,21 +1,22 @@
 package com.arka.request;
 
+import com.arka.exceptions.Required;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 
 
 public record CreateAddressRequest (
 
-        @NotBlank(message = "Missing country")
+        @Required(field = "Country")
         String country,
 
-        @NotBlank(message = "Missing city")
+        @Required(field = "City")
         String city,
 
         @Nullable
         String zipCode,
 
-        @NotBlank(message = "Missing address")
+        @Required(field = "Address")
         String address,
 
         @Nullable

@@ -12,7 +12,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Custom annotation to avoid to make the same message
- * manually each time we use @NotBlank
+ * manually each time we use @NotBlank.
+ * Example: "Missing required field: {field}"
  * @code @Required(field = "name")
  */
 

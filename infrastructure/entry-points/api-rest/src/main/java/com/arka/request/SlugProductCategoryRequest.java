@@ -1,10 +1,10 @@
 package com.arka.request;
 
-import jakarta.validation.constraints.NotBlank;
+import com.arka.exceptions.Required;
 
 public record SlugProductCategoryRequest(
 
-        @NotBlank(message = "Product category slug required")
+        @Required(field = "Category slug")
         String slug
 ) {
 }

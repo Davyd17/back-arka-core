@@ -1,7 +1,7 @@
 package com.arka.company;
 
 import com.arka.model.Company;
-import com.arka.gateway.SupplierGateway;
+import com.arka.gateway.party.SupplierGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,12 @@ public class SupplierServiceAdapter implements SupplierGateway {
     }
 
     @Override
-    public Company createSupplier(Company supplier) {
+    public Company getCompanyByName(String name) {
+        return mapper.toDomain(repository.getSupplierByName(name));
+    }
+
+    @Override
+    public Company createCompany(Company supplier) {
 
         CompanyEntity savedEntity = repository
                 .save(mapper.toEntity(supplier));

@@ -2,7 +2,7 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateCompanyIn;
 
-import com.arka.gateway.SupplierGateway;
+import com.arka.gateway.party.SupplierGateway;
 import com.arka.model.Company;
 import com.arka.model.enums.CompanyRelationType;
 import com.arka.model.factory.CompanyFactory;
@@ -36,7 +36,7 @@ public class CreateSupplierUseCase {
                             .collect(Collectors.toSet());
 
                     return supplierGateway
-                            .createSupplier(companyFactory
+                            .createCompany(companyFactory
                                     .createCompanyWithFullInfo(
                                             request.getName(),
                                             CompanyRelationType.SUPPLIER,

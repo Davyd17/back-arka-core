@@ -1,12 +1,11 @@
-package com.arka.gateway;
+package com.arka.gateway.party;
 
 import com.arka.model.Company;
 
 import java.util.List;
 
-public interface SupplierGateway {
+public interface SupplierGateway extends CompanyGateway{
 
     List<Company> getSuppliersByProductCategoryId(Long categoryId);
 
-    Company createSupplier(Company supplier);
 }

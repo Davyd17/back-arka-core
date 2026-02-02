@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class Company {
     private Long id;
     private String name;

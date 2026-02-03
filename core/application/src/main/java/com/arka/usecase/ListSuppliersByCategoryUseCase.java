@@ -3,7 +3,7 @@ package com.arka.usecase;
 import com.arka.model.Company;
 import com.arka.exceptions.NotFoundException;
 import com.arka.gateway.ProductCategoryGateway;
-import com.arka.gateway.SupplierGateway;
+import com.arka.gateway.party.SupplierGateway;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;

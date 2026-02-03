@@ -21,4 +21,11 @@ public interface SupplierRepository extends JpaRepository<CompanyEntity, Long> {
             nativeQuery = true
     )
     List<CompanyEntity> getSuppliersByProductCategoryId(@Param("categoryId") Long categoryId);
+
+    @Query("""
+            SELECT c
+            FROM CompanyEntity c
+            WHERE c.relation = 'SUPPLIER' AND c.id = :id
+            """)
+    CompanyEntity getSupplierById(@Param("id") Long id);
 }

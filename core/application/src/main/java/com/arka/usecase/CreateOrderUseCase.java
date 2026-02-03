@@ -4,6 +4,7 @@ import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.gateway.OrderGateway;
 import com.arka.mapper.CreateOrderMapper;
+import com.arka.mapper.CreateOrderMapperImpl;
 import com.arka.model.Company;
 import com.arka.model.Order;
 import com.arka.service.CompanyService;
@@ -15,7 +16,8 @@ import java.util.Objects;
 public class CreateOrderUseCase {
 
     private final OrderGateway orderGateway;
-    private final CreateOrderMapper createOrderMapper;
+    private final CreateOrderMapper createOrderMapper =
+            new CreateOrderMapperImpl();
     private final CompanyService companyService;
 
     public CreateOrderOut execute(CreateOrderIn createOrderIn){
@@ -23,8 +25,7 @@ public class CreateOrderUseCase {
         if(Objects.nonNull(createOrderIn)){
 
             Company embbededCompany = companyService
-                    .getCompanyByName(
-                            createOrderIn.company().name());
+                    .getCompanyById(createOrderIn.companyId().id());
 
             Order newOrder =
                     orderGateway.createOrder(

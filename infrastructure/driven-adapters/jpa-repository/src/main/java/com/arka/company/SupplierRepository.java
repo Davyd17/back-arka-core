@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<CompanyEntity, Long> {
@@ -26,7 +25,7 @@ public interface SupplierRepository extends JpaRepository<CompanyEntity, Long> {
     @Query("""
             SELECT c
             FROM CompanyEntity c
-            WHERE c.relation = 'SUPPLIER' AND c.name = :name
+            WHERE c.relation = 'SUPPLIER' AND c.id = :id
             """)
-    CompanyEntity getSupplierByName(@Param("name") String name);
+    CompanyEntity getSupplierById(@Param("id") Long id);
 }

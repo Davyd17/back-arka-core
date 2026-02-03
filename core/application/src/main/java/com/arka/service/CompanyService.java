@@ -5,6 +5,7 @@ import com.arka.gateway.party.CompanyGateway;
 import com.arka.model.Company;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -12,13 +13,13 @@ public class CompanyService {
 
     private final CompanyGateway companyGateway;
 
-    public Company getCompanyByName(String name) {
+    public Company getCompanyById(Long id) {
 
-        if(!name.isBlank()) {
+        if(Objects.nonNull(id)) {
 
-            return Optional.of(companyGateway.getCompanyByName(name))
+            return Optional.of(companyGateway.getCompanyById(id))
                     .orElseThrow(() -> new NotFoundException(
-                            String.format("Company %s not found", name)
+                            "Company not found, please enter a valid id"
                     ));
 
         } else throw new IllegalArgumentException("Name can't be null");

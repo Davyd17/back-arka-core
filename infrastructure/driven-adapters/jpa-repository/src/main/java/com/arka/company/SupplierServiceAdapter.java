@@ -30,8 +30,8 @@ public class SupplierServiceAdapter implements SupplierGateway {
     }
 
     @Override
-    public Company getCompanyByName(String name) {
-        return mapper.toDomain(repository.getSupplierByName(name));
+    public Company getCompanyById(Long id) {
+        return mapper.toDomain(repository.getSupplierById(id));
     }
 
     @Override

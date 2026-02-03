@@ -9,7 +9,7 @@ public record CreateOrderIn (
         OrderStatus status,
         String notes,
         OrderType type,
-        CompanyNameIn company
+        CompanyIdIn companyId
 ){
 
 }

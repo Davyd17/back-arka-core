@@ -4,6 +4,8 @@ server:
 spring:
   jackson:
     time-zone: UTC
+    deserialization:
+      accept_empty_string_as_null_object: true
 
   application:
     name: arka

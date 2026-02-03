@@ -4,7 +4,7 @@ import com.arka.model.Company;
 
 public interface CompanyGateway {
 
-    Company getCompanyByName(String name);
+    Company getCompanyById(Long id);
 
     Company createCompany(Company company);
 }

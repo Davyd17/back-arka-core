@@ -1,7 +1,7 @@
 package com.arka.controller;
 
 import com.arka.dto.out.CreateOrderOut;
-import com.arka.mappers.CreateOrderRequestMapper;
+import com.arka.mappers.request.CreateOrderRequestMapper;
 import com.arka.mappers.response.CreateOrderResponseMapper;
 import com.arka.request.CreateOrderRequest;
 import com.arka.response.save.CreateOrderResponse;

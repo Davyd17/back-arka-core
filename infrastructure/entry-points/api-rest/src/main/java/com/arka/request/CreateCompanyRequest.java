@@ -7,7 +7,7 @@ import java.util.List;
 
 public record CreateCompanyRequest(
 
-        @Required(field = "name") String name,
+        @Required(field = "id") String name,
 
         @NotEmpty(message =
                 "There must be at least one contact")

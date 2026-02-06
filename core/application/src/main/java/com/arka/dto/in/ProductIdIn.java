@@ -1,6 +1,6 @@
 package com.arka.dto.in;
 
-public record CompanyIdIn(
+public record ProductIdIn(
         Long id
-){
+) {
 }

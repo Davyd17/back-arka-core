@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +26,12 @@ public class ProductServiceAdapter implements ProductGateway {
         } else throw new IllegalArgumentException(
                 "Product can't be null");
 
+    }
+
+    @Override
+    public Optional<Product> findById(Long id) {
+
+        return repository.findById(id)
+                .map(mapper::toDomain);
     }
 }

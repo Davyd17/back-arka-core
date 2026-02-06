@@ -2,7 +2,6 @@ package com.arka.exceptions;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.lang.annotation.Retention;
@@ -15,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Custom annotation to avoid to make the same message
  * manually each time we use @NotNull.
  * Example: "Missing required field: {field}"
- * @code @Required(field = "name")
+ * @code @Required(field = "id")
  */
 
 @NotNull

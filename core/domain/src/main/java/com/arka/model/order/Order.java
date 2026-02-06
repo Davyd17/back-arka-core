@@ -1,11 +1,16 @@
-package com.arka.model;
+package com.arka.model.order;
 
+import com.arka.model.Company;
 import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
+import com.arka.model.product.Product;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Builder(toBuilder = true)
@@ -19,5 +24,6 @@ public class Order {
     private Instant createdAt;
     private Instant updatedAt;
     private Company company;
+    private Set<OrderItem> items;
 
 }

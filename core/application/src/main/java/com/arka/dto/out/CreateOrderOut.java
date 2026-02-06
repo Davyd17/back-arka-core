@@ -4,6 +4,7 @@ import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
 
 import java.time.Instant;
+import java.util.Set;
 
 public record CreateOrderOut (
 
@@ -13,6 +14,7 @@ public record CreateOrderOut (
         String notes,
         OrderType type,
         CompanyCreateOrderOut company,
+        Set<CreateOrderItemOut> items,
         Instant createdAt
 ){
 

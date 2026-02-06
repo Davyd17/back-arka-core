@@ -1,6 +1,6 @@
-package com.arka.gateway;
+package com.arka.gateway.order;
 
-import com.arka.model.Order;
+import com.arka.model.order.Order;
 
 public interface OrderGateway {
 

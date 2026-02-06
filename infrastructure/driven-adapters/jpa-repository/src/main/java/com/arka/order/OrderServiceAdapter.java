@@ -1,7 +1,7 @@
 package com.arka.order;
 
-import com.arka.gateway.OrderGateway;
-import com.arka.model.Order;
+import com.arka.gateway.order.OrderGateway;
+import com.arka.model.order.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +19,14 @@ public class OrderServiceAdapter implements OrderGateway {
 
         if(Objects.nonNull(newOrder)){
 
+            OrderEntity newOrderEntity = mapper.toEntity(newOrder);
+
+            newOrderEntity.getItems().forEach(item -> {
+                item.setOrder(newOrderEntity);
+            });
+
             OrderEntity savedOrder = repository
-                    .save(mapper.toEntity(newOrder));
+                    .save(newOrderEntity);
 
             return mapper.toDomain(savedOrder);
 

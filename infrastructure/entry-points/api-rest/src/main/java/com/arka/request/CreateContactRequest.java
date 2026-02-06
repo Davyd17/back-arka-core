@@ -14,7 +14,7 @@ public record CreateContactRequest(
         @Required(field = "Name")
         String name,
 
-        @Required(field = "Last name")
+        @Required(field = "Last id")
         String lastName,
 
         @Required(field = "Position")

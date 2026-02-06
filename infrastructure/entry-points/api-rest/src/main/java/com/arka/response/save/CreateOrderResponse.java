@@ -5,6 +5,7 @@ import com.arka.model.enums.OrderType;
 import com.arka.response.get.CompanyCreateOrderResponse;
 
 import java.time.Instant;
+import java.util.Set;
 
 public record CreateOrderResponse(
         Long id,
@@ -13,6 +14,7 @@ public record CreateOrderResponse(
         String notes,
         OrderType type,
         Instant createdAt,
+        Set<CreateOrderItemResponse> items,
         CompanyCreateOrderResponse company
 ) {
 }

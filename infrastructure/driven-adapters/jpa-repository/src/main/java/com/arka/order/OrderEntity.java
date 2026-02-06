@@ -3,6 +3,8 @@ package com.arka.order;
 import com.arka.company.CompanyEntity;
 import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
+import com.arka.order.item.OrderItemEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +14,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -49,4 +52,10 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
     private CompanyEntity company;
+
+    @OneToMany(mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
+    private Set<OrderItemEntity> items;
 }

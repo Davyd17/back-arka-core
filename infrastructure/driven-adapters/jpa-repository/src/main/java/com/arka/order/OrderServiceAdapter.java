@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +33,16 @@ public class OrderServiceAdapter implements OrderGateway {
 
         } else throw new IllegalArgumentException(
                 "Order can't be null");
+    }
+
+    @Override
+    public Optional<Order> findById(Long id) {
+
+        if(Objects.nonNull(id))
+            return repository.findById(id)
+                    .map(mapper::toDomain);
+
+        else throw new IllegalArgumentException(
+                "Order id can't be null");
     }
 }

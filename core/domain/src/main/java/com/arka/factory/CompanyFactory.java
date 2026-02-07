@@ -1,4 +1,4 @@
-package com.arka.model.factory;
+package com.arka.factory;
 
 import com.arka.model.Company;
 import com.arka.model.enums.CompanyRelationType;

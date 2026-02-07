@@ -5,6 +5,7 @@ import lombok.*;
 
 @Builder(toBuilder = true)
 public record Address(
+        Long id,
         String country,
         String city,
         String zipCode,

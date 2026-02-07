@@ -4,10 +4,9 @@ import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.in.CreateOrderItemIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.gateway.order.OrderGateway;
-import com.arka.mapper.CreateOrderItemMapper;
-import com.arka.mapper.CreateOrderItemMapperImpl;
-import com.arka.mapper.CreateOrderMapper;
-import com.arka.mapper.CreateOrderMapperImpl;
+import com.arka.mapper.*;
+import com.arka.mapper.OrderMapperImpl;
+import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
@@ -27,8 +26,8 @@ public class CreateOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    private final CreateOrderMapper createOrderMapper =
-            new CreateOrderMapperImpl();
+    private final OrderMapper orderMapper =
+            new OrderMapperImpl();
 
     private final CreateOrderItemMapper orderItemMapper =
             new CreateOrderItemMapperImpl();
@@ -56,7 +55,7 @@ public class CreateOrderUseCase {
 
             Order newOrder =
                     orderGateway.createOrder(
-                            createOrderMapper.toDomain(createOrderIn)
+                            orderMapper.toDomain(createOrderIn)
                     );
 
 
@@ -67,7 +66,7 @@ public class CreateOrderUseCase {
                                                 .get(createdItem.getProduct().getId()))
                                         .build()).collect(Collectors.toSet());
 
-            return createOrderMapper
+            return orderMapper
                     .toDTO(newOrder
                             .toBuilder()
                             .company(embbededCompany)

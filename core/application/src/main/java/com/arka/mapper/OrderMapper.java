@@ -2,6 +2,7 @@ package com.arka.mapper;
 
 import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
+import com.arka.dto.out.OrderSummaryOut;
 import com.arka.model.order.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +11,7 @@ import org.mapstruct.Mappings;
 @Mapper(uses =
         {CreateOrderItemMapper.class,
         CreateCompanyMapper.class})
-public interface CreateOrderMapper {
+public interface OrderMapper {
 
     @Mappings({
             @Mapping(target = "createdAt", ignore = true),
@@ -21,5 +22,7 @@ public interface CreateOrderMapper {
     Order toDomain(CreateOrderIn in);
 
     CreateOrderOut toDTO(Order domain);
+
+    OrderSummaryOut toSummaryDTO(Order domain);
 
 }

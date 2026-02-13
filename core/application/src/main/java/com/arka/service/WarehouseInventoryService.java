@@ -1,7 +1,7 @@
 package com.arka.service;
 
 import com.arka.exceptions.NotFoundException;
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.repository.inventory.WarehouseInventoryGateway;
 import com.arka.model.inventory.WarehouseInventory;
 import lombok.RequiredArgsConstructor;
 

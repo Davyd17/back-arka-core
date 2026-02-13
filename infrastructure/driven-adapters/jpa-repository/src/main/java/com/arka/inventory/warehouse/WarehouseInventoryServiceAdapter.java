@@ -1,10 +1,11 @@
 package com.arka.inventory.warehouse;
 
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.repository.inventory.WarehouseInventoryGateway;
 import com.arka.model.inventory.WarehouseInventory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,15 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
                  mapper.toEntity(inventory) ;
 
         return mapper.toDomain(repository.save(inventoryEntity));
+    }
+
+    @Override
+    public List<WarehouseInventory> listLowStockInventoryByWarehouseId(
+            Long warehouseInventoryId, int threshold) {
+
+        return repository.findLowStockInventoryByWarehouseId(warehouseInventoryId, threshold)
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

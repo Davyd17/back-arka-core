@@ -1,6 +1,6 @@
 package com.arka.order;
 
-import com.arka.gateway.order.OrderGateway;
+import com.arka.repository.order.OrderGateway;
 import com.arka.model.order.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

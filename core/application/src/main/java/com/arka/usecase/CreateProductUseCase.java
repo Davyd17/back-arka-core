@@ -2,7 +2,7 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateProductIn;
 import com.arka.dto.out.CreateProductOut;
-import com.arka.gateway.ProductGateway;
+import com.arka.repository.ProductGateway;
 import com.arka.mapper.CreateProductOutMapper;
 import com.arka.mapper.CreateProductOutMapperImpl;
 import com.arka.model.product.Product;

@@ -2,14 +2,11 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateShippingDetailIn;
 import com.arka.dto.out.ShippingDetailOut;
-import com.arka.gateway.ShippingDetailGateway;
+import com.arka.repository.ShippingDetailGateway;
 import com.arka.mapper.ShippingDetailMapper;
 import com.arka.mapper.ShippingDetailMapperImpl;
 import com.arka.model.ShippingDetail;
 import com.arka.model.enums.ShippingStatus;
-import com.arka.model.order.Order;
-import com.arka.service.AddressService;
-import com.arka.service.OrderService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

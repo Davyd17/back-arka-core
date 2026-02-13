@@ -1,8 +1,8 @@
 package com.arka.usecase;
 
 import com.arka.dto.in.CreateInventoryMovementIn;
-import com.arka.gateway.inventory.InventoryMovementGateway;
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.repository.inventory.InventoryMovementGateway;
+import com.arka.repository.inventory.WarehouseInventoryGateway;
 import com.arka.mapper.InventoryMovementMapper;
 import com.arka.mapper.InventoryMovementMapperImpl;
 import com.arka.model.Employee;

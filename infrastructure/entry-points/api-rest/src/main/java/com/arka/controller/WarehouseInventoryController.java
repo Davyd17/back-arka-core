@@ -1,15 +1,12 @@
 package com.arka.controller;
 
-import com.arka.mappers.WarehouseInventoryRestMapper;
-import com.arka.response.get.WarehouseInventoryResponse;
+import com.arka.service.export.ExportFormat;
 import com.arka.usecase.GenerateLowStockReportUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/warehouses-inventory")
@@ -18,16 +15,19 @@ public class WarehouseInventoryController {
 
     private final GenerateLowStockReportUseCase generateLowStockReportUseCase;
 
-    private final WarehouseInventoryRestMapper mapper;
+    @GetMapping("{warehouseInventoryId}/low-stock")
+    public final ResponseEntity<byte[]> getLowStockReport(
+            @PathVariable Long warehouseInventoryId,
+            @RequestParam(defaultValue = "40") int threshold){
 
-    @GetMapping("/low-stock/{warehouseInventoryId}")
-    public final List<WarehouseInventoryResponse> getLowStockReport(
-            @PathVariable Long warehouseInventoryId, int threshold){
+        byte[] csvReport = generateLowStockReportUseCase
+                .execute(warehouseInventoryId, threshold, ExportFormat.CSV);
 
-        return generateLowStockReportUseCase.execute(warehouseInventoryId, threshold)
-                .stream()
-                .map(mapper::toResponse)
-                .toList();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=low_stock_inventory.csv")
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(csvReport);
     }
 
 }

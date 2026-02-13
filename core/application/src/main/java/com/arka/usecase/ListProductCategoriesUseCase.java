@@ -1,6 +1,6 @@
 package com.arka.usecase;
 
-import com.arka.gateway.ProductCategoryGateway;
+import com.arka.repository.ProductCategoryGateway;
 import com.arka.model.product.ProductCategory;
 import lombok.RequiredArgsConstructor;
 

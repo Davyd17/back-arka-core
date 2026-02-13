@@ -1,4 +1,4 @@
-package com.arka.gateway.inventory;
+package com.arka.repository.inventory;
 
 import com.arka.model.inventory.WarehouseInventory;
 
@@ -12,5 +12,5 @@ public interface WarehouseInventoryGateway {
     WarehouseInventory save(WarehouseInventory inventory);
 
     List<WarehouseInventory> listLowStockInventoryByWarehouseId(
-            Long warehouseInventoryId, int threshold);
+            Long warehouseId, int threshold);
 }

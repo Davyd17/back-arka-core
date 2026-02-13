@@ -26,6 +26,6 @@ public interface WarehouseInventoryRepository
             WHERE i.warehouse.id = :warehouseId AND i.stock <= :threshold
             """)
     List<WarehouseInventoryEntity> findLowStockInventoryByWarehouseId(
-            @Param("warehouseInventoryId") Long warehouseInventoryId,
+            @Param("warehouseId") Long warehouseId,
             @Param("threshold") int threshold);
 }

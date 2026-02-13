@@ -1,6 +1,6 @@
 package com.arka.warehouse;
 
-import com.arka.gateway.WarehouseGateway;
+import com.arka.repository.WarehouseGateway;
 import com.arka.model.Warehouse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

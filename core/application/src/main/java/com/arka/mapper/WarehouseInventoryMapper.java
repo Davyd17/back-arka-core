@@ -1,11 +1,11 @@
 package com.arka.mapper;
 
-import com.arka.dto.out.WarehouseInventoryOut;
+import com.arka.dto.out.LowStockItemOut;
 import com.arka.model.inventory.WarehouseInventory;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(uses = ProductSummaryOutMapper.class)
 public interface WarehouseInventoryMapper {
 
-    WarehouseInventoryOut toOutDTO(WarehouseInventory warehouseInventory);
+    LowStockItemOut toOutDTO(WarehouseInventory warehouseInventory);
 }

@@ -1,4 +1,4 @@
-package com.arka.gateway;
+package com.arka.repository;
 
 import com.arka.model.Warehouse;
 

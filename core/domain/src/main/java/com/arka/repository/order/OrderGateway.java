@@ -1,4 +1,4 @@
-package com.arka.gateway.order;
+package com.arka.repository.order;
 
 import com.arka.model.order.Order;
 

@@ -15,11 +15,7 @@ import com.arka.service.CompanyService;
 import com.arka.service.ProductService;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class CreateOrderUseCase {
@@ -42,36 +38,32 @@ public class CreateOrderUseCase {
             Company embbededCompany = companyService
                     .getCompanyById(createOrderIn.companyId());
 
-            Map<Long, Product> foundProductWithId = new HashMap<>();
 
-            for (CreateOrderItemIn item :
-                    createOrderIn.items()) {
+            Set<OrderItem> embeddedOrderItems = new HashSet<>();
 
-                Product foundProduct =
-                        productService.findById(item.productId());
+            for (CreateOrderItemIn item : createOrderIn.items()){
 
-                foundProductWithId.put(foundProduct.getId(), foundProduct);
+                Product foundProduct = productService
+                        .findById(item.productId());
+
+                embeddedOrderItems.add(
+                        orderItemMapper.toDomain(item)
+                        .toBuilder()
+                        .product(foundProduct)
+                        .build());
             }
 
             Order newOrder =
                     orderGateway.createOrder(
                             orderMapper.toDomain(createOrderIn)
+                                    .toBuilder()
+                                    .company(embbededCompany)
+                                    .items(embeddedOrderItems)
+                                    .build()
                     );
 
-
-            Set<OrderItem> resolvedItems = newOrder
-                    .getItems().stream()
-                            .map(createdItem -> createdItem.toBuilder()
-                                        .product(foundProductWithId
-                                                .get(createdItem.getProduct().getId()))
-                                        .build()).collect(Collectors.toSet());
-
             return orderMapper
-                    .toDTO(newOrder
-                            .toBuilder()
-                            .company(embbededCompany)
-                            .items(resolvedItems)
-                            .build());
+                    .toDTO(newOrder);
 
         } else throw new IllegalArgumentException(
                 "Order can't be null"

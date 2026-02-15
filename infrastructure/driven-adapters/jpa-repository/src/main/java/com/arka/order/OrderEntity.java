@@ -33,7 +33,7 @@ public class OrderEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.PENDING;
 
     @Column(nullable = false)
     @CreationTimestamp

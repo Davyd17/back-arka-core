@@ -3,6 +3,8 @@ package com.arka.usecase;
 import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.in.CreateOrderItemIn;
 import com.arka.dto.out.CreateOrderOut;
+import com.arka.model.enums.OrderStatus;
+import com.arka.model.enums.OrderType;
 import com.arka.repository.order.OrderGateway;
 import com.arka.mapper.*;
 import com.arka.mapper.OrderMapperImpl;
@@ -13,12 +15,13 @@ import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
 import com.arka.service.CompanyService;
 import com.arka.service.ProductService;
+import com.arka.service.WarehouseInventoryService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
 @RequiredArgsConstructor
-public class CreateOrderUseCase {
+public class GenerateOrderUseCase {
 
     private final OrderGateway orderGateway;
 
@@ -30,6 +33,7 @@ public class CreateOrderUseCase {
 
     private final CompanyService companyService;
     private final ProductService productService;
+    private final WarehouseInventoryService inventoryService;
 
     public CreateOrderOut execute(CreateOrderIn createOrderIn) {
 
@@ -46,6 +50,10 @@ public class CreateOrderUseCase {
                 Product foundProduct = productService
                         .findById(item.productId());
 
+                if(createOrderIn.type().equals(OrderType.SALES))
+                    inventoryService.validateGeneralStockAvailability(
+                            foundProduct.getId(), item.quantity());
+
                 embeddedOrderItems.add(
                         orderItemMapper.toDomain(item)
                         .toBuilder()
@@ -57,6 +65,7 @@ public class CreateOrderUseCase {
                     orderGateway.createOrder(
                             orderMapper.toDomain(createOrderIn)
                                     .toBuilder()
+                                    .status(OrderStatus.PENDING)
                                     .company(embbededCompany)
                                     .items(embeddedOrderItems)
                                     .build()

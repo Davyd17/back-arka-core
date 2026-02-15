@@ -1,5 +1,6 @@
 package com.arka.service;
 
+import com.arka.exceptions.InsufficientStockException;
 import com.arka.exceptions.NotFoundException;
 import com.arka.repository.inventory.WarehouseInventoryGateway;
 import com.arka.model.inventory.WarehouseInventory;
@@ -24,5 +25,18 @@ public class WarehouseInventoryService {
                                 "No inventory found for product %d in warehouse %d",
                                 productId, warehouseId)
                 ));
+    }
+
+    public void validateGeneralStockAvailability(Long productId, int quantity) {
+
+        int totalStock = gateway.getTotalStockByProductId(productId);
+
+        if (totalStock < quantity) {
+            throw new InsufficientStockException(
+                    String.format(
+                            "Insufficient stock for product id %d. Available: %d, Required: %d",
+                            productId, totalStock, quantity)
+            );
+        }
     }
 }

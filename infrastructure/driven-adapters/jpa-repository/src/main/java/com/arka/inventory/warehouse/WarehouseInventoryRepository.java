@@ -28,4 +28,10 @@ public interface WarehouseInventoryRepository
     List<WarehouseInventoryEntity> findLowStockInventoryByWarehouseId(
             @Param("warehouseId") Long warehouseId,
             @Param("threshold") int threshold);
+
+    @Query("""
+            SELECT SUM(i.stock) FROM WarehouseInventoryEntity i
+            WHERE i.product.id = :productId
+            """)
+    int getTotalStockByProductId(@Param("productId") Long productId);
 }

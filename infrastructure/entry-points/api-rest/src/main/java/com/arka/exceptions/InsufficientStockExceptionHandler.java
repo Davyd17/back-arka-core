@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
-public class NotFoundExceptionHandler {
+public class InsufficientStockExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException (NotFoundException ex){
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientStock(InsufficientStockException ex) {
+
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(
-                        "NOT_FOUND",
+                        "INSUFFICIENT_STOCK",
                         ex.getMessage(),
                         LocalDateTime.now()
                 ));

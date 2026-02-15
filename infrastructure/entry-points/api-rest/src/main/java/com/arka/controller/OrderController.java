@@ -5,7 +5,7 @@ import com.arka.mappers.request.CreateOrderRequestMapper;
 import com.arka.mappers.response.CreateOrderResponseMapper;
 import com.arka.request.CreateOrderRequest;
 import com.arka.response.save.CreateOrderResponse;
-import com.arka.usecase.CreateOrderUseCase;
+import com.arka.usecase.GenerateOrderUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final CreateOrderUseCase createOrderUseCase;
+    private final GenerateOrderUseCase createOrderUseCase;
     private final CreateOrderRequestMapper createRequestMapper;
     private final CreateOrderResponseMapper createResponseMapper;
 

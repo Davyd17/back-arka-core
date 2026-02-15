@@ -8,7 +8,6 @@ import java.util.Set;
 public record CreateOrderIn (
 
         String number,
-        OrderStatus status,
         String notes,
         OrderType type,
         Long companyId,

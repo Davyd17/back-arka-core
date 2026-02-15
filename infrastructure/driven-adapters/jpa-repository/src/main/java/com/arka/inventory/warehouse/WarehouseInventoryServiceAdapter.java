@@ -40,4 +40,16 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public int getTotalStockByProductId(Long productId) {
+
+        if(productId != null)
+
+            return repository.getTotalStockByProductId(productId);
+
+        else throw new IllegalArgumentException(
+                "Product ID can't be null"
+        );
+    }
 }

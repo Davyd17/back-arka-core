@@ -14,9 +14,6 @@ public record CreateOrderRequest(
         @Required(field = "number")
         String number,
 
-        @NotNull(message = "Order status is required")
-        OrderStatus status,
-
         String notes,
 
         @NotNull(message = "Order type is required")

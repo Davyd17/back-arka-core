@@ -13,4 +13,6 @@ public interface WarehouseInventoryGateway {
 
     List<WarehouseInventory> listLowStockInventoryByWarehouseId(
             Long warehouseId, int threshold);
+
+    int getTotalStockByProductId(Long productId);
 }

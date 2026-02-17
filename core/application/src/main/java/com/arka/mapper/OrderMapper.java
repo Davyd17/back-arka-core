@@ -1,15 +1,17 @@
 package com.arka.mapper;
 
 import com.arka.dto.in.CreateOrderIn;
+import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.dto.out.OrderSummaryOut;
+import com.arka.dto.out.UpdateOrderOut;
 import com.arka.model.order.Order;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 @Mapper(uses =
-        {CreateOrderItemMapper.class,
+        {OrderItemMapper.class,
         CreateCompanyMapper.class})
 public interface OrderMapper {
 
@@ -26,4 +28,5 @@ public interface OrderMapper {
 
     OrderSummaryOut toSummaryDTO(Order domain);
 
+    UpdateOrderOut toUpdateDTO(Order domain);
 }

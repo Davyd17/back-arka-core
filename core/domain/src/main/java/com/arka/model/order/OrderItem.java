@@ -13,4 +13,12 @@ public class OrderItem {
     private Product product;
     private int quantity;
     private BigDecimal unitPrice;
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void updateUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
 }

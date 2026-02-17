@@ -28,8 +28,8 @@ public class GenerateOrderUseCase {
     private final OrderMapper orderMapper =
             new OrderMapperImpl();
 
-    private final CreateOrderItemMapper orderItemMapper =
-            new CreateOrderItemMapperImpl();
+    private final OrderItemMapper orderItemMapper =
+            new OrderItemMapperImpl();
 
     private final CompanyService companyService;
     private final ProductService productService;
@@ -43,7 +43,7 @@ public class GenerateOrderUseCase {
                     .getCompanyById(createOrderIn.companyId());
 
 
-            Set<OrderItem> embeddedOrderItems = new HashSet<>();
+            List<OrderItem> embeddedOrderItems = new ArrayList<>();
 
             for (CreateOrderItemIn item : createOrderIn.items()){
 

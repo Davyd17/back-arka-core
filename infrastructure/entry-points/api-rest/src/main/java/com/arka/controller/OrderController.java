@@ -1,18 +1,19 @@
 package com.arka.controller;
 
 import com.arka.dto.out.CreateOrderOut;
-import com.arka.mappers.request.CreateOrderRequestMapper;
-import com.arka.mappers.response.CreateOrderResponseMapper;
+import com.arka.dto.out.UpdateOrderOut;
+import com.arka.mappers.request.OrderRequestMapper;
+import com.arka.mappers.response.OrderResponseMapper;
 import com.arka.request.CreateOrderRequest;
+import com.arka.request.UpdateOrderRequest;
+import com.arka.response.UpdateOrderResponse;
 import com.arka.response.save.CreateOrderResponse;
 import com.arka.usecase.GenerateOrderUseCase;
+import com.arka.usecase.ModifyOrderUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -22,20 +23,33 @@ import java.net.URI;
 public class OrderController {
 
     private final GenerateOrderUseCase createOrderUseCase;
-    private final CreateOrderRequestMapper createRequestMapper;
-    private final CreateOrderResponseMapper createResponseMapper;
+    private final ModifyOrderUseCase modifyOrderUseCase;
+
+    private final OrderRequestMapper requestMapper;
+    private final OrderResponseMapper responseMapper;
 
     @PostMapping
     public ResponseEntity<CreateOrderResponse> create(@Valid @RequestBody  CreateOrderRequest request){
 
         CreateOrderOut createOrderOut =
                 createOrderUseCase.execute(
-                        createRequestMapper.toDomain(request));
+                        requestMapper.toDomain(request));
 
         URI uri = URI.create(Long.toString(createOrderOut.id()));
 
         return ResponseEntity.created(uri).body(
-                createResponseMapper.toResponse(createOrderOut));
+                responseMapper.toResponse(createOrderOut));
 
     }
+
+    @PatchMapping
+    public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request){
+
+        UpdateOrderOut updatedOrder = modifyOrderUseCase.execute(
+                requestMapper.toDomain(request));
+
+        return ResponseEntity.ok(responseMapper.toResponse(updatedOrder));
+    }
+
+
 }

@@ -1,6 +1,6 @@
 package com.arka.response.get;
 
-public record CompanyCreateOrderResponse(
+public record CompanyNameResponse(
         Long id,
         String name
 ) {

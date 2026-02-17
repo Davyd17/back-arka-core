@@ -45,4 +45,24 @@ public class OrderServiceAdapter implements OrderGateway {
         else throw new IllegalArgumentException(
                 "Order id can't be null");
     }
+
+    @Override
+    public Order update(Order order) {
+
+        if(Objects.nonNull(order)){
+
+            OrderEntity orderEntity = mapper.toEntity(order);
+
+            orderEntity.getItems().forEach(item -> {
+                item.setOrder(orderEntity);
+            });
+
+            OrderEntity updatedOrder = repository
+                    .save(orderEntity);
+
+            return mapper.toDomain(updatedOrder);
+
+        } else throw new IllegalArgumentException(
+                "Order can't be null");
+    }
 }

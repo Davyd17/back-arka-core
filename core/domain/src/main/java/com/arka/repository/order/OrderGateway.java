@@ -9,4 +9,6 @@ public interface OrderGateway {
     Order createOrder(Order newOrder);
 
     Optional<Order> findById(Long id);
+
+    Order update(Order order);
 }

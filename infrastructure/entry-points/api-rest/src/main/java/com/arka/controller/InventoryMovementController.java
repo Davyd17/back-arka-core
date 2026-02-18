@@ -1,6 +1,6 @@
 package com.arka.controller;
 
-import com.arka.mappers.InventoryMovementRequestMapper;
+import com.arka.mappers.request.InventoryMovementRequestMapper;
 import com.arka.model.inventory.InventoryMovement;
 import com.arka.request.CreateInventoryMovementRequest;
 import com.arka.usecase.GenerateInventoryMovementUseCase;

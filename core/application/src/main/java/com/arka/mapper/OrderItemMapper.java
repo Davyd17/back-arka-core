@@ -1,11 +1,14 @@
 package com.arka.mapper;
 
+import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.in.CreateOrderItemIn;
 import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.in.UpdateOrderItemIn;
 import com.arka.dto.out.CreateOrderItemOut;
 import com.arka.model.order.OrderItem;
 import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(uses = CreateProductOutMapper.class)
 public interface OrderItemMapper {
@@ -22,6 +25,7 @@ public interface OrderItemMapper {
     })
     OrderItem toDomain(UpdateOrderItemIn outDTO);
 
+    List<OrderItem> toDomainList(List<CreateOrderItemIn> outDTOs);
 
     CreateOrderItemOut toOrderItemDTO(OrderItem domain);
 }

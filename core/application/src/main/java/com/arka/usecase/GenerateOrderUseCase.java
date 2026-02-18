@@ -1,19 +1,18 @@
 package com.arka.usecase;
 
 import com.arka.dto.in.CreateOrderIn;
-import com.arka.dto.in.CreateOrderItemIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
+import com.arka.model.order.OrderItem;
 import com.arka.repository.order.OrderGateway;
 import com.arka.mapper.*;
 import com.arka.mapper.OrderMapperImpl;
 import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.order.Order;
-import com.arka.model.order.OrderItem;
-import com.arka.model.product.Product;
 import com.arka.service.CompanyService;
+import com.arka.service.OrderItemService;
 import com.arka.service.ProductService;
 import com.arka.service.WarehouseInventoryService;
 import lombok.RequiredArgsConstructor;
@@ -28,51 +27,30 @@ public class GenerateOrderUseCase {
     private final OrderMapper orderMapper =
             new OrderMapperImpl();
 
-    private final OrderItemMapper orderItemMapper =
-            new OrderItemMapperImpl();
-
     private final CompanyService companyService;
     private final ProductService productService;
-    private final WarehouseInventoryService inventoryService;
 
     public CreateOrderOut execute(CreateOrderIn createOrderIn) {
 
         if (Objects.nonNull(createOrderIn)) {
 
-            Company embbededCompany = companyService
+            Order newOrder = orderMapper.toDomain(createOrderIn);
+
+            Company foundCompany = companyService
                     .getCompanyById(createOrderIn.companyId());
 
+            newOrder.addCompany(foundCompany);
 
-            List<OrderItem> embeddedOrderItems = new ArrayList<>();
+            newOrder.getItems().forEach(item -> {
+                                item.addProduct(
+                                        productService.findById(item.getProduct().getId()));
+                            });
 
-            for (CreateOrderItemIn item : createOrderIn.items()){
+            newOrder.updateTotalPrice();
 
-                Product foundProduct = productService
-                        .findById(item.productId());
+            newOrder.updateStatus(OrderStatus.PENDING);
 
-                if(createOrderIn.type().equals(OrderType.SALES))
-                    inventoryService.validateGeneralStockAvailability(
-                            foundProduct.getId(), item.quantity());
-
-                embeddedOrderItems.add(
-                        orderItemMapper.toDomain(item)
-                        .toBuilder()
-                        .product(foundProduct)
-                        .build());
-            }
-
-            Order newOrder =
-                    orderGateway.createOrder(
-                            orderMapper.toDomain(createOrderIn)
-                                    .toBuilder()
-                                    .status(OrderStatus.PENDING)
-                                    .company(embbededCompany)
-                                    .items(embeddedOrderItems)
-                                    .build()
-                    );
-
-            return orderMapper
-                    .toDTO(newOrder);
+            return orderMapper.toDTO(orderGateway.createOrder(newOrder));
 
         } else throw new IllegalArgumentException(
                 "Order can't be null"

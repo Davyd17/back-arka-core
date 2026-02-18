@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Set;
 
@@ -36,18 +37,21 @@ public class OrderEntity {
     private OrderStatus status = OrderStatus.PENDING;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
+    private String notes;
+
+    @Column(nullable = false)
+    private BigDecimal totalPrice;
+
+    @Column(nullable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @Column(insertable = false)
     @UpdateTimestamp
     private Instant updatedAt;
-
-    private String notes;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OrderType type;
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)

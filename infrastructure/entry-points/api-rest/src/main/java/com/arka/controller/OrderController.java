@@ -6,7 +6,7 @@ import com.arka.mappers.request.OrderRequestMapper;
 import com.arka.mappers.response.OrderResponseMapper;
 import com.arka.request.CreateOrderRequest;
 import com.arka.request.UpdateOrderRequest;
-import com.arka.response.UpdateOrderResponse;
+import com.arka.response.update.UpdateOrderResponse;
 import com.arka.response.save.CreateOrderResponse;
 import com.arka.usecase.GenerateOrderUseCase;
 import com.arka.usecase.ModifyOrderUseCase;

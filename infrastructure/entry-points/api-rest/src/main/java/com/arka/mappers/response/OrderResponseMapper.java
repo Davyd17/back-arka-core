@@ -4,7 +4,7 @@ import com.arka.dto.out.CompanyCreateOrderOut;
 import com.arka.dto.out.CreateOrderItemOut;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.dto.out.UpdateOrderOut;
-import com.arka.response.UpdateOrderResponse;
+import com.arka.response.update.UpdateOrderResponse;
 import com.arka.response.get.CompanyNameResponse;
 import com.arka.response.save.CreateOrderItemResponse;
 import com.arka.response.save.CreateOrderResponse;

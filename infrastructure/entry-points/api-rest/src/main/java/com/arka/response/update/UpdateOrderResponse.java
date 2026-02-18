@@ -1,4 +1,4 @@
-package com.arka.response;
+package com.arka.response.update;
 
 import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;

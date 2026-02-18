@@ -11,6 +11,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private BigDecimal basePrice;
 
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> attributes;

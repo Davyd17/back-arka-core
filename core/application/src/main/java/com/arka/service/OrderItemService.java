@@ -25,8 +25,6 @@ public class OrderItemService {
         if (newItems == null || newItems.isEmpty())
             throw new IllegalArgumentException("Order must contain at least one item");
 
-        List<OrderItem> resolvedItems = new ArrayList<>();
-
         for (OrderItem item : newItems) {
 
             Product foundProduct = productService.findById(item.getProduct().getId());
@@ -35,12 +33,9 @@ public class OrderItemService {
                 inventoryService.validateGeneralStockAvailability(
                         foundProduct.getId(), item.getQuantity());
 
-            resolvedItems.add(item
-                            .toBuilder()
-                            .product(foundProduct)
-                            .build());
+            item.addProduct(foundProduct);
         }
 
-        return resolvedItems;
+        return newItems;
     }
 }

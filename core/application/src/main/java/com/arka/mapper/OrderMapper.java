@@ -20,7 +20,8 @@ public interface OrderMapper {
             @Mapping(target = "updatedAt", ignore = true),
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "company.id", source = "companyId"),
-            @Mapping(target = "status", ignore = true)
+            @Mapping(target = "status", ignore = true),
+            @Mapping(target = "totalPrice", ignore = true)
     })
     Order toDomain(CreateOrderIn in);
 

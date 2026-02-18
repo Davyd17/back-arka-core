@@ -1,9 +1,8 @@
 package com.arka.dto.in;
 
-import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
 
-import java.util.Set;
+import java.util.List;
 
 public record CreateOrderIn (
 
@@ -11,7 +10,7 @@ public record CreateOrderIn (
         String notes,
         OrderType type,
         Long companyId,
-        Set<CreateOrderItemIn> items
+        List<CreateOrderItemIn> items
 ){
 
 }

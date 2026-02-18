@@ -12,13 +12,6 @@ public record CreateOrderItemRequest(
         Long productId,
 
         @Required(field = "quantity")
-        int quantity,
-
-        @Required(field = "unit price")
-        @DecimalMin(value = "0.00", inclusive = false)
-        @Digits(integer = 10, fraction = 2)
-        BigDecimal unitPrice
-
-
+        int quantity
 ) {
 }

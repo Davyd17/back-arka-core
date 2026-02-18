@@ -3,16 +3,18 @@ package com.arka.model.order;
 import com.arka.model.Company;
 import com.arka.model.enums.OrderStatus;
 import com.arka.model.enums.OrderType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Getter
-@Builder(toBuilder = true)
+@Builder
+@AllArgsConstructor
 public class Order {
 
     private Long id;
@@ -20,13 +22,18 @@ public class Order {
     private OrderStatus status;
     private String notes;
     private OrderType type;
+    private BigDecimal totalPrice;
     private Instant createdAt;
     private Instant updatedAt;
     private Company company;
     private List<OrderItem> items;
 
-    public void addItems(List<OrderItem> items) {
-        this.items.addAll(items);
+    public Order() {
+        this.status = OrderStatus.PENDING;
+    }
+
+    public void addCompany(Company company) {
+        this.company = company;
     }
 
     public void updateItems(List<OrderItem> newItems) {
@@ -48,10 +55,16 @@ public class Order {
 
                     }, () -> this.items.add(newItem));
         }
+
+        this.updateTotalPrice();
     }
 
-    public void removeItem(OrderItem item) {
-        this.items.remove(item);
+    public void updateTotalPrice() {
+        this.totalPrice = this.items.stream()
+                .map(item -> item
+                        .getUnitPrice()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void updateStatus(OrderStatus status) {

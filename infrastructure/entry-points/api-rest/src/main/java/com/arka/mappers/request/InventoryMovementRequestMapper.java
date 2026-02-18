@@ -1,4 +1,4 @@
-package com.arka.mappers;
+package com.arka.mappers.request;
 
 import com.arka.dto.in.CreateInventoryMovementIn;
 import com.arka.request.CreateInventoryMovementRequest;

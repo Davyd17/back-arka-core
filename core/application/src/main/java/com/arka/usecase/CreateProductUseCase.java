@@ -34,6 +34,7 @@ public class CreateProductUseCase {
                             request.sku(),
                             request.name(),
                             request.description(),
+                            request.basePrice(),
                             request.attributes(),
                             category,
                             Instant.now()

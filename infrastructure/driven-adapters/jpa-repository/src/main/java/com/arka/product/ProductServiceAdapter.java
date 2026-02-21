@@ -1,10 +1,13 @@
 package com.arka.product;
 
-import com.arka.repository.ProductGateway;
+import com.arka.dto.out.ProductSalesReportOut;
+import com.arka.gateway.repository.product.ProductGateway;
 import com.arka.model.product.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -33,5 +36,12 @@ public class ProductServiceAdapter implements ProductGateway {
 
         return repository.findById(id)
                 .map(mapper::toDomain);
+    }
+
+    @Override
+    public List<ProductSalesReportOut> getTopSellingProductsFromDateRange(Instant since, Instant until) {
+        return repository.getTopSellingProductsFromDateRange(since, until)
+                .stream()
+                .toList();
     }
 }

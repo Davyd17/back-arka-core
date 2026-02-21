@@ -7,7 +7,6 @@ import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -38,4 +37,5 @@ public class OrderItemService {
 
         return newItems;
     }
+
 }

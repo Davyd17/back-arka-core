@@ -1,13 +1,12 @@
 package com.arka.usecase;
 
-import com.arka.dto.out.LowStockItemOut;
+import com.arka.dto.out.LowStockReportOut;
+import com.arka.dto.value.LowStockItem;
 import com.arka.exceptions.NotFoundException;
 import com.arka.mapper.WarehouseInventoryMapperImpl;
-import com.arka.repository.inventory.WarehouseInventoryGateway;
+import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
 import com.arka.mapper.WarehouseInventoryMapper;
 import com.arka.service.WarehouseService;
-import com.arka.service.export.ExportFormat;
-import com.arka.service.export.LowStockInventoryCsvExporterService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -22,42 +21,28 @@ public class GenerateLowStockReportUseCase {
 
     private final WarehouseService warehouseService;
 
-    public byte[] execute(Long warehouseId,
-                          int threshold,
-                          ExportFormat format) {
+    public LowStockReportOut execute(Long warehouseId, int threshold) {
 
         if (Objects.nonNull(warehouseId) && threshold > 0) {
 
             warehouseService.findById(warehouseId);
 
-            List<LowStockItemOut> lowStockItems = inventoryGateway
+            List<LowStockItem> items = inventoryGateway
                     .listLowStockInventoryByWarehouseId(warehouseId, threshold)
                     .stream()
                     .map(mapper::toOutDTO)
                     .toList();
 
-            if (lowStockItems.isEmpty()) {
+            if (items.isEmpty()) {
 
                 throw new NotFoundException(
                         "No low stock items found for warehouse with id " + warehouseId
                 );
 
-            } else return ReportFormatTo(format, lowStockItems);
+            } else return new LowStockReportOut(items);
 
         } else throw new IllegalArgumentException(
                 "Warehouse inventory id cannot be null"
         );
-    }
-
-    private byte[] ReportFormatTo(ExportFormat format, List<LowStockItemOut> lowStockItems) {
-
-        if (format == ExportFormat.CSV) {
-
-            return LowStockInventoryCsvExporterService.exportToCsv(lowStockItems);
-
-        } else throw new IllegalArgumentException(
-                String.format("Unsupported export format: %s", format)
-        );
-
     }
 }

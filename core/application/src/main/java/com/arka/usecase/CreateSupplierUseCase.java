@@ -2,7 +2,7 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateCompanyIn;
 
-import com.arka.repository.party.SupplierGateway;
+import com.arka.gateway.repository.party.SupplierGateway;
 import com.arka.model.Company;
 import com.arka.model.enums.CompanyRelationType;
 import com.arka.factory.CompanyFactory;

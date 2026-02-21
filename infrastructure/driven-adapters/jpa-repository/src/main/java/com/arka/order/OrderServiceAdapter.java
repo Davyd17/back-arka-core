@@ -1,10 +1,13 @@
 package com.arka.order;
 
-import com.arka.repository.order.OrderGateway;
+import com.arka.gateway.repository.order.OrderGateway;
 import com.arka.model.order.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -64,5 +67,11 @@ public class OrderServiceAdapter implements OrderGateway {
 
         } else throw new IllegalArgumentException(
                 "Order can't be null");
+    }
+
+    @Override
+    public BigDecimal getTotalRevenueFromDateRange(Instant since, Instant until) {
+
+        return repository.getTotalRevenueFromDateRange(since, until);
     }
 }

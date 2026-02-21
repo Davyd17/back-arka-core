@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
 public class Company {
     private Long id;
@@ -33,5 +34,13 @@ public class Company {
                 .contacts(List.copyOf(contacts))
                 .productCategories(Set.copyOf(productCategories))
                 .build();
+    }
+
+    public void asCustomer(){
+        this.relation = CompanyRelationType.CUSTOMER;
+    }
+
+    public void asSupplier(){
+        this.relation = CompanyRelationType.SUPPLIER;
     }
 }

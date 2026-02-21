@@ -1,7 +1,7 @@
 package com.arka.service;
 
 import com.arka.exceptions.NotFoundException;
-import com.arka.repository.WarehouseGateway;
+import com.arka.gateway.repository.WarehouseGateway;
 import com.arka.model.Warehouse;
 import lombok.RequiredArgsConstructor;
 

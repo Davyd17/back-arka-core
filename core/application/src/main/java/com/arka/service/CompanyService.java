@@ -1,7 +1,7 @@
 package com.arka.service;
 
 import com.arka.exceptions.NotFoundException;
-import com.arka.repository.party.CompanyGateway;
+import com.arka.gateway.repository.party.CompanyGateway;
 import com.arka.model.Company;
 import lombok.RequiredArgsConstructor;
 

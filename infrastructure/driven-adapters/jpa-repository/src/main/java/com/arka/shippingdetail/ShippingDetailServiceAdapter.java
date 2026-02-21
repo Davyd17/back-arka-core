@@ -1,7 +1,7 @@
 package com.arka.shippingdetail;
 
 import com.arka.exceptions.NotFoundException;
-import com.arka.repository.ShippingDetailGateway;
+import com.arka.gateway.repository.ShippingDetailGateway;
 import com.arka.information.address.AddressEntity;
 import com.arka.information.address.AddressEntityRepository;
 import com.arka.model.ShippingDetail;

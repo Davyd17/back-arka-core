@@ -1,6 +1,6 @@
 package com.arka.information.address;
 
-import com.arka.repository.AddressGateway;
+import com.arka.gateway.repository.AddressGateway;
 import com.arka.model.information.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

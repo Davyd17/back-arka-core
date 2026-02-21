@@ -1,6 +1,6 @@
 package com.arka.mappers.response;
 
-import com.arka.dto.out.CompanyCreateOrderOut;
+import com.arka.dto.out.CompanySummaryOut;
 import com.arka.dto.out.CreateOrderItemOut;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.dto.out.UpdateOrderOut;
@@ -19,5 +19,5 @@ public interface OrderResponseMapper {
 
     CreateOrderItemResponse toOrderItemResponse(CreateOrderItemOut domain);
 
-    CompanyNameResponse toCompanyResponse(CompanyCreateOrderOut domain);
+    CompanyNameResponse toCompanyResponse(CompanySummaryOut domain);
 }

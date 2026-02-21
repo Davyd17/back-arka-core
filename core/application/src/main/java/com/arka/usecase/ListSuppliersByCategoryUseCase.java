@@ -2,8 +2,8 @@ package com.arka.usecase;
 
 import com.arka.model.Company;
 import com.arka.exceptions.NotFoundException;
-import com.arka.repository.ProductCategoryGateway;
-import com.arka.repository.party.SupplierGateway;
+import com.arka.gateway.repository.product.ProductCategoryGateway;
+import com.arka.gateway.repository.party.SupplierGateway;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;

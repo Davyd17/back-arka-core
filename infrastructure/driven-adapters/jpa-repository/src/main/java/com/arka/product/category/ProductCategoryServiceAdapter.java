@@ -1,7 +1,7 @@
 package com.arka.product.category;
 
 import com.arka.model.product.ProductCategory;
-import com.arka.repository.ProductCategoryGateway;
+import com.arka.gateway.repository.product.ProductCategoryGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

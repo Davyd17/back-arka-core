@@ -1,10 +1,7 @@
 package com.arka.inventory.movements;
 
 import com.arka.employee.EmployeeEntity;
-import com.arka.model.Employee;
-import com.arka.model.Warehouse;
-import com.arka.model.enums.InventoryMovementType;
-import com.arka.model.product.Product;
+import com.arka.enums.InventoryMovementType;
 import com.arka.product.ProductEntity;
 import com.arka.warehouse.WarehouseEntity;
 import jakarta.persistence.*;

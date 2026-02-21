@@ -2,7 +2,7 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
-import com.arka.model.enums.OrderStatus;
+import com.arka.enums.OrderStatus;
 import com.arka.gateway.repository.order.OrderGateway;
 import com.arka.mapper.OrderMapperImpl;
 import com.arka.mapper.OrderMapper;

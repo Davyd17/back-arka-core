@@ -1,9 +1,7 @@
 package com.arka.shippingdetail;
 
 import com.arka.information.address.AddressEntity;
-import com.arka.model.enums.ShippingStatus;
-import com.arka.model.information.Address;
-import com.arka.model.order.Order;
+import com.arka.enums.ShippingStatus;
 import com.arka.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.*;

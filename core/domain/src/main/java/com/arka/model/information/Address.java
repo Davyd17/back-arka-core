@@ -1,6 +1,6 @@
 package com.arka.model.information;
 
-import com.arka.model.enums.AddressType;
+import com.arka.enums.AddressType;
 import lombok.*;
 
 @Builder(toBuilder = true)

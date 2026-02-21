@@ -1,6 +1,6 @@
 package com.arka.dto.in;
 
-import com.arka.model.enums.InventoryMovementType;
+import com.arka.enums.InventoryMovementType;
 
 public record CreateInventoryMovementIn(
 

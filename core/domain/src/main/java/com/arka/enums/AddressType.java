@@ -1,7 +1,7 @@
-package com.arka.model.enums;
+package com.arka.enums;
 
 public enum AddressType {
-    LOCATION,
+    WAREHOUSE,
     SUPPLIER,
     EMPLOYEE,
     CUSTOMER

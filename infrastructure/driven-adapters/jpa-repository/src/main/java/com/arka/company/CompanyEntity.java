@@ -1,7 +1,7 @@
 package com.arka.company;
 
 import com.arka.information.contact.ContactEntity;
-import com.arka.model.enums.CompanyRelationType;
+import com.arka.enums.CompanyRelationType;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

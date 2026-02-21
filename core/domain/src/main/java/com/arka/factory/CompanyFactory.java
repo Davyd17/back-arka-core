@@ -1,7 +1,7 @@
 package com.arka.factory;
 
 import com.arka.model.Company;
-import com.arka.model.enums.CompanyRelationType;
+import com.arka.enums.CompanyRelationType;
 import com.arka.model.information.Address;
 import com.arka.model.information.Contact;
 import com.arka.model.product.ProductCategory;

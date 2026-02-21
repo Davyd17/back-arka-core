@@ -4,7 +4,7 @@ import com.arka.dto.in.CreateCompanyIn;
 
 import com.arka.gateway.repository.party.SupplierGateway;
 import com.arka.model.Company;
-import com.arka.model.enums.CompanyRelationType;
+import com.arka.enums.CompanyRelationType;
 import com.arka.factory.CompanyFactory;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.ProductCategoryService;

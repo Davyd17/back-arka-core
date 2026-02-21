@@ -1,6 +1,6 @@
 package com.arka.response.get;
 
-import com.arka.model.enums.AddressType;
+import com.arka.enums.AddressType;
 
 public record AddressResponse(
         String country,

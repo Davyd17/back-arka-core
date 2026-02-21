@@ -7,7 +7,7 @@ import com.arka.mapper.InventoryMovementMapper;
 import com.arka.mapper.InventoryMovementMapperImpl;
 import com.arka.model.Employee;
 import com.arka.model.Warehouse;
-import com.arka.model.enums.InventoryMovementType;
+import com.arka.enums.InventoryMovementType;
 import com.arka.model.inventory.InventoryMovement;
 import com.arka.model.inventory.WarehouseInventory;
 import com.arka.model.product.Product;

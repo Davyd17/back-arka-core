@@ -1,7 +1,7 @@
 package com.arka.request;
 
 import com.arka.exceptions.Required;
-import com.arka.model.enums.InventoryMovementType;
+import com.arka.enums.InventoryMovementType;
 import jakarta.validation.constraints.Min;
 
 public record CreateInventoryMovementRequest(

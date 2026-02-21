@@ -1,4 +1,4 @@
-package com.arka.model.enums;
+package com.arka.enums;
 
 public enum OrderStatus {
     AUTHORIZED,

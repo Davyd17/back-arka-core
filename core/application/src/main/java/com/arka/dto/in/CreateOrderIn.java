@@ -1,6 +1,6 @@
 package com.arka.dto.in;
 
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderType;
 
 import java.util.List;
 

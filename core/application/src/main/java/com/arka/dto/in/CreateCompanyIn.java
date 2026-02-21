@@ -1,6 +1,6 @@
 package com.arka.dto.in;
 
-import com.arka.model.enums.CompanyRelationType;
+import com.arka.enums.CompanyRelationType;
 import com.arka.model.information.Contact;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

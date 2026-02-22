@@ -4,7 +4,7 @@ import java.util.List;
 
 public record CreateShoppingCartIn(
 
-        Long user_id,
+        Long userId,
         List<ShoppingCartItemIn> items
 ) {
 }

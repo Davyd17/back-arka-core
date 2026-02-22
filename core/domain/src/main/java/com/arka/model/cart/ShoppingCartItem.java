@@ -1,6 +1,7 @@
 package com.arka.model.cart;
 
 import com.arka.model.product.Product;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,8 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class ShoppingCartItem {
 
     private Long id;

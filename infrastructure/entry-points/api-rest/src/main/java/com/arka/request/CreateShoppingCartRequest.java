@@ -7,7 +7,7 @@ import java.util.List;
 public record CreateShoppingCartRequest(
 
         @Required(field = "user id")
-        Long user_id,
+        Long userId,
 
         @Required(field = "items")
         List<ShoppingCartItemRequest> items

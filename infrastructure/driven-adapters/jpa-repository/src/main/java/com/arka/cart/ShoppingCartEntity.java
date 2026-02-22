@@ -1,10 +1,12 @@
 package com.arka.cart;
 
 import com.arka.cart.item.ShoppingCartItemEntity;
+import com.arka.enums.ShoppingCartStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Table(name = "shopping_carts")
 @Builder
 @Getter
+@Setter
 public class ShoppingCartEntity {
 
     @Id
@@ -24,7 +27,7 @@ public class ShoppingCartEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String status = "ACTIVE";
+    private ShoppingCartStatus status = ShoppingCartStatus.ACTIVE;
 
     @Column(nullable = false)
     private BigDecimal totalAmount;
@@ -39,7 +42,7 @@ public class ShoppingCartEntity {
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "cart" )
+            mappedBy = "shoppingCart" )
     @JsonManagedReference
     private List<ShoppingCartItemEntity> items;
 

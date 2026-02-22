@@ -2,13 +2,18 @@ package com.arka.model.cart;
 
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.model.product.Product;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class ShoppingCart {
 
     private Long id;
@@ -22,6 +27,7 @@ public class ShoppingCart {
     public ShoppingCart(Long userId) {
         this.userId = userId;
         this.status = ShoppingCartStatus.ACTIVE;
+        this.items = new ArrayList<>();
     }
 
     public void addItem(Product product, int quantity){

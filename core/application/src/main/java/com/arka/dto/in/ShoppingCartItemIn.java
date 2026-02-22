@@ -2,7 +2,7 @@ package com.arka.dto.in;
 
 public record ShoppingCartItemIn(
 
-        Long product_id,
+        Long productId,
         int quantity
 ) {
 }

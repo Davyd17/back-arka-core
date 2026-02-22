@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +16,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "shopping_cart_items")
 @Getter
-@Builder
+@Setter
 public class ShoppingCartItemEntity {
 
     @Id

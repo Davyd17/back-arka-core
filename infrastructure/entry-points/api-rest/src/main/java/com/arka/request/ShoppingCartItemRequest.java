@@ -2,7 +2,7 @@ package com.arka.request;
 
 
 public record ShoppingCartItemRequest(
-        Long product_id,
+        Long productId,
         int quantity
 ) {
 }

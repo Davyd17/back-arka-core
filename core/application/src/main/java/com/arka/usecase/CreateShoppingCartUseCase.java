@@ -5,6 +5,7 @@ import com.arka.dto.in.ShoppingCartItemIn;
 import com.arka.dto.out.CreateShoppingCartOut;
 import com.arka.gateway.repository.ShoppingCartRepository;
 import com.arka.mapper.ShoppingCartMapper;
+import com.arka.mapper.ShoppingCartMapperImpl;
 import com.arka.model.cart.ShoppingCart;
 import com.arka.model.product.Product;
 import com.arka.service.ProductService;
@@ -17,7 +18,8 @@ public class CreateShoppingCartUseCase {
     private final ProductService productService;
     private final WarehouseInventoryService inventoryService;
     private final ShoppingCartRepository cartRepository;
-    private final ShoppingCartMapper mapper;
+    private final ShoppingCartMapper mapper =
+            new ShoppingCartMapperImpl();
 
     public CreateShoppingCartOut execute(CreateShoppingCartIn request) {
 
@@ -26,19 +28,17 @@ public class CreateShoppingCartUseCase {
 
         //TODO: Verify user existence
         ShoppingCart newShoppingCart =
-                new ShoppingCart(request.user_id());
+                new ShoppingCart(request.userId());
 
         for(ShoppingCartItemIn item : request.items()) {
 
             inventoryService.validateGeneralStockAvailability
-                    (item.product_id(), item.quantity());
+                    (item.productId(), item.quantity());
 
-            Product itemProduct = productService.findById(item.product_id());
+            Product itemProduct = productService.findById(item.productId());
 
             newShoppingCart.addItem(itemProduct, item.quantity());
         }
-
-        cartRepository.save(newShoppingCart);
 
         return mapper.toCreateDto
                 (cartRepository.save(newShoppingCart));

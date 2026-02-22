@@ -15,7 +15,12 @@ public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
     @Override
     public ShoppingCart save(ShoppingCart shoppingCart) {
 
-        ShoppingCartEntity entity = mapper.toEntity(shoppingCart);
-        return mapper.toDomain(repository.save(entity));
+        ShoppingCartEntity newCartEntity = mapper.toEntity(shoppingCart);
+
+        newCartEntity.getItems().forEach(item -> {
+            item.setShoppingCart(newCartEntity);
+        });
+
+        return mapper.toDomain(repository.save(newCartEntity));
     }
 }

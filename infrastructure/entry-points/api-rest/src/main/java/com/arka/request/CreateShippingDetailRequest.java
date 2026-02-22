@@ -1,7 +1,7 @@
 package com.arka.request;
 
 import com.arka.exceptions.Required;
-import com.arka.model.enums.ShippingStatus;
+import com.arka.enums.ShippingStatus;
 
 public record CreateShippingDetailRequest(
 

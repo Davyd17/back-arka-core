@@ -1,8 +1,8 @@
 package com.arka.model.order;
 
 import com.arka.model.Company;
-import com.arka.model.enums.OrderStatus;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderStatus;
+import com.arka.enums.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.arka.dto.out;
 
 import com.arka.model.Company;
-import com.arka.model.enums.OrderStatus;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderStatus;
+import com.arka.enums.OrderType;
 import com.arka.model.order.OrderItem;
 
 import java.time.Instant;

@@ -5,6 +5,6 @@ public record ProductSummaryResponse(
         Long id,
         String sku,
         String name,
-        ProductCategorySummaryResponse category
+        String category
 ) {
 }

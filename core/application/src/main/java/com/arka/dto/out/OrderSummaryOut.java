@@ -1,6 +1,6 @@
 package com.arka.dto.out;
 
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderType;
 
 public record OrderSummaryOut(
         Long id,

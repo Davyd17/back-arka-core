@@ -1,8 +1,8 @@
 package com.arka.order;
 
 import com.arka.company.CompanyEntity;
-import com.arka.model.enums.OrderStatus;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderStatus;
+import com.arka.enums.OrderType;
 import com.arka.order.item.OrderItemEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

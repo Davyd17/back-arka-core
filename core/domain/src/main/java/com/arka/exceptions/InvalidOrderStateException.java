@@ -1,6 +1,6 @@
 package com.arka.exceptions;
 
-import com.arka.model.enums.OrderStatus;
+import com.arka.enums.OrderStatus;
 
 public class InvalidOrderStateException extends RuntimeException {
 

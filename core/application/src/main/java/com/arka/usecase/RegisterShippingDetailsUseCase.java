@@ -6,7 +6,7 @@ import com.arka.gateway.repository.ShippingDetailGateway;
 import com.arka.mapper.ShippingDetailMapper;
 import com.arka.mapper.ShippingDetailMapperImpl;
 import com.arka.model.ShippingDetail;
-import com.arka.model.enums.ShippingStatus;
+import com.arka.enums.ShippingStatus;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

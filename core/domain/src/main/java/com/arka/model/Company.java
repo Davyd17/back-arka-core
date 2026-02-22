@@ -1,6 +1,6 @@
 package com.arka.model;
 
-import com.arka.model.enums.CompanyRelationType;
+import com.arka.enums.CompanyRelationType;
 import com.arka.model.information.Contact;
 import com.arka.model.product.ProductCategory;
 import lombok.*;

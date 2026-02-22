@@ -1,6 +1,6 @@
 package com.arka.dto.in;
 
-import com.arka.model.enums.ShippingStatus;
+import com.arka.enums.ShippingStatus;
 
 public record CreateShippingDetailIn(
 

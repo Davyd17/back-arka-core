@@ -1,6 +1,6 @@
 package com.arka.model;
 
-import com.arka.model.enums.ShippingStatus;
+import com.arka.enums.ShippingStatus;
 import com.arka.model.information.Address;
 import com.arka.model.order.Order;
 import lombok.Builder;

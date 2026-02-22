@@ -1,7 +1,7 @@
 package com.arka.response.save;
 
-import com.arka.model.enums.OrderStatus;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderStatus;
+import com.arka.enums.OrderType;
 import com.arka.response.get.CompanyNameResponse;
 
 import java.math.BigDecimal;

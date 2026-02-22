@@ -1,7 +1,7 @@
 package com.arka.dto.out;
 
-import com.arka.model.enums.OrderStatus;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderStatus;
+import com.arka.enums.OrderType;
 
 import java.math.BigDecimal;
 import java.time.Instant;

@@ -2,7 +2,7 @@ package com.arka.model.inventory;
 
 import com.arka.model.Employee;
 import com.arka.model.Warehouse;
-import com.arka.model.enums.InventoryMovementType;
+import com.arka.enums.InventoryMovementType;
 import com.arka.model.product.Product;
 import lombok.Builder;
 import lombok.Getter;

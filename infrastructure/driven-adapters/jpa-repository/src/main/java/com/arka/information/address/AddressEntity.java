@@ -1,6 +1,6 @@
 package com.arka.information.address;
 
-import com.arka.model.enums.AddressType;
+import com.arka.enums.AddressType;
 import jakarta.persistence.*;
 import lombok.*;
 

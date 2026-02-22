@@ -7,7 +7,7 @@ import com.arka.mapper.OrderItemMapper;
 import com.arka.mapper.OrderItemMapperImpl;
 import com.arka.mapper.OrderMapper;
 import com.arka.mapper.OrderMapperImpl;
-import com.arka.model.enums.OrderStatus;
+import com.arka.enums.OrderStatus;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
 import com.arka.gateway.repository.order.OrderGateway;

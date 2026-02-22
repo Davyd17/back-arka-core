@@ -2,7 +2,7 @@ package com.arka.service;
 
 import com.arka.mapper.OrderItemMapper;
 import com.arka.mapper.OrderItemMapperImpl;
-import com.arka.model.enums.OrderType;
+import com.arka.enums.OrderType;
 import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
 import lombok.AllArgsConstructor;

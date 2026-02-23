@@ -1,9 +1,12 @@
 package com.arka.cart;
 
+import com.arka.enums.ShoppingCartStatus;
 import com.arka.gateway.repository.ShoppingCartRepository;
 import com.arka.model.cart.ShoppingCart;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +25,14 @@ public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
         });
 
         return mapper.toDomain(repository.save(newCartEntity));
+    }
+
+    @Override
+    public List<ShoppingCart> getAllAbandonedCarts() {
+
+        return repository.findAllByStatus(ShoppingCartStatus.ABANDONED)
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

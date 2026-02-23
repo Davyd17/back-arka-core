@@ -2,7 +2,7 @@ package com.arka.usecase;
 
 import com.arka.dto.in.CreateShoppingCartIn;
 import com.arka.dto.in.ShoppingCartItemIn;
-import com.arka.dto.out.CreateShoppingCartOut;
+import com.arka.dto.out.ShoppingCartOut;
 import com.arka.gateway.repository.ShoppingCartRepository;
 import com.arka.mapper.ShoppingCartMapper;
 import com.arka.mapper.ShoppingCartMapperImpl;
@@ -21,7 +21,7 @@ public class CreateShoppingCartUseCase {
     private final ShoppingCartMapper mapper =
             new ShoppingCartMapperImpl();
 
-    public CreateShoppingCartOut execute(CreateShoppingCartIn request) {
+    public ShoppingCartOut execute(CreateShoppingCartIn request) {
 
         if(request == null)
             throw new IllegalArgumentException("Request can't be null");
@@ -40,7 +40,7 @@ public class CreateShoppingCartUseCase {
             newShoppingCart.addItem(itemProduct, item.quantity());
         }
 
-        return mapper.toCreateDto
+        return mapper.toOutDto
                 (cartRepository.save(newShoppingCart));
     }
 }

@@ -6,13 +6,12 @@ import com.arka.dto.out.ShoppingCartOut;
 import com.arka.gateway.repository.ShoppingCartRepository;
 import com.arka.mapper.ShoppingCartMapper;
 import com.arka.mapper.ShoppingCartMapperImpl;
-import com.arka.model.cart.ShoppingCart;
-import com.arka.model.product.Product;
 import com.arka.service.ProductService;
 import com.arka.service.WarehouseInventoryService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Deprecated
 public class CreateShoppingCartUseCase {
 
     private final ProductService productService;
@@ -23,24 +22,6 @@ public class CreateShoppingCartUseCase {
 
     public ShoppingCartOut execute(CreateShoppingCartIn request) {
 
-        if(request == null)
-            throw new IllegalArgumentException("Request can't be null");
-
-        //TODO: Verify user existence
-        ShoppingCart newShoppingCart =
-                new ShoppingCart(request.userId());
-
-        for(ShoppingCartItemIn item : request.items()) {
-
-            inventoryService.validateGeneralStockAvailability
-                    (item.productId(), item.quantity());
-
-            Product itemProduct = productService.findById(item.productId());
-
-            newShoppingCart.addItem(itemProduct, item.quantity());
-        }
-
-        return mapper.toOutDto
-                (cartRepository.save(newShoppingCart));
+        return null;
     }
 }

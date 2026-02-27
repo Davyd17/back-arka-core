@@ -15,9 +15,9 @@ import java.time.Instant;
 public class ShoppingCartItem {
 
     private Long id;
-    @Setter
     private int quantity;
     private BigDecimal unitPrice;
+    private BigDecimal subTotal;
     private Instant createdAt;
     private Instant updatedAt;
     private final Product product;
@@ -26,12 +26,28 @@ public class ShoppingCartItem {
 
         this.product = product;
         assignUnitPrice();
+        updateSubTotal();
 
         this.quantity = quantity;
     }
 
     private void assignUnitPrice() {
         this.unitPrice = product.getBasePrice();
+    }
+
+    private void updateSubTotal() {
+        this.subTotal =
+                this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
+    }
+
+    public void addQuantity(int quantity) {
+        this.quantity += quantity;
+        updateSubTotal();
+    }
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+        updateSubTotal();
     }
 
 }

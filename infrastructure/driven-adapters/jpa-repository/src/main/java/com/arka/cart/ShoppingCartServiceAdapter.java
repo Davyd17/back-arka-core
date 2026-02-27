@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,17 @@ public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
 
     @Override
     public ShoppingCart save(ShoppingCart shoppingCart) {
+
+        return saveOperation(shoppingCart);
+    }
+
+    @Override
+    public ShoppingCart update(ShoppingCart shoppingCart) {
+
+        return saveOperation(shoppingCart);
+    }
+
+    private ShoppingCart saveOperation(ShoppingCart shoppingCart) {
 
         ShoppingCartEntity newCartEntity = mapper.toEntity(shoppingCart);
 
@@ -34,5 +46,11 @@ public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
                 .stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Optional<ShoppingCart> getActiveCartByUserId(Long userId) {
+        return repository.getActiveCartByUserId(userId)
+                .map(mapper::toDomain);
     }
 }

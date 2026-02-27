@@ -72,11 +72,8 @@ public class ShoppingCart {
 
     private void activeCartIfAbandoned() {
 
-        if(this.status.equals(ShoppingCartStatus.ABANDONED)) {
+        if(this.status.equals(ShoppingCartStatus.ABANDONED))
             this.status = ShoppingCartStatus.ACTIVE;
-
-        } else throw new IllegalArgumentException(
-                String.format("Cart is in state %s, cannot add items", this.status));
     }
 
     private void validateCartStatusAtAddItem() {

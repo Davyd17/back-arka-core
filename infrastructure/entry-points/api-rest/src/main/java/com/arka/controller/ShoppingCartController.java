@@ -1,18 +1,17 @@
 package com.arka.controller;
 
+import com.arka.dto.in.AddItemShoppingCartIn;
 import com.arka.dto.out.ShoppingCartOut;
 import com.arka.mappers.ShoppingCartRestMapper;
-import com.arka.request.CreateShoppingCartRequest;
+import com.arka.request.AddItemShoppingCartRequest;
 import com.arka.response.save.ShoppingCartResponse;
-import com.arka.usecase.CreateShoppingCartUseCase;
+import com.arka.usecase.AddItemToShoppingCartUseCase;
 import com.arka.usecase.ListAbandonedShoppingCartsUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShoppingCartController {
 
-    private final CreateShoppingCartUseCase createShoppingCartUseCase;
+    private final AddItemToShoppingCartUseCase addItemToShoppingCartUseCase;
     private final ListAbandonedShoppingCartsUseCase listAbandonedShoppingCartsUseCase;
 
     private final ShoppingCartRestMapper mapper;
@@ -36,23 +35,21 @@ public class ShoppingCartController {
                 .toList();
     }
 
-    @PostMapping
-    public ResponseEntity<ShoppingCartResponse> create
-            (@Valid @RequestBody CreateShoppingCartRequest request) {
+    @PostMapping("/{userId}/items")
+    public ResponseEntity<ShoppingCartResponse> addItem
+            (@PathVariable Long userId, @Valid @RequestBody AddItemShoppingCartRequest request) {
 
         ShoppingCartOut shoppingCartOut =
-                createShoppingCartUseCase.execute(
-                        mapper.toInDto(request));
-
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(shoppingCartOut.id())
-                .toUri();
+                addItemToShoppingCartUseCase.execute(
+                        new AddItemShoppingCartIn(
+                                userId,
+                                request.productId(),
+                                request.quantity()
+                        ));
 
         ShoppingCartResponse response
                 = mapper.toResponse(shoppingCartOut);
 
-        return ResponseEntity.created(uri).body(response);
+        return ResponseEntity.ok(response);
     }
 }

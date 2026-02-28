@@ -1,5 +1,5 @@
 # -------- Build Stage --------
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:21-alpine AS build
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
 
 WORKDIR /boot
 
@@ -10,7 +10,7 @@ RUN ./gradlew clean build -x test --no-daemon
 
 
 # -------- Production Stage --------
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:21-alpine AS production
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS production
 
 WORKDIR /app
 

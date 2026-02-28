@@ -32,6 +32,8 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:1.18.42")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
 
+        implementation("io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4")
+
         implementation("org.mapstruct:mapstruct:1.6.3")
         annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 

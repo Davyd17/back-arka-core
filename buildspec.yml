@@ -5,7 +5,7 @@ env:
     AWS_REGION: "us-east-1"
     AWS_ACCOUNT_ID: "524496304724"
     ECR_REPO_NAME: "develop/back-arka-core"
-    ECR_REPO_URI: "524496304724.dkr.ecr.us-east-1.amazonaws.com"
+    ECR_REPO_URI: "524496304724.dkr.ecr.us-east-1.amazonaws.com/develop/bak-arka-core"
     CONTAINER_NAME: "back-arka-core"
 
 phases:    

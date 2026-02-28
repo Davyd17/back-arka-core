@@ -1,11 +1,12 @@
 # -------- Build Stage --------
 FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
 
-WORKDIR /boot
+WORKDIR /app
 
-COPY . .
+COPY main-app/boot/ .
 
 RUN chmod +x ./gradlew
+
 RUN ./gradlew clean build -x test --no-daemon
 
 
@@ -16,7 +17,7 @@ WORKDIR /app
 
 ENV TZ=America/Bogota
 
-COPY --from=build /boot/main-app/boot/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
 

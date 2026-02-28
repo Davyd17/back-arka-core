@@ -3,11 +3,10 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-east-1"
-    AWS_ACCOUNT_ID: "510286912033"
-    ECR_REPO_NAME: "develop/back-auth-service"
-    ECR_REPO_URI: "510286912033.dkr.ecr.us-east-1.amazonaws.com/develop/back-auth-service"
-    CONTAINER_NAME: "back-auth-service"
-    SECRET_NAME: "develop/back-auth-service/application-yaml"
+    AWS_ACCOUNT_ID: "524496304724"
+    ECR_REPO_NAME: "develop/back-arka-core"
+    ECR_REPO_URI: "524496304724.dkr.ecr.us-east-1.amazonaws.com/develop/back-arka-core"
+    CONTAINER_NAME: "back-arka-core"
 
 phases:    
   pre_build:

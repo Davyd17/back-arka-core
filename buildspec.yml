@@ -11,10 +11,6 @@ env:
 phases:    
   pre_build:
     commands:
-      - echo "Downloading application.yaml from Secrets Manager..."
-      - aws secretsmanager get-secret-value --secret-id $SECRET_NAME --region $AWS_REGION --query SecretString --output text > application/app-service/src/main/resources/application.yaml
-      - echo "application.yaml replaced successfully"
-      
       - echo "Logging into ECR..."
       - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO_URI
       

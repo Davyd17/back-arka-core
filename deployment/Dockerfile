@@ -3,7 +3,7 @@ FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
 
 WORKDIR /app
 
-COPY main-app/boot/ .
+COPY . .
 
 RUN chmod +x ./gradlew
 
@@ -17,7 +17,7 @@ WORKDIR /app
 
 ENV TZ=America/Bogota
 
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/main-app/boot/build/libs/*.jar app.jar
 
 EXPOSE 8080
 

@@ -1,7 +1,7 @@
 # -------- Build Stage --------
 FROM amazoncorretto:21-alpine AS build
 
-WORKDIR /app
+WORKDIR /boot
 
 COPY . .
 
@@ -16,7 +16,7 @@ WORKDIR /app
 
 ENV TZ=America/Bogota
 
-COPY --from=build /app/main-app/boot/build/libs/*.jar app.jar
+COPY --from=build /boot/main-app/boot/build/libs/*.jar app.jar
 
 EXPOSE 8080
 

@@ -13,6 +13,11 @@ RUN ./gradlew clean build -x test --no-daemon
 # -------- Production Stage --------
 FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS production
 
+# Install curl using the Amazon Linux package manager
+RUN yum update -y && \
+    yum install -y curl && \
+    yum clean all
+
 WORKDIR /app
 
 ENV TZ=America/Bogota

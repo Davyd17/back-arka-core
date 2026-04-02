@@ -41,3 +41,6 @@ management:
   endpoint:
     health:
       show-details: always
+
+jwt-provider:
+  secret: ${JWT_SECRET}

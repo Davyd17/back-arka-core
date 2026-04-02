@@ -10,12 +10,15 @@ include(":boot",
         ":domain",
         ":jpa-repository",
         ":application",
-        ":api-rest")
+        ":api-rest",
+        ":security"
+)
 
 project(":boot").projectDir = file("./main-app/boot")
 project(":domain").projectDir = file("./core/domain")
 project(":application").projectDir = file("./core/application")
 project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/jpa-repository")
 project(":api-rest").projectDir = file("./infrastructure/entry-points/api-rest")
+project(":security").projectDir = file("./infrastructure/entry-points/security")
 
 

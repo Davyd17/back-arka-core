@@ -16,9 +16,9 @@ services:
       dockerfile: deployment/Dockerfile
     image: arka_image
     env_file:
-      - .env.dev
+      - .env
     profiles:
-      - full
+      - deploy
     container_name: arka_app
     ports:
       - "8080:8080"

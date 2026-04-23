@@ -4,6 +4,7 @@ import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.in.UpdateOrderItemIn;
 import com.arka.enums.OrderType;
 import com.arka.gateway.repository.order.OrderGateway;
+import com.arka.model.Company;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
@@ -45,7 +46,13 @@ class ModifyOrderUseCaseTest {
 
     @BeforeEach
     void setUp() {
-        order = Order.create("ORD-001", "old notes", OrderType.SALES);
+
+        Company company = Company.builder()
+                .name("Test Company")
+                .id(1L)
+                .build();
+
+        order = Order.create("ORD-001", "old notes", OrderType.SALES, company);
     }
 
     // --- input validation ---

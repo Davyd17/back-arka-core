@@ -4,6 +4,7 @@ import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.exceptions.InvalidOrderStatusException;
 import com.arka.exceptions.InvalidOrderTransitionStatusException;
+import com.arka.model.Company;
 import com.arka.model.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,12 @@ class OrderTest {
     void setUp() {
 
         //GIVEN
-        order = Order.create("ORD-001", "notes", OrderType.SALES);
+        Company company = Company.builder()
+                .name("Test Company")
+                .id(1L)
+                .build();
+
+        order = Order.create("ORD-001", "notes", OrderType.SALES, company);
 
         Product product1 = Product.builder().id(1L).build();
         Product product2 = Product.builder().id(2L).build();

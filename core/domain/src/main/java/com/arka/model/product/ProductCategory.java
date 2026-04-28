@@ -2,23 +2,21 @@ package com.arka.model.product;
 
 import lombok.*;
 
-import java.time.Instant;
+@Builder(access = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
+public class ProductCategory {
 
-@Builder
-public record ProductCategory(
-        Long id,
-        String name,
-        String slug,
-        Instant createdAt) {
+    private Long id;
+    private String name;
+    private String slug;
 
     public static ProductCategory create(
-            String name,
-            String slug
+            String name
     ) {
         return ProductCategory.builder()
                 .name(name)
-                .slug(slug)
-                .createdAt(Instant.now())
+                .slug(name.toLowerCase().replace(" ", "-"))
                 .build();
     }
 }

@@ -16,7 +16,7 @@ services:
       dockerfile: deployment/Dockerfile
     image: arka_image
     env_file:
-      - .env
+      - .env.docker
     profiles:
       - deploy
     container_name: arka_app

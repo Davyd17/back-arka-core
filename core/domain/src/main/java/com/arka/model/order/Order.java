@@ -1,18 +1,21 @@
 package com.arka.model.order;
 
+import com.arka.exceptions.InvalidOrderStatusException;
 import com.arka.model.Company;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Order {
 
@@ -27,38 +30,53 @@ public class Order {
     private Company company;
     private List<OrderItem> items;
 
-    public Order() {
-        this.status = OrderStatus.PENDING;
+    public static Order create(String number,
+                               String notes,
+                               OrderType type,
+                               Company company) {
+
+        return Order.builder()
+                .number(number)
+                .status(OrderStatus.PENDING)
+                .notes(notes)
+                .type(type)
+                .createdAt(Instant.now())
+                .company(company)
+                .items(new ArrayList<>())
+                .build();
+    };
+
+    public void addItem(OrderItem item){
+
+        this.status.validateEditable(this.number);
+        this.items.add(item);
+        this.updateTotalPrice();
     }
 
-    public void addCompany(Company company) {
-        this.company = company;
-    }
+    public void removeItem(Long productId){
 
-    public void updateItems(List<OrderItem> newItems) {
+        this.status.validateEditable(this.number);
 
-        this.items.removeIf(currentItem ->
-                newItems.stream().noneMatch(newItem ->
-                        newItem.getProduct().getId().equals(currentItem.getProduct().getId())));
-
-        for (OrderItem newItem : newItems) {
-
-            this.items.stream()
-                    .filter(item ->
-                            item.getProduct().getId().equals(newItem.getProduct().getId()))
-                    .findFirst()
-                    .ifPresentOrElse(existingItem -> {
-
-                        if(existingItem.getQuantity() != newItem.getQuantity())
-                            existingItem.updateQuantity(newItem.getQuantity());
-
-                    }, () -> this.items.add(newItem));
-        }
+        this.items.removeIf(item ->
+                    item.getProduct().getId().equals(productId));
 
         this.updateTotalPrice();
     }
 
-    public void updateTotalPrice() {
+    public void changeItemQuantity(Long productId, int newQuantity){
+
+        this.status.validateEditable(this.number);
+
+        this.items.stream()
+                .filter(item ->
+                        item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(item -> item.updateQuantity(newQuantity));
+
+        this.updateTotalPrice();
+    }
+
+    private void updateTotalPrice() {
         this.totalPrice = this.items.stream()
                 .map(item -> item
                         .getUnitPrice()
@@ -67,10 +85,12 @@ public class Order {
     }
 
     public void updateStatus(OrderStatus status) {
-        this.status = status;
+        this.status = this.status.transitionTo(status);
     }
 
     public void updateNotes(String notes) {
+
+        this.status.validateEditable(this.number);
         this.notes = notes;
     }
 

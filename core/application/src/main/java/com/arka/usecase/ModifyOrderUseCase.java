@@ -2,12 +2,10 @@ package com.arka.usecase;
 
 import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.out.UpdateOrderOut;
-import com.arka.exceptions.InvalidOrderStateException;
 import com.arka.mapper.OrderItemMapper;
 import com.arka.mapper.OrderItemMapperImpl;
 import com.arka.mapper.OrderMapper;
 import com.arka.mapper.OrderMapperImpl;
-import com.arka.enums.OrderStatus;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
 import com.arka.gateway.repository.order.OrderGateway;
@@ -16,6 +14,7 @@ import com.arka.service.OrderService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class ModifyOrderUseCase {
@@ -31,32 +30,83 @@ public class ModifyOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    public UpdateOrderOut execute(UpdateOrderIn request) {
+    public UpdateOrderOut execute(UpdateOrderIn input) {
 
-        if(request == null)
-            throw new IllegalArgumentException("Input cannot be null");
+        if (input == null)
+            throw new IllegalArgumentException("Order cannot be null");
 
-        Order order = orderService.findById(request.id());
+        Order order = orderService.findById(input.id());
 
-        if(!order.getStatus().equals(OrderStatus.PENDING))
-            throw new InvalidOrderStateException(order.getNumber(), order.getStatus());
+        if (input.items() != null && !input.items().isEmpty()) {
 
-        if(request.items() != null && !request.items().isEmpty()) {
-
-            List<OrderItem> mappedRequestItems = request.items().stream()
+            List<OrderItem> mappedInputItems = input.items().stream()
                     .map(orderItemMapper::toDomain)
                     .toList();
 
             List<OrderItem> resolvedItems = itemService
                     .resolveProductsFromOrderItemsRequest(
-                            mappedRequestItems, order.getType());
+                            mappedInputItems, order.getType());
 
-            order.updateItems(resolvedItems);
+            this.updateItems(order, resolvedItems);
 
-        } if (!request.notes().isBlank())
-            order.updateNotes(request.notes());
+        }
+
+        if (!input.notes().isBlank())
+            order.updateNotes(input.notes());
 
         return orderMapper.toUpdateDTO(orderGateway.update(order));
     }
 
+    private void updateItems(Order order,
+                             List<OrderItem> incomingItems) {
+
+        this.itemsToRemove(order.getItems(), incomingItems)
+                .forEach(order::removeItem);
+
+        incomingItems.forEach(item -> syncItem(order, item));
+    }
+
+
+    private List<Long> itemsToRemove(List<OrderItem> currentItems,
+                                     List<OrderItem> incomingItems) {
+
+        Set<Long> incomingProductIds = incomingItems.stream()
+                .map(item -> item.getProduct().getId())
+                .collect(Collectors.toSet());
+
+        return currentItems.stream()
+                .map(item -> item.getProduct().getId())
+                .filter(id -> !incomingProductIds.contains(id))
+                .toList();
+    }
+
+    private void syncItem(Order order, OrderItem incomingItem) {
+
+        Optional<OrderItem> existingItem = this.findMatchingItem
+                        (order.getItems(), incomingItem);
+
+        if (existingItem.isPresent()) {
+
+            OrderItem item = existingItem.get();
+
+            if (item.getQuantity() != incomingItem.getQuantity())
+                order.changeItemQuantity
+                        (item.getProduct().getId(), incomingItem.getQuantity());
+
+        } else
+            order.addItem(incomingItem);
+
+    }
+
+
+    private Optional<OrderItem> findMatchingItem(List<OrderItem> currentItems,
+                                                 OrderItem incomingItem) {
+
+        Long incomingProductId = incomingItem.getProduct().getId();
+
+        return currentItems.stream()
+                .filter(item ->
+                        incomingProductId.equals(item.getProduct().getId()))
+                .findFirst();
+    }
 }

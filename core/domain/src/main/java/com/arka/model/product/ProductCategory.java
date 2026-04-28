@@ -3,6 +3,8 @@ package com.arka.model.product;
 import lombok.*;
 
 @Builder(access = AccessLevel.PRIVATE)
+@Getter
+@AllArgsConstructor
 public class ProductCategory {
 
     private Long id;

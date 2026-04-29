@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +23,6 @@ public class Order {
     private String notes;
     private OrderType type;
     private BigDecimal totalPrice;
-    private Instant createdAt;
-    private Instant updatedAt;
     private Company company;
     private List<OrderItem> items;
 
@@ -39,11 +36,10 @@ public class Order {
                 .status(OrderStatus.PENDING)
                 .notes(notes)
                 .type(type)
-                .createdAt(Instant.now())
                 .company(company)
                 .items(new ArrayList<>())
                 .build();
-    };
+    }
 
     public void addItem(OrderItem item){
 

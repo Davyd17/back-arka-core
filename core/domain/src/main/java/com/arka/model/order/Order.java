@@ -1,6 +1,5 @@
 package com.arka.model.order;
 
-import com.arka.exceptions.InvalidOrderStatusException;
 import com.arka.model.Company;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;

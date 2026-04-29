@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class Contact {
-    private Long contactId;
+    private Long id;
     private String name;
     private String lastName;
     private String position;

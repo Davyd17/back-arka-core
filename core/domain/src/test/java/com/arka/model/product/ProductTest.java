@@ -1,6 +1,6 @@
 package com.arka.model.product;
 
-import com.arka.exceptions.InvalidProductStateException;
+import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +71,7 @@ class ProductTest {
 
     @Test
     void shouldThrowWhenActivatingAlreadyActiveProduct() {
-        assertThrows(InvalidProductStateException.class,
+        assertThrows(InvalidActivationStateException.class,
                 () -> product.activate());
     }
 
@@ -79,7 +79,7 @@ class ProductTest {
     void shouldThrowWhenDeactivatingAlreadyInactiveProduct() {
         product.deactivate();
 
-        assertThrows(InvalidProductStateException.class,
+        assertThrows(InvalidActivationStateException.class,
                 () -> product.deactivate());
     }
 

@@ -1,8 +1,9 @@
-package com.arka.model;
+package com.arka.model.company;
 
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.NotFoundException;
+import com.arka.model.Company;
 import com.arka.model.information.Contact;
 import com.arka.model.product.ProductCategory;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ class CompanyTest {
 
     private Contact buildContact(Long id) {
         return new Contact(id, "John", "Doe", "CEO",
-                "john@test.com", new ArrayList<>(), new ArrayList<>(), null, true, 1L);
+                "john@test.com", new ArrayList<>(), new ArrayList<>(), true, 1L);
     }
 
     private ProductCategory buildCategory(Long id) {

@@ -1,6 +1,6 @@
 package com.arka.model.product;
 
-import com.arka.exceptions.InvalidProductStateException;
+import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
 import jakarta.annotation.Nullable;
 import lombok.*;
@@ -44,7 +44,7 @@ public class Product {
     public void activate(){
 
         if(this.active)
-            throw new InvalidProductStateException(this.sku, this.active);
+            throw new InvalidActivationStateException(this.getClass(), this.sku, this.active);
 
         this.active = true;
     }
@@ -52,7 +52,7 @@ public class Product {
     public void deactivate(){
 
         if(!this.active)
-            throw new InvalidProductStateException(this.sku, this.active);
+            throw new InvalidActivationStateException(this.getClass(), this.sku, this.active);
 
         this.active = false;
     }

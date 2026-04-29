@@ -8,6 +8,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class PhoneNumber {
+    private Long id;
     private String countryCode;
     private String extension;
     private String phone;

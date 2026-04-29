@@ -1,22 +1,23 @@
 package com.arka.model.information;
 
+import com.arka.exceptions.InvalidActivationStateException;
+import com.arka.exceptions.NotFoundException;
+import com.arka.util.ExistenceValidator;
 import lombok.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
-@Builder(toBuilder = true)
+@Builder(access = AccessLevel.PRIVATE)
 public class Contact {
     private Long id;
-    private String name;
-    private String lastName;
-    private String position;
-    private String email;
+    @Setter private String name;
+    @Setter private String lastName;
+    @Setter private String position;
+    @Setter private String email;
     private List<Address> addresses;
     private List<PhoneNumber> phoneNumbers;
-    private Instant createdAt;
     private boolean active;
     private Long userId;
 
@@ -30,17 +31,84 @@ public class Contact {
             Long userId
     ){
 
+        if(addresses == null || addresses.isEmpty())
+            throw new IllegalArgumentException(
+                    "Contact should have at least one associated address");
+
+        if(phoneNumbers == null || phoneNumbers.isEmpty())
+            throw new IllegalArgumentException(
+                    "Contact should have at least one associated phone number");
+
         return Contact.builder()
                 .name(name)
                 .lastName(lastName)
                 .position(position)
                 .email(email)
-                .addresses(List.copyOf(addresses))
+                .addresses(addresses)
                 .active(true)
-                .createdAt(Instant.now())
                 .phoneNumbers(phoneNumbers)
                 .userId(userId)
                 .build();
     }
 
+    public void activate(){
+
+        this.validateActivationState(true);
+        this.active = true;
+    }
+
+    public void deactivate(){
+
+        this.validateActivationState(false);
+        this.active = false;
+    }
+
+    private void validateActivationState(boolean newState){
+
+        if(this.active == newState)
+            throw new InvalidActivationStateException(
+                    this.getClass(),
+                    this.id,
+                    this.active);
+    }
+
+    public void addAddress(Address address){
+
+        ExistenceValidator.validateNoDuplicate(
+                this.addresses, Address::id, address.id(), Address.class);
+
+        this.addresses.add(address);
+    }
+
+    public void removeAddress(Long addressId){
+
+        boolean removed = this.addresses.removeIf(a ->
+                a.id().equals(addressId));
+
+        if(!removed)
+            throw new NotFoundException(
+                    String.format("Address with id [%s] not found", addressId));
+    }
+
+    public void addPhoneNumber(PhoneNumber phoneNumber){
+
+        ExistenceValidator.validateNoDuplicate(
+                this.phoneNumbers,
+                PhoneNumber::getId,
+                phoneNumber.getId(),
+                PhoneNumber.class);
+
+        this.phoneNumbers.add(phoneNumber);
+    }
+
+    public void removePhoneNumber(Long phoneNumberId){
+
+        boolean removed = this.phoneNumbers.removeIf(pn ->
+                pn.getId().equals(phoneNumberId));
+
+        if(!removed){
+            throw new NotFoundException(
+                    String.format("PhoneNumber with id [%s] not found", phoneNumberId));
+        }
+    }
 }

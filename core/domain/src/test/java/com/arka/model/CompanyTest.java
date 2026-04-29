@@ -31,7 +31,7 @@ class CompanyTest {
 
     private Contact buildContact(Long id) {
         return new Contact(id, "John", "Doe", "CEO",
-                "john@test.com", new ArrayList<>(), new ArrayList<>(), null, true, 1L);
+                "john@test.com", new ArrayList<>(), new ArrayList<>(), true, 1L);
     }
 
     private ProductCategory buildCategory(Long id) {

@@ -53,7 +53,7 @@ public class Company {
                         contact.getId().equals(contactId));
 
         if (alreadyExists){
-            throw new AlreadyExistsException("Contact", contactId);
+            throw new AlreadyExistsException(Contact.class, contactId);
         }
 
     }
@@ -79,7 +79,7 @@ public class Company {
                 .anyMatch(pc -> pc.getId().equals(categoryId));
 
         if (alreadyExists)
-            throw new AlreadyExistsException("ProductCategory", categoryId);
+            throw new AlreadyExistsException(ProductCategory.class, categoryId);
     }
 
     public void removeProductCategory(Long categoryId) {

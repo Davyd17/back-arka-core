@@ -1,8 +1,9 @@
-package com.arka.model;
+package com.arka.model.company;
 
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.NotFoundException;
+import com.arka.model.Company;
 import com.arka.model.information.Contact;
 import com.arka.model.product.ProductCategory;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,39 +1,55 @@
 package com.arka.model.order;
 
 import com.arka.model.product.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
-@Builder(toBuilder = true)
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class OrderItem {
     private Long id;
     private Product product;
     private int quantity;
-    private BigDecimal unitPrice;
+    private BigDecimal unitPriceSnapshot;
+    private BigDecimal totalPrice;
+
+    public static OrderItem create(Product product,
+                                   int quantity) {
+
+        validateGraterThanZero(quantity, product);
+
+        return OrderItem.builder()
+                .product(product)
+                .quantity(quantity)
+                .unitPriceSnapshot(product.getBasePrice())
+                .totalPrice(product.getBasePrice()
+                        .multiply(BigDecimal.valueOf(quantity)))
+                .build();
+    }
 
     public void updateQuantity(int quantity) {
+
+        validateGraterThanZero(quantity, this.product);
+
         this.quantity = quantity;
+        this.updateTotalPrice();
     }
 
-    public void addProduct(Product product){
+    private static void validateGraterThanZero(int quantity, Product product) {
 
-        if(product != null && product.getBasePrice() != null && product.isActive()){
-
-            this.product = product;
-            this.setUnitPriceFromProductBasePrice();
-
-        } else throw new IllegalArgumentException(
-                "Product must be active and have a base price to be added.");
+        if (quantity <= 0)
+            throw new
+                    IllegalArgumentException(
+                    String.format("Quantity must be greater than zero for product [%s]",
+                            product.getSku()));
     }
 
-    private void setUnitPriceFromProductBasePrice() {
-        if (Objects.nonNull(product))
-            this.unitPrice = product.getBasePrice();
+    private void updateTotalPrice() {
+
+        this.totalPrice = this.unitPriceSnapshot
+                .multiply(BigDecimal.valueOf(this.quantity));
     }
 }

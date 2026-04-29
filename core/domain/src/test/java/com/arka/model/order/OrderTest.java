@@ -6,10 +6,14 @@ import com.arka.exceptions.InvalidOrderStatusException;
 import com.arka.exceptions.InvalidOrderTransitionStatusException;
 import com.arka.model.Company;
 import com.arka.model.product.Product;
+import com.arka.model.product.ProductCategory;
+import jdk.jfr.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,27 +27,30 @@ class OrderTest {
     void setUp() {
 
         //GIVEN
-        Company company = Company.builder()
-                .name("Test Company")
-                .id(1L)
-                .build();
 
-        order = Order.create("ORD-001", "notes", OrderType.SALES, company);
+        order = Order.create("ORD-001", "notes", OrderType.SALES, null);
 
-        Product product1 = Product.builder().id(1L).build();
-        Product product2 = Product.builder().id(2L).build();
+        item1 = OrderItem.create(
+                buildProduct(1L, BigDecimal.valueOf(10.00)),
+                2);
 
-        item1 = OrderItem.builder()
-                .product(product1)
-                .quantity(2)
-                .unitPrice(BigDecimal.valueOf(10.00))
-                .build();
+        item2 = OrderItem.create(
+                buildProduct(2L, BigDecimal.valueOf(20.00)),
+                3);
+    }
 
-        item2 = OrderItem.builder()
-                .product(product2)
-                .quantity(3)
-                .unitPrice(BigDecimal.valueOf(20.00))
-                .build();
+    private Product buildProduct(Long id, BigDecimal basePrice){
+
+        return new Product(
+                id,
+                "SKU-00" + id,
+                "Test Product" + id,
+                null,
+                basePrice,
+                new HashMap<>(),
+                null,
+                true
+        );
     }
 
     // --- updateTotalPrice ---

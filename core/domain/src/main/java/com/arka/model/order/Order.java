@@ -78,9 +78,7 @@ public class Order {
 
     private void updateTotalPrice() {
         this.totalPrice = this.items.stream()
-                .map(item -> item
-                        .getUnitPrice()
-                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(OrderItem::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

@@ -1,13 +1,9 @@
 package com.arka.service;
 
-import com.arka.mapper.OrderItemMapper;
-import com.arka.mapper.OrderItemMapperImpl;
 import com.arka.enums.OrderType;
 import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 @AllArgsConstructor
 public class OrderItemService {
@@ -15,27 +11,24 @@ public class OrderItemService {
     private final ProductService productService;
     private final WarehouseInventoryService inventoryService;
 
-    private final OrderItemMapper orderItemMapper =
-            new OrderItemMapperImpl();
+    public OrderItem resolveItem(OrderType type, Long productId, int quantity){
 
-    public List<OrderItem> resolveProductsFromOrderItemsRequest(
-            List<OrderItem> newItems, OrderType orderType) {
+        Product resolvedProduct =
+                this.productService.findById(productId);
 
-        if (newItems == null || newItems.isEmpty())
-            throw new IllegalArgumentException("Order must contain at least one item");
+        validateStockIfRequired(
+                type,
+                resolvedProduct.getId(),
+                quantity);
 
-        for (OrderItem item : newItems) {
+        return OrderItem.create(resolvedProduct, quantity);
+    }
 
-            Product foundProduct = productService.findById(item.getProduct().getId());
+    private void validateStockIfRequired(OrderType type, Long productId, int quantity){
 
-            if (orderType.equals(OrderType.SALES))
-                inventoryService.validateGeneralStockAvailability(
-                        foundProduct.getId(), item.getQuantity());
-
-            item.addProduct(foundProduct);
-        }
-
-        return newItems;
+        if(type.equals(OrderType.SALES))
+            this.inventoryService.validateGeneralStockAvailability
+                    (productId, quantity);
     }
 
 }

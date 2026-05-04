@@ -2,12 +2,14 @@ package com.arka.usecase;
 
 import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.in.UpdateOrderItemIn;
+import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.gateway.repository.order.OrderGateway;
 import com.arka.model.Company;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
+import com.arka.model.product.ProductCategory;
 import com.arka.service.OrderItemService;
 import com.arka.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.swing.*;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,12 +48,30 @@ class ModifyOrderUseCaseTest {
     @BeforeEach
     void setUp() {
 
-        Company company = Company.builder()
-                .name("Test Company")
-                .id(1L)
-                .build();
+        order = Order.create("ORD-001", "old notes", OrderType.SALES, this.buildCompany(1L));
+    }
 
-        order = Order.create("ORD-001", "old notes", OrderType.SALES, company);
+    private Company buildCompany(long id){
+        return new Company(
+                id,
+                "Test Company " + id,
+                CompanyRelationType.CUSTOMER,
+                new ArrayList<>(),
+                new HashSet<>()
+        );
+    }
+
+    private Product buildProduct(long id, BigDecimal basePrice){
+        return new Product(
+                id,
+                "PT-00" + id,
+                "test product-" + id,
+                null,
+                basePrice,
+                new HashMap<>(),
+                ProductCategory.create("Test category"),
+                true
+        );
     }
 
     // --- input validation ---
@@ -103,24 +122,19 @@ class ModifyOrderUseCaseTest {
     void shouldAddNewItemWhenNotPresentInOrder(){
 
         //Arrange
-        Product product = Product.builder().id(1L).build();
+        Product product = this.buildProduct(2L, BigDecimal.valueOf(20.00));
 
-        OrderItem incomingItem = OrderItem
-                .builder()
-                .product(product)
-                .unitPrice(BigDecimal.valueOf(10.00))
-                .quantity(3)
-                .build();
+        OrderItem incomingItem = OrderItem.create(product, 10);
 
-        Set<UpdateOrderItemIn> itemsInput =
-                Set.of(new UpdateOrderItemIn(null, 1L, 3));
+        Set<UpdateOrderIn.Item> itemsInput =
+                Set.of(new UpdateOrderIn.Item(null, 1L, 3));
 
         UpdateOrderIn orderInput = new UpdateOrderIn(1L, "", itemsInput);
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveProductsFromOrderItemsRequest(any(), any()))
-                .thenReturn(List.of(incomingItem));
+        when(itemService.resolveItem(any(), any(), any()))
+                .thenReturn(incomingItem);
 
         when(orderGateway.update(order)).thenReturn(order);
 
@@ -129,39 +143,25 @@ class ModifyOrderUseCaseTest {
 
         //Asser
         assertEquals(1, order.getItems().size());
-        assertEquals(BigDecimal.valueOf(10.00), order.getItems().getFirst().getUnitPrice());
+        assertEquals(BigDecimal.valueOf(10.00), order.getItems().getFirst().getUnitPriceSnapshot());
     }
 
     @Test
     void shouldRemoveItemNotPresentInIncomingList(){
 
         //Arrange
-        Product product1 = Product.builder().id(1L).build();
-        Product product2 = Product.builder().id(2L).build();
+        Product product1 = this.buildProduct(1L, BigDecimal.valueOf(10.00));
+        Product product2 = this.buildProduct(2L, BigDecimal.valueOf(20.00));
 
-        OrderItem currentItem1 = OrderItem
-                .builder()
-                .product(product1)
-                .unitPrice(BigDecimal.valueOf(10.00))
-                .quantity(3)
-                .build();
+        OrderItem currentItem1 = OrderItem.create(product1, 3);
 
-        OrderItem currentItem2 = OrderItem
-                .builder()
-                .product(product2)
-                .unitPrice(BigDecimal.valueOf(20.00))
-                .quantity(5)
-                .build();
+        OrderItem currentItem2 = OrderItem.create(product2, 5);
 
         order.addItem(currentItem1);
         order.addItem(currentItem2);
 
         OrderItem incomingItem =
-                OrderItem.builder()
-                        .product(product1)
-                        .unitPrice(BigDecimal.valueOf(10.00))
-                        .quantity(3)
-                        .build();
+                OrderItem.create(product1, 3);
 
         UpdateOrderIn orderInput =
                 new UpdateOrderIn(1L, "", Set.of(
@@ -169,8 +169,8 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveProductsFromOrderItemsRequest(any(), any()))
-                .thenReturn(List.of(incomingItem));
+        when(itemService.resolveItem(any(), any(), any()))
+                .thenReturn(incomingItem);
 
         when(orderGateway.update(order)).thenReturn(order);
 
@@ -189,50 +189,31 @@ class ModifyOrderUseCaseTest {
     void shouldUpdateQuantityWhenItemAlreadyExists() {
 
         //Arrange
-        Product product1 = Product.builder().id(1L).build();
-        Product product2 = Product.builder().id(2L).build();
+        Product product1 = this.buildProduct(1L, BigDecimal.valueOf(10.00));
+        Product product2 = this.buildProduct(2L, BigDecimal.valueOf(20.00));
 
-        OrderItem currentItem1 = OrderItem
-                .builder()
-                .product(product1)
-                .unitPrice(BigDecimal.valueOf(10.00))
-                .quantity(3)
-                .build();
 
-        OrderItem currentItem2 = OrderItem
-                .builder()
-                .product(product2)
-                .unitPrice(BigDecimal.valueOf(20.00))
-                .quantity(5)
-                .build();
+        OrderItem currentItem1 = OrderItem.create(product1, 3);
+
+        OrderItem currentItem2 = OrderItem.create(product2, 5);
 
         order.addItem(currentItem1);
         order.addItem(currentItem2);
 
-        OrderItem incomingItem1 =
-                OrderItem.builder()
-                        .product(product1)
-                        .unitPrice(BigDecimal.valueOf(10.00))
-                        .quantity(3)
-                        .build();
+        OrderItem incomingItem1 = OrderItem.create(product1, 3);
 
         //Update quantity of item2 from 5 to 8
-        OrderItem incomingItem2 =
-                OrderItem.builder()
-                        .product(product2)
-                        .unitPrice(BigDecimal.valueOf(10.00))
-                        .quantity(8)
-                        .build();
+        OrderItem incomingItem2 = OrderItem.create(product2, 8);
 
-        UpdateOrderIn orderInput =
-                new UpdateOrderIn(1L, "", Set.of(
-                        new UpdateOrderItemIn(null, 1L, 3),
-                        new UpdateOrderItemIn(null, 2L, 8)));
+        UpdateOrderIn orderInput;
+        orderInput = new UpdateOrderIn(1L, "", Set.of(
+                new UpdateOrderIn.Item(null, 1L, 3),
+                new UpdateOrderIn.Item(null, 2L, 8)));
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveProductsFromOrderItemsRequest(any(), any()))
-                .thenReturn(List.of(incomingItem1, incomingItem2));
+        when(itemService.resolveItem(any(), any(), any()))
+                .thenReturn(incomingItem2);
 
         when(orderGateway.update(order)).thenReturn(order);
 

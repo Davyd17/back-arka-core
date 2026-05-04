@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class Order {
     private BigDecimal totalPrice;
     private Company company;
     private List<OrderItem> items;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     public static Order create(String number,
                                String notes,

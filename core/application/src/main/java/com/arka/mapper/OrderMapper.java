@@ -1,7 +1,6 @@
 package com.arka.mapper;
 
 import com.arka.dto.in.CreateOrderIn;
-import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.dto.out.OrderSummaryOut;
 import com.arka.dto.out.UpdateOrderOut;

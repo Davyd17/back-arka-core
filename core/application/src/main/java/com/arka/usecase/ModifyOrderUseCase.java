@@ -2,8 +2,6 @@ package com.arka.usecase;
 
 import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.out.UpdateOrderOut;
-import com.arka.mapper.OrderItemMapper;
-import com.arka.mapper.OrderItemMapperImpl;
 import com.arka.mapper.OrderMapper;
 import com.arka.mapper.OrderMapperImpl;
 import com.arka.model.order.Order;
@@ -25,9 +23,6 @@ public class ModifyOrderUseCase {
     private final OrderMapper orderMapper =
             new OrderMapperImpl();
 
-    private final OrderItemMapper orderItemMapper =
-            new OrderItemMapperImpl();
-
     private final OrderGateway orderGateway;
 
     public UpdateOrderOut execute(UpdateOrderIn input) {
@@ -35,43 +30,42 @@ public class ModifyOrderUseCase {
         if (input == null)
             throw new IllegalArgumentException("Order cannot be null");
 
-        Order order = orderService.findById(input.id());
+        Order existingOrder = orderService.findById(input.id());
 
-        if (input.items() != null && !input.items().isEmpty()) {
+        if(hasItems(input))
+            updateItems(existingOrder, input.items());
 
-            List<OrderItem> mappedInputItems = input.items().stream()
-                    .map(orderItemMapper::toDomain)
-                    .toList();
+        if (hasNotes(input))
+            existingOrder.updateNotes(input.notes());
 
-            List<OrderItem> resolvedItems = itemService
-                    .resolveProductsFromOrderItemsRequest(
-                            mappedInputItems, order.getType());
-
-            this.updateItems(order, resolvedItems);
-
-        }
-
-        if (!input.notes().isBlank())
-            order.updateNotes(input.notes());
-
-        return orderMapper.toUpdateDTO(orderGateway.update(order));
+        return orderMapper.toUpdateDTO(orderGateway.update(existingOrder));
     }
 
-    private void updateItems(Order order,
-                             List<OrderItem> incomingItems) {
+    private boolean hasItems(UpdateOrderIn input){
+        return input.items() != null && !input.items().isEmpty();
+    }
 
-        this.itemsToRemove(order.getItems(), incomingItems)
+    private boolean hasNotes(UpdateOrderIn input){
+        return input.notes() != null && !input.notes().isBlank();
+    }
+
+    private void updateItems(Order order, Set<UpdateOrderIn.Item> incomingItems){
+
+        itemsToRemove(order.getItems(), incomingItems)
                 .forEach(order::removeItem);
 
-        incomingItems.forEach(item -> syncItem(order, item));
+        incomingItems.forEach(item ->
+                syncItem(order, itemService.resolveItem(
+                        order.getType(),
+                        item.productId(),
+                        item.quantity())));
     }
 
-
     private List<Long> itemsToRemove(List<OrderItem> currentItems,
-                                     List<OrderItem> incomingItems) {
+                                     Set<UpdateOrderIn.Item> incomingItems) {
 
         Set<Long> incomingProductIds = incomingItems.stream()
-                .map(item -> item.getProduct().getId())
+                .map(UpdateOrderIn.Item::productId)
                 .collect(Collectors.toSet());
 
         return currentItems.stream()

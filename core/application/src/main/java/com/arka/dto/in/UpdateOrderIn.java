@@ -6,6 +6,13 @@ public record UpdateOrderIn(
 
         Long id,
         String notes,
-        Set<UpdateOrderItemIn>items
+        Set<Item> items
 ) {
+
+    public record Item(
+            Long id,
+            Long productId,
+            int quantity
+    ){
+    }
 }

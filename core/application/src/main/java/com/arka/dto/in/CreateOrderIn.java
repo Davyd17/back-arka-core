@@ -10,7 +10,13 @@ public record CreateOrderIn (
         String notes,
         OrderType type,
         Long companyId,
-        List<CreateOrderItemIn> items
+        List<Item> items
 ){
+
+    public record Item(
+            Long productId,
+            int quantity
+    ) {
+    }
 
 }

@@ -7,6 +7,7 @@ public record CreateOrderItemOut(
         Long id,
         CreateProductOut product,
         int quantity,
-        BigDecimal unitPrice
+        BigDecimal unitPriceSnapshot,
+        BigDecimal totalPrice
 ) {
 }

@@ -1,16 +1,14 @@
 package com.arka.model.cart;
 
 import com.arka.model.product.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.arka.util.QuantityValidator;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ShoppingCartItem {
 
@@ -18,36 +16,34 @@ public class ShoppingCartItem {
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal subTotal;
-    private Instant createdAt;
-    private Instant updatedAt;
     private final Product product;
 
-    public ShoppingCartItem(Product product, int quantity) {
+    public static ShoppingCartItem create(
+            int quantity,
+            Product product){
 
-        this.product = product;
-        assignUnitPrice();
-        updateSubTotal();
+        QuantityValidator.validate(quantity);
 
-        this.quantity = quantity;
+        return ShoppingCartItem.builder()
+                .quantity(quantity)
+                .unitPrice(product.getBasePrice())
+                .subTotal(product.getBasePrice()
+                                .multiply(BigDecimal.valueOf(quantity)))
+                .product(product)
+                .build();
     }
 
-    private void assignUnitPrice() {
-        this.unitPrice = product.getBasePrice();
+    public void updateQuantity(int quantity) {
+
+        QuantityValidator.validate(quantity);
+
+        this.quantity = quantity;
+        updateSubTotal();
     }
 
     private void updateSubTotal() {
         this.subTotal =
                 this.unitPrice.multiply(BigDecimal.valueOf(this.quantity));
-    }
-
-    public void addQuantity(int quantity) {
-        this.quantity += quantity;
-        updateSubTotal();
-    }
-
-    public void updateQuantity(int quantity) {
-        this.quantity = quantity;
-        updateSubTotal();
     }
 
 }

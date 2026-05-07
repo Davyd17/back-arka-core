@@ -2,18 +2,21 @@ package com.arka.model.cart;
 
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.model.product.Product;
+import com.arka.util.NullValidator;
+import com.arka.util.QuantityValidator;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Getter
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class ShoppingCart {
 
@@ -25,71 +28,86 @@ public class ShoppingCart {
     private Instant updatedAt;
     private final Long userId;
 
-    public ShoppingCart(Long userId) {
-        this.userId = userId;
-        this.status = ShoppingCartStatus.ACTIVE;
-        this.items = new ArrayList<>();
+    public static ShoppingCart create(
+            List<ShoppingCartItem> items,
+            Long userId
+    ){
+        ShoppingCart newCart = ShoppingCart.builder()
+                .status(ShoppingCartStatus.ACTIVE)
+                .items(items)
+                .userId(userId)
+                .build();
+
+        newCart.updateTotalAmount();
+        return newCart;
     }
 
     public void addItem(Product product, int quantity){
 
         validateAddItemArgs(product, quantity);
-        validateCartStatusAtAddItem();
 
         activeCartIfAbandoned();
 
-        getExistingItem(product)
-                .ifPresentOrElse(existingItem -> existingItem.addQuantity(quantity),
-                        () -> this.items.add(new ShoppingCartItem(product, quantity)));
+        Optional<ShoppingCartItem> item = getExistingItem(product);
 
-        updateTotalPrice();
+        if(item.isPresent()){
+            item.get().updateQuantity(quantity);
+        } else
+            this.items.add(ShoppingCartItem.create(quantity, product));
+
+        updateTotalAmount();
     }
 
     private Optional<ShoppingCartItem> getExistingItem(Product product) {
         return this.items.stream()
-                .filter(item -> item.getProduct().getId().equals(product.getId()))
+                .filter(item ->
+                        item.getProduct().getId().equals(product.getId()))
                 .findFirst();
     }
 
     private void validateAddItemArgs(Product product, int quantity){
         validateProduct(product);
-        validateQuantity(quantity);
+        QuantityValidator.validate(quantity);
+        this.status.validateEditable(this.id);
     }
 
     private void validateProduct(Product product) {
 
-        if(product == null)
-            throw new IllegalArgumentException("Product can't be null");
+        NullValidator.validate(product, "product");
 
         if(!product.isActive())
-            throw new IllegalArgumentException("Product must be active");
-    }
-
-    private void validateQuantity(int quantity) {
-        if(quantity <= 0)
-            throw new IllegalArgumentException("Quantity must be greater than 0");
+            throw new IllegalStateException("Product must be active");
     }
 
     private void activeCartIfAbandoned() {
 
         if(this.status.equals(ShoppingCartStatus.ABANDONED))
-            this.status = ShoppingCartStatus.ACTIVE;
+            this.status = this.status.transitionTo(ShoppingCartStatus.ACTIVE);
     }
 
-    private void validateCartStatusAtAddItem() {
-
-        if(this.status.equals(ShoppingCartStatus.PROCESSED) ||
-                this.status.equals(ShoppingCartStatus.CANCELLED))
-
-            throw new IllegalArgumentException(
-                    String.format("Cart is in state %s, cannot add items", this.status));
-    }
-
-    private void updateTotalPrice() {
+    private void updateTotalAmount() {
         this.totalAmount = this.items.stream()
-                .map(item -> item
-                        .getUnitPrice()
-                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(ShoppingCartItem::getSubTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public boolean isExpired(Duration expirationPeriod){
+        return Instant.now().isAfter(this.createdAt.plus(expirationPeriod));
+    }
+
+    public boolean isAbandoned(Duration abandonedPeriod){
+
+        if(this.updatedAt == null)
+            return Instant.now().isAfter(this.createdAt.plus(abandonedPeriod));
+
+        return Instant.now().isAfter(this.updatedAt.plus(abandonedPeriod));
+    }
+
+    public void abandon(){
+        this.status = this.status.transitionTo(ShoppingCartStatus.ABANDONED);
+    }
+
+    public void cancel(){
+        this.status = this.status.transitionTo(ShoppingCartStatus.CANCELLED);
     }
 }

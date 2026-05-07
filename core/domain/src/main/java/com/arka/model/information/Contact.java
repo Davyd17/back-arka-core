@@ -75,7 +75,7 @@ public class Contact {
     public void addAddress(Address address){
 
         ExistenceValidator.validateNoDuplicate(
-                this.addresses, Address::id, address.id(), Address.class);
+                this.addresses, Address::getId, address.getId(), Address.class);
 
         this.addresses.add(address);
     }
@@ -83,7 +83,7 @@ public class Contact {
     public void removeAddress(Long addressId){
 
         boolean removed = this.addresses.removeIf(a ->
-                a.id().equals(addressId));
+                a.getId().equals(addressId));
 
         if(!removed)
             throw new NotFoundException(

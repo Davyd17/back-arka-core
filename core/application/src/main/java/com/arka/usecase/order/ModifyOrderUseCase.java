@@ -1,9 +1,8 @@
-package com.arka.usecase;
+package com.arka.usecase.order;
 
 import com.arka.dto.in.UpdateOrderIn;
 import com.arka.dto.out.UpdateOrderOut;
 import com.arka.mapper.OrderMapper;
-import com.arka.mapper.OrderMapperImpl;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
 import com.arka.gateway.repository.order.OrderGateway;
@@ -20,8 +19,7 @@ public class ModifyOrderUseCase {
     private final OrderService orderService;
     private final OrderItemService itemService;
 
-    private final OrderMapper orderMapper =
-            new OrderMapperImpl();
+    private final OrderMapper orderMapper;
 
     private final OrderGateway orderGateway;
 

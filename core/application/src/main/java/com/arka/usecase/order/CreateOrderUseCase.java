@@ -1,9 +1,8 @@
-package com.arka.usecase;
+package com.arka.usecase.order;
 
 import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
 import com.arka.gateway.repository.order.OrderGateway;
-import com.arka.mapper.OrderMapperImpl;
 import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.order.Order;
@@ -20,8 +19,7 @@ public class CreateOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    private final OrderMapper orderMapper =
-            new OrderMapperImpl();
+    private final OrderMapper orderMapper;
 
     private final CompanyService companyService;
     private final ProductService productService;

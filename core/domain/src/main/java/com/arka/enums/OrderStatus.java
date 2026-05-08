@@ -1,7 +1,8 @@
 package com.arka.enums;
 
-import com.arka.exceptions.InvalidOrderStatusException;
-import com.arka.exceptions.InvalidOrderTransitionStatusException;
+import com.arka.exceptions.InvalidEditableStatusException;
+import com.arka.exceptions.InvalidTransitionStatusException;
+import com.arka.model.order.Order;
 
 public enum OrderStatus {
 
@@ -12,7 +13,7 @@ public enum OrderStatus {
             if(next == PROCESSING)
                 return next;
 
-            throw new InvalidOrderTransitionStatusException(PENDING, next);
+            throw new InvalidTransitionStatusException(PENDING, next);
         }
     },
 
@@ -23,21 +24,21 @@ public enum OrderStatus {
             if (next == AUTHORIZED || next == CANCELLED)
                 return next;
 
-            throw new InvalidOrderTransitionStatusException(PROCESSING, next);
+            throw new InvalidTransitionStatusException(PROCESSING, next);
         }
     },
 
     AUTHORIZED {
         @Override
         public OrderStatus transitionTo(OrderStatus next) {
-            throw new InvalidOrderTransitionStatusException(AUTHORIZED);
+            throw new InvalidTransitionStatusException(AUTHORIZED);
         }
     },
 
     CANCELLED {
         @Override
         public OrderStatus transitionTo(OrderStatus next) {
-            throw new InvalidOrderTransitionStatusException(CANCELLED);
+            throw new InvalidTransitionStatusException(CANCELLED);
         }
     };
 
@@ -45,7 +46,11 @@ public enum OrderStatus {
 
     public void validateEditable(String orderNumber){
         if(this != PENDING) {
-            throw new InvalidOrderStatusException(orderNumber, this);
+            throw new InvalidEditableStatusException(
+                    Order.class,
+                    "number",
+                    orderNumber,
+                    this);
         }
     }
 }

@@ -1,12 +1,14 @@
 package com.arka.model.information;
 
+import com.arka.exceptions.AlreadyExistsException;
+import com.arka.exceptions.InvalidActivationStateException;
 import lombok.*;
 
 import java.time.Instant;
 
 @Getter
 @AllArgsConstructor
-@Builder
+@Builder(access = AccessLevel.PRIVATE)
 public class PhoneNumber {
     private Long id;
     private String countryCode;
@@ -15,8 +17,40 @@ public class PhoneNumber {
     private boolean active;
     private Instant createdAt;
 
-    public PhoneNumber(){
+    public static PhoneNumber create(
+            int countryCode,
+            String phone){
+
+        return PhoneNumber.builder()
+                .countryCode("+" + countryCode)
+                .phone(phone)
+                .active(true)
+                .build();
+    }
+
+    public void activate(){
+
+        if(this.active)
+            throw new InvalidActivationStateException(
+                    PhoneNumber.class, id, this.active);
+
         this.active = true;
-        this.createdAt = Instant.now();
+    }
+
+    public void deactivate(){
+
+        if(!this.active)
+            throw new InvalidActivationStateException(
+                    PhoneNumber.class, id, this.active);
+
+        this.active = false;
+    }
+
+    public void addExtension(String ext){
+
+        if(this.extension != null)
+            throw new AlreadyExistsException(PhoneNumber.class, id);
+
+        this.extension = ext;
     }
 }

@@ -2,18 +2,14 @@ package com.arka.model.order;
 
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
-import com.arka.exceptions.InvalidOrderStatusException;
-import com.arka.exceptions.InvalidOrderTransitionStatusException;
-import com.arka.model.Company;
+import com.arka.exceptions.InvalidEditableStatusException;
+import com.arka.exceptions.InvalidTransitionStatusException;
 import com.arka.model.product.Product;
-import com.arka.model.product.ProductCategory;
-import jdk.jfr.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -126,7 +122,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.AUTHORIZED);
 
-        assertThrows(InvalidOrderTransitionStatusException.class,
+        assertThrows(InvalidTransitionStatusException.class,
                 () -> order.updateStatus(OrderStatus.PENDING));
     }
 
@@ -136,7 +132,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.CANCELLED);
 
-        assertThrows(InvalidOrderTransitionStatusException.class,
+        assertThrows(InvalidTransitionStatusException.class,
                 () -> order.updateStatus(OrderStatus.PROCESSING));
     }
 
@@ -146,7 +142,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.AUTHORIZED);
 
-        assertThrows(InvalidOrderTransitionStatusException.class,
+        assertThrows(InvalidTransitionStatusException.class,
                 () -> order.updateStatus(OrderStatus.PENDING));
     }
 
@@ -158,7 +154,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.AUTHORIZED);
 
-        assertThrows(InvalidOrderStatusException.class,
+        assertThrows(InvalidEditableStatusException.class,
                 () -> order.addItem(item1));
     }
 
@@ -168,7 +164,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.CANCELLED);
 
-        assertThrows(InvalidOrderStatusException.class,
+        assertThrows(InvalidEditableStatusException.class,
                 () -> order.removeItem(1L));
     }
 
@@ -178,7 +174,7 @@ class OrderTest {
         order.updateStatus(OrderStatus.PROCESSING);
         order.updateStatus(OrderStatus.AUTHORIZED);
 
-        assertThrows(InvalidOrderStatusException.class,
+        assertThrows(InvalidEditableStatusException.class,
                 () -> order.updateNotes("new notes"));
     }
 }

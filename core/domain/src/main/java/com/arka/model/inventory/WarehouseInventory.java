@@ -26,10 +26,13 @@ public class WarehouseInventory {
     private Deque<InventoryMovement> inventoryMovements;
 
     public static WarehouseInventory create(Warehouse warehouse,
-                                            Product product){
+                                            Product product,
+                                            int initialStock){
+
+        validateGreaterThanZero(initialStock);
 
         return WarehouseInventory.builder()
-                .stock(0)
+                .stock(initialStock)
                 .warehouse(warehouse)
                 .product(product)
                 .inventoryMovements(new ArrayDeque<>())
@@ -92,7 +95,7 @@ public class WarehouseInventory {
         this.inventoryMovements.push(newMovement);
     }
 
-    private void validateGreaterThanZero(int quantity){
+    private static void validateGreaterThanZero(int quantity){
         if(quantity <= 0)
             throw new IllegalArgumentException(
                     "Quantity must be greater than 0");

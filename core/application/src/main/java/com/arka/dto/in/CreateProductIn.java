@@ -1,14 +1,16 @@
 package com.arka.dto.in;
 
+import jakarta.annotation.Nullable;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
 public record CreateProductIn(
         String sku,
         String name,
-        String description,
+        Long categoryId,
+        @Nullable String description,
         BigDecimal basePrice,
-        Map<String, Object> attributes,
-        SlugProductCategoryIn slugCategory
+        @Nullable Map<String, Object> attributes
 ) {
 }

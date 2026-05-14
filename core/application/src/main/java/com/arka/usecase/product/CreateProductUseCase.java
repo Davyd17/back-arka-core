@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.product;
 
 import com.arka.dto.in.CreateProductIn;
 import com.arka.dto.out.CreateProductOut;
@@ -8,10 +8,8 @@ import com.arka.mapper.CreateProductOutMapperImpl;
 import com.arka.model.product.Product;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.ProductCategoryService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
-
-import java.time.Instant;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 public class CreateProductUseCase {
@@ -22,28 +20,24 @@ public class CreateProductUseCase {
     private final CreateProductOutMapper outMapper =
             new CreateProductOutMapperImpl();
 
-    public CreateProductOut execute(CreateProductIn request){
+    public CreateProductOut execute(CreateProductIn input){
 
-        if(Objects.nonNull(request)){
+        NullValidator.validate(input, "input");
 
-            ProductCategory category = categoryService
-                    .getBySlug(request.slugCategory().slug());
+            ProductCategory category =
+                    categoryService.findById(input.categoryId());
 
-            return outMapper.toDTO(productGateway.createProduct(
-                    Product.create(
-                            request.sku(),
-                            request.name(),
-                            request.description(),
-                            request.basePrice(),
-                            request.attributes(),
-                            category,
-                            Instant.now()
-                    )
-            ));
+            Product product = Product.create(
+                    input.sku(),
+                    input.name(),
+                    input.description(),
+                    input.basePrice(),
+                    category);
 
-        } else throw new IllegalArgumentException(
-                "Request product can't be null"
-        );
+            if(input.attributes() != null && !input.attributes().isEmpty())
+                 input.attributes().forEach(product::addAttribute);
+
+            return outMapper.toDTO(productGateway.create(product));
 
     }
 }

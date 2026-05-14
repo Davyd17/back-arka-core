@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.supplier;
 
 import com.arka.dto.in.CreateCompanyIn;
 
@@ -8,6 +8,7 @@ import com.arka.enums.CompanyRelationType;
 import com.arka.factory.CompanyFactory;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.ProductCategoryService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -23,7 +24,9 @@ public class CreateSupplierUseCase {
 
 
 
-    public Company execute(CreateCompanyIn request) {
+    public Company execute(CreateCompanyIn input) {
+
+        NullValidator.validate(input, "input");
 
         return Optional.ofNullable(request)
                 .map(r -> {

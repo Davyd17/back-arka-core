@@ -18,7 +18,6 @@ public class CreateCompanyIn {
     private String name;
     private CompanyRelationType relation;
     private List<Contact> contacts;
-    private Set<SlugProductCategoryIn> slugProductCategories;
+    private Set<Long> productCategoryIds;
     private Instant createdAt;
-
 }

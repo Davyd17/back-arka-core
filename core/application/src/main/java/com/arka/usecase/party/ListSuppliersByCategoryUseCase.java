@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.supplier;
 
 import com.arka.model.Company;
 import com.arka.exceptions.NotFoundException;

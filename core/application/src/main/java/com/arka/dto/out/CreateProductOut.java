@@ -1,7 +1,6 @@
 package com.arka.dto.out;
 
 import com.arka.model.product.ProductCategory;
-import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -15,7 +14,4 @@ public record CreateProductOut(
         Map<String, Object>attributes,
         ProductCategory category
 ) {
-
-    @Builder
-    public CreateProductOut{}
 }

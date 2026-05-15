@@ -1,23 +1,10 @@
 package com.arka.dto.in;
 
-import com.arka.enums.CompanyRelationType;
-import com.arka.model.information.Contact;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
-import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
-@Builder
-@AllArgsConstructor
-@Getter
-public class CreateCompanyIn {
-
-    private String name;
-    private CompanyRelationType relation;
-    private List<Contact> contacts;
-    private Set<Long> productCategoryIds;
-    private Instant createdAt;
+public record CreateSupplierIn(
+        String name,
+        Set<Long> contactIds,
+        Set<Long> productCategoryIds
+) {
 }

@@ -5,15 +5,30 @@ import com.arka.gateway.repository.product.ProductCategoryGateway;
 import com.arka.model.product.ProductCategory;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 @RequiredArgsConstructor
 public class ProductCategoryService {
 
     private final ProductCategoryGateway gateway;
 
-    public ProductCategory getBySlug(String slug){
-
-        return gateway.findProductCategoryBySlug(slug)
+    public ProductCategory findById(Long id){
+        return gateway.findProductCategoryById(id)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Category %s not found", slug)));
+                        String.format("Category with id %s not found", id)));
     }
+
+    public List<ProductCategory> findAllByIds(Set<Long> ids){
+
+        List<ProductCategory> foundCategories =
+                gateway.findAllByIds(new ArrayList<>(ids));
+
+        if(ids.size() != foundCategories.size())
+            throw new NotFoundException("one or more categories not found");
+
+        return foundCategories;
+    }
+
 }

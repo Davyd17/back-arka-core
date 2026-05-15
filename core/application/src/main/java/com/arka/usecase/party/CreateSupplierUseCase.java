@@ -1,57 +1,51 @@
-package com.arka.usecase.supplier;
+package com.arka.usecase.party;
 
-import com.arka.dto.in.CreateCompanyIn;
+import com.arka.dto.in.CreateSupplierIn;
 
+import com.arka.dto.out.CompanyOut;
 import com.arka.gateway.repository.party.SupplierGateway;
+import com.arka.mapper.CompanyMapper;
+import com.arka.mapper.CompanyMapperImpl;
 import com.arka.model.Company;
 import com.arka.enums.CompanyRelationType;
-import com.arka.factory.CompanyFactory;
+import com.arka.model.information.Contact;
 import com.arka.model.product.ProductCategory;
+import com.arka.service.ContactService;
 import com.arka.service.ProductCategoryService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class CreateSupplierUseCase {
 
-    private final ProductCategoryService productCategoryService;
+    private final ProductCategoryService categoryService;
+    private final ContactService contactService;
+
     private final SupplierGateway supplierGateway;
-    private final CompanyFactory companyFactory = new CompanyFactory();
 
+    private final CompanyMapper companyMapper =
+            new CompanyMapperImpl();
 
-
-    public Company execute(CreateCompanyIn input) {
+    public CompanyOut execute(CreateSupplierIn input) {
 
         NullValidator.validate(input, "input");
 
-        return Optional.ofNullable(request)
-                .map(r -> {
+        List<Contact> foundContacts =
+                contactService.findAllByIds(input.contactIds());
 
-                    Set<ProductCategory> categories = request
-                            .getSlugProductCategories()
-                            .stream()
-                            .map(category ->
-                                    productCategoryService.getBySlug(category.slug()))
-                            .collect(Collectors.toSet());
+        List<ProductCategory> foundCategories =
+                categoryService.findAllByIds(input.productCategoryIds());
 
-                    return supplierGateway
-                            .createCompany(companyFactory
-                                    .createCompanyWithFullInfo(
-                                            request.getName(),
-                                            CompanyRelationType.SUPPLIER,
-                                            request.getContacts(),
-                                            categories
-                                    )
-                            );
 
-                }).orElseThrow(()
-                        -> new IllegalArgumentException(
-                                "Request supplier can't be null"));
+        Company newSupplier = Company.createSupplier(
+                input.name(),
+                CompanyRelationType.SUPPLIER,
+                foundContacts,
+                foundCategories);
+
+        return companyMapper.toOut(supplierGateway.createCompany(newSupplier));
     }
-
 
 }

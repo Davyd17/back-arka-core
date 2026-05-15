@@ -14,12 +14,6 @@ public class ProductCategoryService {
 
     private final ProductCategoryGateway gateway;
 
-    public ProductCategory findById(Long id){
-        return gateway.findProductCategoryById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Category with id %s not found", id)));
-    }
-
     public List<ProductCategory> findAllByIds(Set<Long> ids){
 
         List<ProductCategory> foundCategories =

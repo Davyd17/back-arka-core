@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.shipping;
 
 import com.arka.dto.in.CreateShippingDetailIn;
 import com.arka.dto.out.ShippingDetailOut;
@@ -6,28 +6,47 @@ import com.arka.gateway.repository.ShippingDetailGateway;
 import com.arka.mapper.ShippingDetailMapper;
 import com.arka.mapper.ShippingDetailMapperImpl;
 import com.arka.model.ShippingDetail;
-import com.arka.enums.ShippingStatus;
+import com.arka.model.information.Address;
+import com.arka.model.order.Order;
+import com.arka.service.AddressService;
+import com.arka.service.OrderService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RegisterShippingDetailsUseCase {
 
     private final ShippingDetailGateway gateway;
+    private final OrderService orderService;
+    private final AddressService addressService;
 
     private final ShippingDetailMapper shippingDetailMapper =
             new ShippingDetailMapperImpl();
 
-    public ShippingDetailOut execute(CreateShippingDetailIn request){
+    public ShippingDetailOut execute(CreateShippingDetailIn input) {
 
-            ShippingDetail savedShippingDetail = gateway.save(
+        NullValidator.validate(input, "input");
 
-                    shippingDetailMapper.toDomain(request)
-                            .toBuilder()
-                            .status(ShippingStatus.PENDING)
-                            .build()
-
-            );
+        ShippingDetail savedShippingDetail =
+                gateway.save(buildShippingDetail(input));
 
         return shippingDetailMapper.toOutDTO(savedShippingDetail);
+    }
+
+    private ShippingDetail buildShippingDetail(CreateShippingDetailIn input){
+
+        Order foundOrder = orderService.findById(input.orderId());
+        Address foundOriginAddress =
+                addressService.findById(input.originAddressId());
+        Address foundDestinationAddress =
+                addressService.findById(input.destinationAddressId());
+
+        return ShippingDetail.create(
+                input.carrier(),
+                input.trackingNumber(),
+                foundOrder,
+                input.notes(),
+                foundOriginAddress,
+                foundDestinationAddress);
     }
 }

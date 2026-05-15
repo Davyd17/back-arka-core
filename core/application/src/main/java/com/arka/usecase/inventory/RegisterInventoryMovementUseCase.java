@@ -25,22 +25,18 @@ public class RegisterInventoryMovementUseCase {
 
     private final WarehouseInventoryGateway inventoryGateway;
 
-    private final ProductService productService;
     private final EmployeeService employeeService;
-    private final WarehouseService warehouseService;
     private final WarehouseInventoryService inventoryService;
 
     public CreateInventoryMovementOut execute(CreateInventoryMovementIn input) {
 
         NullValidator.validate(input, "input");
 
-        Warehouse foundWarehouse = warehouseService.findById(input.warehouseId());
         Employee foundEmployee = employeeService.findById(input.employeeId());
-        Product foundProduct = productService.findById(input.productId());
 
         WarehouseInventory inventory = inventoryService.findByProductAndWarehouse(
-                foundProduct.getId(),
-                foundWarehouse.getId()
+                input.productId(),
+                input.warehouseId()
         );
 
         if(input.type().equals(InventoryMovementType.IN))

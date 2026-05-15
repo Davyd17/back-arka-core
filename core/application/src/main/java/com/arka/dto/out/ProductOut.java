@@ -1,7 +1,7 @@
 package com.arka.dto.out;
 
 
-public record ProductSummaryOut(
+public record ProductOut(
 
         Long id,
         String sku,

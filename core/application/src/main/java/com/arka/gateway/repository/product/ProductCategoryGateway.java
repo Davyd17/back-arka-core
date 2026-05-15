@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface ProductCategoryGateway {
 
-    Optional<ProductCategory> findProductCategoryBySlug(String slug);
+    Optional<ProductCategory> findById(Long id);
 
     List<ProductCategory> getAll();
+
+    List<ProductCategory> findAllByIds(List<Long> ids);
 }

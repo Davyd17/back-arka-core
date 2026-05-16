@@ -8,6 +8,6 @@ public record ShoppingCartItemOut(
         Long id,
         int quantity,
         BigDecimal unitPrice,
-        ProductSummaryOut product
+        ProductOut product
 ) {
 }

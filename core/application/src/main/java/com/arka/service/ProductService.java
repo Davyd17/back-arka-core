@@ -3,8 +3,8 @@ package com.arka.service;
 import com.arka.dto.out.ProductSalesReportOut;
 import com.arka.dto.value.InstantDateRange;
 import com.arka.exceptions.NotFoundException;
-import com.arka.mapper.ProductSummaryOutMapper;
-import com.arka.mapper.ProductSummaryOutMapperImpl;
+import com.arka.mapper.ProductMapper;
+import com.arka.mapper.ProductMapperImpl;
 import com.arka.gateway.repository.product.ProductGateway;
 import com.arka.model.product.Product;
 import com.arka.service.util.DateRangeTypeParser;
@@ -18,9 +18,6 @@ import java.util.List;
 public class ProductService {
 
     private final ProductGateway gateway;
-
-    private final ProductSummaryOutMapper productSummaryMapper =
-            new ProductSummaryOutMapperImpl();
 
     public Product findById(Long id){
 

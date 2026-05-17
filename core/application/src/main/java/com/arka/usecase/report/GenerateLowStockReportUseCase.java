@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.report;
 
 import com.arka.dto.out.LowStockReportOut;
 import com.arka.dto.value.LowStockItem;
@@ -7,6 +7,7 @@ import com.arka.mapper.WarehouseInventoryMapperImpl;
 import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
 import com.arka.mapper.WarehouseInventoryMapper;
 import com.arka.service.WarehouseService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -23,26 +24,24 @@ public class GenerateLowStockReportUseCase {
 
     public LowStockReportOut execute(Long warehouseId, int threshold) {
 
-        if (Objects.nonNull(warehouseId) && threshold > 0) {
+        NullValidator.validate(warehouseId, "warehouseId");
 
-            warehouseService.findById(warehouseId);
+        if(threshold < 0 )
+            throw new IllegalArgumentException("Threshold should be greater than 0");
 
-            List<LowStockItem> items = inventoryGateway
-                    .listLowStockInventoryByWarehouseId(warehouseId, threshold)
-                    .stream()
-                    .map(mapper::toOutDTO)
-                    .toList();
+        warehouseService.findById(warehouseId);
 
-            if (items.isEmpty()) {
+        List<LowStockItem> items = inventoryGateway
+                .listLowStockInventoryByWarehouseId(warehouseId, threshold)
+                .stream()
+                .map(mapper::toOutDTO)
+                .toList();
 
-                throw new NotFoundException(
-                        "No low stock items found for warehouse with id " + warehouseId
-                );
+        if (items.isEmpty()) {
+            throw new NotFoundException(
+                    "No low stock items found for warehouse with id " + warehouseId
+            );
 
-            } else return new LowStockReportOut(items);
-
-        } else throw new IllegalArgumentException(
-                "Warehouse inventory id cannot be null"
-        );
+        } else return new LowStockReportOut(items);
     }
 }

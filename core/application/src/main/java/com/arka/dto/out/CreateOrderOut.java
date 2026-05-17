@@ -15,7 +15,7 @@ public record CreateOrderOut (
         String notes,
         OrderType type,
         BigDecimal totalPrice,
-        CompanySummaryOut company,
+        CompanyOut company,
         Set<CreateOrderItemOut> items,
         Instant createdAt
 ){

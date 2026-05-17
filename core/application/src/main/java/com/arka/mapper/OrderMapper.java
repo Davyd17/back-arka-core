@@ -9,9 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper(uses =
-        {OrderItemMapper.class,
-        CreateCompanyMapper.class})
+@Mapper(uses = CompanyMapper.class)
 public interface OrderMapper {
 
     @Mappings({

@@ -13,14 +13,5 @@ import org.mapstruct.Mappings;
 @Mapper(uses = OrderMapper.class)
 public interface ShippingDetailMapper {
 
-    @Mappings({
-            @Mapping(target = "destinationAddress.id", source = "destinationAddressId"),
-            @Mapping(target = "originAddress.id", source = "originAddressId"),
-            @Mapping(target = "order.id", source = "orderId"),
-            @Mapping(target = "createdAt", ignore = true),
-            @Mapping(target = "id", ignore = true)
-    })
-    ShippingDetail toDomain(CreateShippingDetailIn inDTO);
-
     ShippingDetailOut toOutDTO(ShippingDetail shippingDetailDomain);
 }

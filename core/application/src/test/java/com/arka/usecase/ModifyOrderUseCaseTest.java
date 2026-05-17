@@ -1,10 +1,11 @@
 package com.arka.usecase;
 
 import com.arka.dto.in.UpdateOrderIn;
-import com.arka.dto.in.UpdateOrderItemIn;
+import com.arka.dto.out.UpdateOrderOut;
 import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
-import com.arka.gateway.repository.order.OrderGateway;
+import com.arka.gateway.order.OrderGateway;
+import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
@@ -12,6 +13,7 @@ import com.arka.model.product.Product;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.OrderItemService;
 import com.arka.service.OrderService;
+import com.arka.usecase.order.ModifyOrderUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,12 +21,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.*;
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +40,9 @@ class ModifyOrderUseCaseTest {
 
     @Mock
     private OrderGateway orderGateway;
+
+    @Mock
+    private OrderMapper orderMapper;
 
     @InjectMocks
     private ModifyOrderUseCase useCase;
@@ -57,7 +61,7 @@ class ModifyOrderUseCaseTest {
                 "Test Company " + id,
                 CompanyRelationType.CUSTOMER,
                 new ArrayList<>(),
-                new HashSet<>()
+                new ArrayList<>()
         );
     }
 
@@ -94,6 +98,8 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.update(order)).thenReturn(order);
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         //Act
         useCase.execute(input);
@@ -110,6 +116,8 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.update(order)).thenReturn(order);
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         //Act
         useCase.execute(input);
@@ -122,9 +130,13 @@ class ModifyOrderUseCaseTest {
     void shouldAddNewItemWhenNotPresentInOrder(){
 
         //Arrange
-        Product product = this.buildProduct(2L, BigDecimal.valueOf(20.00));
+        Product product1 = this.buildProduct(1L, BigDecimal.valueOf(10.00));
+        Product product2 = this.buildProduct(2L, BigDecimal.valueOf(20.00));
 
-        OrderItem incomingItem = OrderItem.create(product, 10);
+        OrderItem existingItem = OrderItem.create(product1, 30);
+        order.addItem(existingItem);
+
+        OrderItem incomingItem = OrderItem.create(product2, 10);
 
         Set<UpdateOrderIn.Item> itemsInput =
                 Set.of(new UpdateOrderIn.Item(null, 1L, 3));
@@ -133,17 +145,22 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveItem(any(), any(), any()))
+        when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem);
 
         when(orderGateway.update(order)).thenReturn(order);
+
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         //Act
         useCase.execute(orderInput);
 
         //Asser
-        assertEquals(1, order.getItems().size());
-        assertEquals(BigDecimal.valueOf(10.00), order.getItems().getFirst().getUnitPriceSnapshot());
+        assertEquals(2, order.getItems().size());
+        assertEquals(BigDecimal.valueOf(10.00),
+                order.getItems().getFirst().getUnitPriceSnapshot());
+        assertEquals(BigDecimal.valueOf(500.00), order.getTotalPrice());
     }
 
     @Test
@@ -165,14 +182,17 @@ class ModifyOrderUseCaseTest {
 
         UpdateOrderIn orderInput =
                 new UpdateOrderIn(1L, "", Set.of(
-                        new UpdateOrderItemIn(null, 1L, 3)));
+                        new UpdateOrderIn.Item(null, 1L, 3)));
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveItem(any(), any(), any()))
+        when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem);
 
         when(orderGateway.update(order)).thenReturn(order);
+
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         //Act
         useCase.execute(orderInput);
@@ -212,10 +232,13 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
 
-        when(itemService.resolveItem(any(), any(), any()))
+        when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem2);
 
         when(orderGateway.update(order)).thenReturn(order);
+
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         //Act
         useCase.execute(orderInput);
@@ -231,6 +254,8 @@ class ModifyOrderUseCaseTest {
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.update(order)).thenReturn(order);
+        when(orderMapper.toUpdateDTO(order))
+                .thenReturn(any(UpdateOrderOut.class));
 
         useCase.execute(input);
 

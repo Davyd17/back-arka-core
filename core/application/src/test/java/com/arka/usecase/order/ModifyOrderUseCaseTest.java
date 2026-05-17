@@ -1,7 +1,6 @@
-package com.arka.usecase;
+package com.arka.usecase.order;
 
 import com.arka.dto.in.UpdateOrderIn;
-import com.arka.dto.out.UpdateOrderOut;
 import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.gateway.order.OrderGateway;
@@ -13,7 +12,6 @@ import com.arka.model.product.Product;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.OrderItemService;
 import com.arka.service.OrderService;
-import com.arka.usecase.order.ModifyOrderUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -97,9 +95,7 @@ class ModifyOrderUseCaseTest {
         UpdateOrderIn input = new UpdateOrderIn(1L, "new notes", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
-        when(orderGateway.update(order)).thenReturn(order);
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         //Act
         useCase.execute(input);
@@ -115,9 +111,7 @@ class ModifyOrderUseCaseTest {
         UpdateOrderIn input = new UpdateOrderIn(1L, " ", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
-        when(orderGateway.update(order)).thenReturn(order);
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         //Act
         useCase.execute(input);
@@ -148,10 +142,7 @@ class ModifyOrderUseCaseTest {
         when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem);
 
-        when(orderGateway.update(order)).thenReturn(order);
-
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         //Act
         useCase.execute(orderInput);
@@ -189,10 +180,7 @@ class ModifyOrderUseCaseTest {
         when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem);
 
-        when(orderGateway.update(order)).thenReturn(order);
-
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         //Act
         useCase.execute(orderInput);
@@ -235,10 +223,7 @@ class ModifyOrderUseCaseTest {
         when(itemService.resolveItem(any(OrderType.class), anyLong(), anyInt()))
                 .thenReturn(incomingItem2);
 
-        when(orderGateway.update(order)).thenReturn(order);
-
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         //Act
         useCase.execute(orderInput);
@@ -253,12 +238,10 @@ class ModifyOrderUseCaseTest {
         UpdateOrderIn input = new UpdateOrderIn(1L, "", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
-        when(orderGateway.update(order)).thenReturn(order);
-        when(orderMapper.toUpdateDTO(order))
-                .thenReturn(any(UpdateOrderOut.class));
+        when(orderGateway.save(order)).thenReturn(order);
 
         useCase.execute(input);
 
-        verify(orderGateway).update(order);
+        verify(orderGateway).save(order);
     }
 }

@@ -1,4 +1,4 @@
-package com.arka.usecase;
+package com.arka.usecase.report;
 
 import com.arka.dto.out.CustomerSalesReportOut;
 import com.arka.dto.out.ProductSalesReportOut;

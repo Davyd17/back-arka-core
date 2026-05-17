@@ -2,6 +2,7 @@ package com.arka.usecase.cart;
 
 import com.arka.dto.in.AddItemShoppingCartIn;
 import com.arka.dto.out.ShoppingCartOut;
+import com.arka.enums.ShoppingCartStatus;
 import com.arka.gateway.ShoppingCartGateway;
 import com.arka.mapper.ShoppingCartMapper;
 import com.arka.mapper.ShoppingCartMapperImpl;
@@ -42,6 +43,9 @@ public class AddItemToShoppingCartUseCase {
 
     private ShoppingCart getOrCreateCart(Long userId){
         return cartGateway.getLastCreatedCart(userId)
+                .filter(cart ->
+                        cart.getStatus().equals(ShoppingCartStatus.ABANDONED) ||
+                        cart.getStatus().equals(ShoppingCartStatus.ACTIVE))
                 .orElseGet(() -> ShoppingCart.create(userId));
     }
 }

@@ -13,7 +13,7 @@ public record ShippingDetailOut(
         ShippingStatus status,
         Instant createdAt,
         OrderSummaryOut order,
-        Address originAddress,
-        Address destinationAddress
+        Address origin,
+        Address destination
 ) {
 }

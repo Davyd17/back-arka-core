@@ -36,7 +36,7 @@ public class ModifyOrderUseCase {
         if (hasNotes(input))
             existingOrder.updateNotes(input.notes());
 
-        return orderMapper.toUpdateDTO(orderGateway.update(existingOrder));
+        return orderMapper.toUpdateDTO(orderGateway.save(existingOrder));
     }
 
     private boolean hasItems(UpdateOrderIn input){

@@ -10,6 +10,7 @@ import com.arka.model.order.OrderItem;
 import com.arka.model.product.Product;
 import com.arka.service.CompanyService;
 import com.arka.service.ProductService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
@@ -26,14 +27,13 @@ public class CreateOrderUseCase {
 
     public CreateOrderOut execute(CreateOrderIn input) {
 
-        if (input == null)
-            throw new IllegalArgumentException("Order can't be null");
+        NullValidator.validate(input, "input");
 
         Order newOrder = this.buildOrder(input);
 
         this.addItemsToOrder(newOrder, input.items());
 
-        return orderMapper.toDTO(orderGateway.createOrder(newOrder));
+        return orderMapper.toCreateOut(orderGateway.save(newOrder));
 
     }
 

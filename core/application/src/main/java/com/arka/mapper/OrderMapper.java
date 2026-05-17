@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper(uses = CompanyMapper.class)
 public interface OrderMapper {
 
-    CreateOrderOut toDTO(Order domain);
+    CreateOrderOut toCreateOut(Order domain);
 
     OrderSummaryOut toSummaryDTO(Order domain);
 

@@ -2,18 +2,14 @@ package com.arka.usecase.inventory;
 
 import com.arka.dto.in.CreateInventoryMovementIn;
 import com.arka.dto.out.CreateInventoryMovementOut;
-import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
+import com.arka.gateway.inventory.WarehouseInventoryGateway;
 import com.arka.mapper.InventoryMovementMapper;
 import com.arka.mapper.InventoryMovementMapperImpl;
 import com.arka.model.Employee;
-import com.arka.model.Warehouse;
 import com.arka.enums.InventoryMovementType;
 import com.arka.model.inventory.WarehouseInventory;
-import com.arka.model.product.Product;
 import com.arka.service.EmployeeService;
-import com.arka.service.ProductService;
 import com.arka.service.WarehouseInventoryService;
-import com.arka.service.WarehouseService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 

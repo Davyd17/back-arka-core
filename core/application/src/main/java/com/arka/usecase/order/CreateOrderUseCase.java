@@ -2,7 +2,7 @@ package com.arka.usecase.order;
 
 import com.arka.dto.in.CreateOrderIn;
 import com.arka.dto.out.CreateOrderOut;
-import com.arka.gateway.repository.order.OrderGateway;
+import com.arka.gateway.order.OrderGateway;
 import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.order.Order;

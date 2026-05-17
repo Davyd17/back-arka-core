@@ -2,7 +2,7 @@ package com.arka.service;
 
 import com.arka.exceptions.InsufficientStockException;
 import com.arka.exceptions.NotFoundException;
-import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
+import com.arka.gateway.inventory.WarehouseInventoryGateway;
 import com.arka.model.inventory.WarehouseInventory;
 import lombok.RequiredArgsConstructor;
 

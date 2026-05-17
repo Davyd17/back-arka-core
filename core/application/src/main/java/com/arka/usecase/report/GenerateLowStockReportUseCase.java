@@ -4,14 +4,13 @@ import com.arka.dto.out.LowStockReportOut;
 import com.arka.dto.value.LowStockItem;
 import com.arka.exceptions.NotFoundException;
 import com.arka.mapper.WarehouseInventoryMapperImpl;
-import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
+import com.arka.gateway.inventory.WarehouseInventoryGateway;
 import com.arka.mapper.WarehouseInventoryMapper;
 import com.arka.service.WarehouseService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 public class GenerateLowStockReportUseCase {

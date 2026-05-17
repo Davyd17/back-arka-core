@@ -1,4 +1,4 @@
-package com.arka.gateway.repository;
+package com.arka.gateway;
 
 import com.arka.model.Employee;
 

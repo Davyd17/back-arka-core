@@ -4,7 +4,7 @@ import com.arka.dto.out.CompanyOut;
 import com.arka.mapper.CompanyMapper;
 import com.arka.mapper.CompanyMapperImpl;
 import com.arka.model.Company;
-import com.arka.gateway.repository.party.SupplierGateway;
+import com.arka.gateway.party.SupplierGateway;
 import com.arka.service.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
 

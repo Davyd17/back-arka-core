@@ -2,7 +2,7 @@ package com.arka.usecase.cart;
 
 import com.arka.dto.in.AddItemShoppingCartIn;
 import com.arka.dto.out.ShoppingCartOut;
-import com.arka.gateway.repository.ShoppingCartGateway;
+import com.arka.gateway.ShoppingCartGateway;
 import com.arka.mapper.ShoppingCartMapper;
 import com.arka.mapper.ShoppingCartMapperImpl;
 import com.arka.model.cart.ShoppingCart;

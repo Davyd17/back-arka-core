@@ -2,7 +2,7 @@ package com.arka.usecase.shipping;
 
 import com.arka.dto.in.CreateShippingDetailIn;
 import com.arka.dto.out.ShippingDetailOut;
-import com.arka.gateway.repository.ShippingDetailGateway;
+import com.arka.gateway.ShippingDetailGateway;
 import com.arka.mapper.ShippingDetailMapper;
 import com.arka.mapper.ShippingDetailMapperImpl;
 import com.arka.model.ShippingDetail;

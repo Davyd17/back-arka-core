@@ -13,7 +13,7 @@ public class CompanyService {
 
     private final CompanyGateway companyGateway;
 
-    public Company getCompanyById(Long id) {
+    public Company findById(Long id) {
 
         if(Objects.nonNull(id)) {
 

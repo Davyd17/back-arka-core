@@ -40,7 +40,7 @@ public class CreateOrderUseCase {
     private Order buildOrder(CreateOrderIn input) {
 
         Company foundCompany = companyService
-                .getCompanyById(input.companyId());
+                .findById(input.companyId());
 
         return Order.create(
                 input.number(),

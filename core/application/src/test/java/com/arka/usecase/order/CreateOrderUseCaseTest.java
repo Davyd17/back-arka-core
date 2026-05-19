@@ -1,13 +1,11 @@
 package com.arka.usecase.order;
 
 import com.arka.dto.in.CreateOrderIn;
-import com.arka.dto.out.CreateOrderOut;
 import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.gateway.order.OrderGateway;
 import com.arka.mapper.OrderMapper;
 import com.arka.model.Company;
-import com.arka.model.order.Order;
 import com.arka.model.product.Product;
 import com.arka.model.product.ProductCategory;
 import com.arka.service.CompanyService;
@@ -91,7 +89,7 @@ class CreateOrderUseCaseTest {
                 1L,
                 List.of(new CreateOrderIn.Item(1L, 10)));
 
-        when(companyService.getCompanyById(1L)).thenReturn(company);
+        when(companyService.findById(1L)).thenReturn(company);
 
         when(productService.findById(1L)).thenReturn(product);
 
@@ -120,7 +118,7 @@ class CreateOrderUseCaseTest {
                 1L,
                 List.of(new CreateOrderIn.Item(1L, 10)));
 
-        when(companyService.getCompanyById(1L)).thenReturn(company);
+        when(companyService.findById(1L)).thenReturn(company);
 
         when(productService.findById(1L)).thenReturn(product);
 

@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(":domain")
-    implementation project(":application")
+    implementation project(":model")
+    implementation project(":usecase")
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 

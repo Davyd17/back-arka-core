@@ -1,0 +1,12 @@
+package com.arka.party.dto;
+
+public record ContactOut(
+
+        Long id,
+        String name,
+        String lastName,
+        String position,
+        String email
+
+) {
+}

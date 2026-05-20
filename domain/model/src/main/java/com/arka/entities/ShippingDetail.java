@@ -1,9 +1,9 @@
-package com.arka.model;
+package com.arka.entities;
 
+import com.arka.entities.information.Address;
+import com.arka.entities.order.Order;
 import com.arka.enums.ShippingStatus;
 import com.arka.exceptions.DuplicationException;
-import com.arka.model.information.Address;
-import com.arka.model.order.Order;
 import com.arka.util.NullValidator;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;

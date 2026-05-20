@@ -1,8 +1,8 @@
 package com.arka.enums;
 
+import com.arka.entities.order.Order;
 import com.arka.exceptions.InvalidEditableStatusException;
 import com.arka.exceptions.InvalidTransitionStatusException;
-import com.arka.model.order.Order;
 
 public enum OrderStatus {
 

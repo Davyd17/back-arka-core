@@ -1,4 +1,4 @@
-package com.arka.model.information;
+package com.arka.entities.information;
 
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.InvalidActivationStateException;

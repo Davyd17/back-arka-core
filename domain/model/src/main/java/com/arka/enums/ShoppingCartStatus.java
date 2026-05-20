@@ -1,8 +1,8 @@
 package com.arka.enums;
 
+import com.arka.entities.cart.ShoppingCart;
 import com.arka.exceptions.InvalidEditableStatusException;
 import com.arka.exceptions.InvalidTransitionStatusException;
-import com.arka.model.cart.ShoppingCart;
 
 public enum ShoppingCartStatus {
 

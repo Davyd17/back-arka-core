@@ -1,4 +1,4 @@
-package com.arka.model.order;
+package com.arka.entities.order;
 
 import com.arka.model.product.Product;
 import lombok.*;

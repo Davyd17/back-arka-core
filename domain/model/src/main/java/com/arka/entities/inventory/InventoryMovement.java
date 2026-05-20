@@ -1,4 +1,4 @@
-package com.arka.model.inventory;
+package com.arka.entities.inventory;
 
 import com.arka.model.Employee;
 import com.arka.enums.InventoryMovementType;

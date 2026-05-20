@@ -1,6 +1,6 @@
-package com.arka.model;
+package com.arka.entities;
 
-import com.arka.model.information.Contact;
+import com.arka.entities.information.Contact;
 import lombok.*;
 
 @Getter

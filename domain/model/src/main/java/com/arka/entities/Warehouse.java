@@ -1,7 +1,7 @@
-package com.arka.model;
+package com.arka.entities;
 
+import com.arka.entities.information.Address;
 import com.arka.exceptions.InvalidActivationStateException;
-import com.arka.model.information.Address;
 import com.arka.util.NullValidator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

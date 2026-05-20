@@ -1,7 +1,8 @@
-package com.arka.model.information;
+package com.arka.entities.information;
 
 import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
+import com.arka.model.information.PhoneNumber;
 import com.arka.util.ExistenceValidator;
 import lombok.*;
 

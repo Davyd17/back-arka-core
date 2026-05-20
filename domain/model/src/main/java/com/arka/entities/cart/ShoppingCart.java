@@ -1,4 +1,4 @@
-package com.arka.model.cart;
+package com.arka.entities.cart;
 
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.model.product.Product;

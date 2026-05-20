@@ -3,7 +3,7 @@ package com.arka.usecase.cart;
 import com.arka.cart.AddItemToShoppingCartUseCase;
 import com.arka.cart.dto.AddItemShoppingCartIn;
 import com.arka.enums.ShoppingCartStatus;
-import com.arka.gateway.ShoppingCartGateway;
+import com.arka.cart.gateway.ShoppingCartGateway;
 import com.arka.cart.mapper.ShoppingCartMapper;
 import com.arka.model.cart.ShoppingCart;
 import com.arka.model.product.Product;

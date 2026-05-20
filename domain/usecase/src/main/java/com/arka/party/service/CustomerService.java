@@ -2,7 +2,7 @@ package com.arka.party.service;
 
 import com.arka.report.dto.CustomerSalesReportOut;
 import com.arka.report.dto.InstantDateRange;
-import com.arka.gateway.party.CustomerGateway;
+import com.arka.report.gateway.CustomerGateway;
 import com.arka.util.DateRangeTypeParser;
 import com.arka.util.DateRangeValidator;
 import lombok.RequiredArgsConstructor;

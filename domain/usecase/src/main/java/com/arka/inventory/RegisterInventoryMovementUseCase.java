@@ -2,9 +2,9 @@ package com.arka.inventory;
 
 import com.arka.inventory.dto.CreateInventoryMovementIn;
 import com.arka.inventory.dto.CreateInventoryMovementOut;
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.InventoryMovementMapper;
-import com.arka.mapper.InventoryMovementMapperImpl;
+import com.arka.inventory.mapper.InventoryMovementMapperImpl;
 import com.arka.model.Employee;
 import com.arka.enums.InventoryMovementType;
 import com.arka.model.inventory.WarehouseInventory;

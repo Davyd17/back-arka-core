@@ -1,6 +1,7 @@
-package com.arka.gateway.party;
+package com.arka.report.gateway;
 
-import com.arka.dto.out.report.CustomerSalesReportOut;
+
+import com.arka.report.dto.CustomerSalesReportOut;
 
 import java.time.Instant;
 import java.util.List;

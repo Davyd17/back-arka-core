@@ -1,7 +1,7 @@
-package com.arka.gateway.product;
+package com.arka.product.gateway;
 
-import com.arka.dto.out.report.ProductSalesReportOut;
 import com.arka.model.product.Product;
+import com.arka.report.dto.ProductSalesReportOut;
 
 import java.time.Instant;
 import java.util.List;

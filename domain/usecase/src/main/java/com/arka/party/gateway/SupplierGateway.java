@@ -1,4 +1,4 @@
-package com.arka.gateway.party;
+package com.arka.party.gateway;
 
 import com.arka.model.Company;
 

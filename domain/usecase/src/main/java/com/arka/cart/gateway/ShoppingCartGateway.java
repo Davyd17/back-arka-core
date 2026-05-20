@@ -1,4 +1,4 @@
-package com.arka.gateway;
+package com.arka.cart.gateway;
 
 import com.arka.model.cart.ShoppingCart;
 

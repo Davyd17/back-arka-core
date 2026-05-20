@@ -1,4 +1,4 @@
-package com.arka.gateway;
+package com.arka.party.gateway;
 
 import com.arka.model.information.Address;
 

@@ -1,4 +1,4 @@
-package com.arka.gateway.product;
+package com.arka.product.gateway;
 
 import com.arka.model.product.ProductCategory;
 

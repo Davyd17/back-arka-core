@@ -1,4 +1,4 @@
-package com.arka.gateway;
+package com.arka.shipping.gateway;
 
 import com.arka.model.ShippingDetail;
 

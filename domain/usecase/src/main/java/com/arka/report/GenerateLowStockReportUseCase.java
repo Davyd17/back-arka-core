@@ -1,10 +1,10 @@
 package com.arka.report;
 
+import com.arka.inventory.mapper.WarehouseInventoryMapperImpl;
 import com.arka.report.dto.LowStockReportOut;
 import com.arka.report.dto.LowStockItem;
 import com.arka.exceptions.NotFoundException;
-import com.arka.mapper.WarehouseInventoryMapperImpl;
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.WarehouseInventoryMapper;
 import com.arka.inventory.service.WarehouseService;
 import com.arka.util.NullValidator;

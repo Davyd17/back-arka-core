@@ -1,6 +1,6 @@
 package com.arka.product;
 
-import com.arka.gateway.product.ProductCategoryGateway;
+import com.arka.product.gateway.ProductCategoryGateway;
 import com.arka.model.product.ProductCategory;
 import lombok.RequiredArgsConstructor;
 

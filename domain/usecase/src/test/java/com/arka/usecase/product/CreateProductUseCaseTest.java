@@ -2,7 +2,7 @@ package com.arka.usecase.product;
 
 import com.arka.product.CreateProductUseCase;
 import com.arka.product.dto.CreateProductIn;
-import com.arka.gateway.product.ProductGateway;
+import com.arka.product.gateway.ProductGateway;
 import com.arka.model.product.ProductCategory;
 import com.arka.product.service.ProductCategoryService;
 import org.junit.jupiter.api.BeforeEach;

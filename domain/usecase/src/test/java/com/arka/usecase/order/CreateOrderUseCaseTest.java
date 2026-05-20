@@ -4,7 +4,7 @@ import com.arka.order.CreateOrderUseCase;
 import com.arka.order.dto.CreateOrderIn;
 import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
-import com.arka.gateway.order.OrderGateway;
+import com.arka.order.gateway.OrderGateway;
 import com.arka.order.mapper.OrderMapper;
 import com.arka.model.Company;
 import com.arka.model.product.Product;

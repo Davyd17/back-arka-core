@@ -2,7 +2,7 @@ package com.arka.order.service;
 
 import com.arka.report.dto.InstantDateRange;
 import com.arka.exceptions.NotFoundException;
-import com.arka.gateway.order.OrderGateway;
+import com.arka.order.gateway.OrderGateway;
 import com.arka.model.order.Order;
 import com.arka.util.DateRangeTypeParser;
 import com.arka.util.DateRangeValidator;

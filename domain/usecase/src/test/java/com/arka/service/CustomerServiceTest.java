@@ -1,6 +1,6 @@
 package com.arka.service;
 
-import com.arka.gateway.party.CustomerGateway;
+import com.arka.report.gateway.CustomerGateway;
 import com.arka.party.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

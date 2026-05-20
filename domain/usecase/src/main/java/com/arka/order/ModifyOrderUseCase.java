@@ -5,7 +5,7 @@ import com.arka.order.dto.UpdateOrderOut;
 import com.arka.order.mapper.OrderMapper;
 import com.arka.model.order.Order;
 import com.arka.model.order.OrderItem;
-import com.arka.gateway.order.OrderGateway;
+import com.arka.order.gateway.OrderGateway;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;
 import lombok.RequiredArgsConstructor;

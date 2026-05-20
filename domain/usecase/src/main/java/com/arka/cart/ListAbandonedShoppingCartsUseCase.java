@@ -1,10 +1,10 @@
 package com.arka.cart;
 
 import com.arka.cart.dto.ShoppingCartOut;
+import com.arka.cart.mapper.ShoppingCartMapperImpl;
 import com.arka.exceptions.NotFoundException;
-import com.arka.gateway.ShoppingCartGateway;
+import com.arka.cart.gateway.ShoppingCartGateway;
 import com.arka.cart.mapper.ShoppingCartMapper;
-import com.arka.mapper.ShoppingCartMapperImpl;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

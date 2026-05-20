@@ -1,9 +1,8 @@
-package com.arka.gateway;
+package com.arka.party.gateway;
 
 import com.arka.model.information.Contact;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ContactGateway {
 

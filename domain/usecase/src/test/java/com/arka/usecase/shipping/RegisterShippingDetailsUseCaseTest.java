@@ -6,7 +6,7 @@ import com.arka.enums.AddressType;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.exceptions.DuplicationException;
-import com.arka.gateway.ShippingDetailGateway;
+import com.arka.shipping.gateway.ShippingDetailGateway;
 import com.arka.shipping.mapper.ShippingDetailMapper;
 import com.arka.model.information.Address;
 import com.arka.model.order.Order;

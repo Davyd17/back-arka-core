@@ -3,7 +3,7 @@ package com.arka.usecase.inventory;
 import com.arka.inventory.RegisterInventoryMovementUseCase;
 import com.arka.inventory.dto.CreateInventoryMovementIn;
 import com.arka.enums.InventoryMovementType;
-import com.arka.gateway.inventory.WarehouseInventoryGateway;
+import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.InventoryMovementMapper;
 import com.arka.model.Employee;
 import com.arka.model.Warehouse;

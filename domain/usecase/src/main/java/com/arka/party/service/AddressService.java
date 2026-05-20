@@ -1,7 +1,7 @@
 package com.arka.party.service;
 
 import com.arka.exceptions.NotFoundException;
-import com.arka.gateway.AddressGateway;
+import com.arka.party.gateway.AddressGateway;
 import com.arka.model.information.Address;
 import lombok.RequiredArgsConstructor;
 

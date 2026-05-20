@@ -1,4 +1,4 @@
-package com.arka.gateway.inventory;
+package com.arka.inventory.gateway;
 
 import com.arka.model.inventory.InventoryMovement;
 

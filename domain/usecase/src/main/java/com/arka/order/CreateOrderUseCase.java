@@ -3,7 +3,7 @@ package com.arka.order;
 import com.arka.entities.Company;
 import com.arka.entities.order.Order;
 import com.arka.entities.order.OrderItem;
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
 import com.arka.order.dto.CreateOrderIn;
 import com.arka.order.dto.CreateOrderOut;
 import com.arka.order.gateway.OrderGateway;

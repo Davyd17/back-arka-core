@@ -1,4 +1,4 @@
-package com.arka.model.product;
+package com.arka.entities.product;
 
 import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;

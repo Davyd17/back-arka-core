@@ -1,6 +1,6 @@
 package com.arka.entities.cart;
 
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
 import com.arka.util.QuantityValidator;
 import lombok.*;
 

@@ -1,5 +1,8 @@
 package com.arka.model.information;
 
+import com.arka.entities.information.Address;
+import com.arka.entities.information.Contact;
+import com.arka.entities.information.PhoneNumber;
 import com.arka.enums.AddressType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.InvalidActivationStateException;

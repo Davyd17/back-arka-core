@@ -1,10 +1,12 @@
 package com.arka.model.order;
 
+import com.arka.entities.order.Order;
+import com.arka.entities.order.OrderItem;
+import com.arka.entities.product.Product;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.exceptions.InvalidEditableStatusException;
 import com.arka.exceptions.InvalidTransitionStatusException;
-import com.arka.model.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

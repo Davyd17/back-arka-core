@@ -1,11 +1,11 @@
 package com.arka.model.company;
 
+import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
+import com.arka.entities.product.ProductCategory;
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.NotFoundException;
-import com.arka.model.Company;
-import com.arka.model.information.Contact;
-import com.arka.model.product.ProductCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

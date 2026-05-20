@@ -1,13 +1,14 @@
 package com.arka.model;
 
+import com.arka.entities.ShippingDetail;
+import com.arka.entities.information.Address;
+import com.arka.entities.order.Order;
 import com.arka.enums.AddressType;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.enums.ShippingStatus;
 import com.arka.exceptions.DuplicationException;
 import com.arka.exceptions.InvalidTransitionStatusException;
-import com.arka.model.information.Address;
-import com.arka.model.order.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

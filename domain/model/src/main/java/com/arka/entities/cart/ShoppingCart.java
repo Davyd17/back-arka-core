@@ -1,7 +1,7 @@
 package com.arka.entities.cart;
 
+import com.arka.entities.product.Product;
 import com.arka.enums.ShoppingCartStatus;
-import com.arka.model.product.Product;
 import com.arka.util.NullValidator;
 import com.arka.util.QuantityValidator;
 import lombok.AccessLevel;

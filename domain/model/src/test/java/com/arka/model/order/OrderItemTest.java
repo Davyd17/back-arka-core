@@ -1,6 +1,7 @@
 package com.arka.model.order;
 
-import com.arka.model.product.Product;
+import com.arka.entities.order.OrderItem;
+import com.arka.entities.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

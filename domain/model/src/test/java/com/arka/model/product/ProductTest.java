@@ -1,5 +1,6 @@
 package com.arka.model.product;
 
+import com.arka.entities.product.Product;
 import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,8 +1,9 @@
 package com.arka.model.cart;
 
+import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.product.Product;
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.exceptions.InvalidEditableStatusException;
-import com.arka.model.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

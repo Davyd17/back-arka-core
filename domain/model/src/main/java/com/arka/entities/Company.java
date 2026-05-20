@@ -1,10 +1,10 @@
 package com.arka.entities;
 
 import com.arka.entities.information.Contact;
+import com.arka.entities.product.ProductCategory;
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.NotFoundException;
-import com.arka.model.product.ProductCategory;
 import com.arka.util.NullValidator;
 import lombok.*;
 

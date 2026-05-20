@@ -1,9 +1,10 @@
 package com.arka.model.inventory;
 
+import com.arka.entities.Employee;
+import com.arka.entities.Warehouse;
+import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.entities.product.Product;
 import com.arka.enums.InventoryMovementType;
-import com.arka.model.Employee;
-import com.arka.model.Warehouse;
-import com.arka.model.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

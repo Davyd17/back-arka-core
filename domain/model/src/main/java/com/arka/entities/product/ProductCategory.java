@@ -1,4 +1,4 @@
-package com.arka.model.product;
+package com.arka.entities.product;
 
 import lombok.*;
 

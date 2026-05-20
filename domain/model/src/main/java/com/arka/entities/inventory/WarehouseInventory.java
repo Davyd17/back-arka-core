@@ -1,10 +1,10 @@
 package com.arka.entities.inventory;
 
+import com.arka.entities.Employee;
+import com.arka.entities.Warehouse;
+import com.arka.entities.product.Product;
 import com.arka.enums.InventoryMovementType;
 import com.arka.exceptions.InsufficientStockException;
-import com.arka.model.Employee;
-import com.arka.model.Warehouse;
-import com.arka.model.product.Product;
 import com.arka.util.NullValidator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

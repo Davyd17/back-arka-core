@@ -1,6 +1,7 @@
 package com.arka.model.cart;
 
-import com.arka.model.product.Product;
+import com.arka.entities.cart.ShoppingCartItem;
+import com.arka.entities.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

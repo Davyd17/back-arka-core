@@ -1,5 +1,6 @@
 package com.arka.model.product;
 
+import com.arka.entities.product.ProductCategory;
 import jdk.jfr.Category;
 import org.junit.jupiter.api.Test;
 

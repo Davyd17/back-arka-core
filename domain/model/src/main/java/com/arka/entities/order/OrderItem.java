@@ -1,10 +1,9 @@
 package com.arka.entities.order;
 
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)

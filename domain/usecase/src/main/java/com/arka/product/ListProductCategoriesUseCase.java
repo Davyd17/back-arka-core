@@ -1,0 +1,18 @@
+package com.arka.product;
+
+import com.arka.product.gateway.ProductCategoryGateway;
+import com.arka.model.product.ProductCategory;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+public class ListProductCategoriesUseCase {
+
+    private final ProductCategoryGateway categoryGateway;
+
+    public List<ProductCategory> execute(){
+
+        return categoryGateway.getAll();
+    }
+}

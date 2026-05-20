@@ -1,9 +1,9 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    implementation project(":application")
+    implementation project(":usecase")
     implementation project(":jpa-repository")
-    implementation project(":domain")
+    implementation project(":model")
     implementation project(":api-rest")
     implementation project(":security")
 

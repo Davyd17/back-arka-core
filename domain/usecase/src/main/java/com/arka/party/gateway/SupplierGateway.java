@@ -1,6 +1,6 @@
 package com.arka.party.gateway;
 
-import com.arka.model.Company;
+import com.arka.entities.Company;
 
 import java.util.List;
 

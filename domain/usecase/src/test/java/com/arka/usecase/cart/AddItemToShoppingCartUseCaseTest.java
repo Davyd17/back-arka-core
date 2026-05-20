@@ -2,12 +2,12 @@ package com.arka.usecase.cart;
 
 import com.arka.cart.AddItemToShoppingCartUseCase;
 import com.arka.cart.dto.AddItemShoppingCartIn;
+import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.product.Product;
+import com.arka.entities.product.ProductCategory;
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.cart.gateway.ShoppingCartGateway;
 import com.arka.cart.mapper.ShoppingCartMapper;
-import com.arka.model.cart.ShoppingCart;
-import com.arka.model.product.Product;
-import com.arka.model.product.ProductCategory;
 import com.arka.product.service.ProductService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import org.junit.jupiter.api.BeforeEach;

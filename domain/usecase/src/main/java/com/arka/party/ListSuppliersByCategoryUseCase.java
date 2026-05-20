@@ -1,8 +1,8 @@
 package com.arka.party;
 
+import com.arka.entities.Company;
 import com.arka.party.dto.CompanyOut;
 import com.arka.party.mapper.CompanyMapper;
-import com.arka.model.Company;
 import com.arka.party.gateway.SupplierGateway;
 import com.arka.party.mapper.CompanyMapperImpl;
 import com.arka.product.service.ProductCategoryService;

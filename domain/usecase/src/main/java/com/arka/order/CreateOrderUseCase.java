@@ -1,13 +1,13 @@
 package com.arka.order;
 
+import com.arka.entities.Company;
+import com.arka.entities.order.Order;
+import com.arka.entities.order.OrderItem;
+import com.arka.model.product.Product;
 import com.arka.order.dto.CreateOrderIn;
 import com.arka.order.dto.CreateOrderOut;
 import com.arka.order.gateway.OrderGateway;
 import com.arka.order.mapper.OrderMapper;
-import com.arka.model.Company;
-import com.arka.model.order.Order;
-import com.arka.model.order.OrderItem;
-import com.arka.model.product.Product;
 import com.arka.party.service.CompanyService;
 import com.arka.product.service.ProductService;
 import com.arka.util.NullValidator;

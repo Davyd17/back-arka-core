@@ -1,7 +1,7 @@
 package com.arka.product;
 
+import com.arka.entities.product.ProductCategory;
 import com.arka.product.gateway.ProductCategoryGateway;
-import com.arka.model.product.ProductCategory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

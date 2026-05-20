@@ -1,12 +1,12 @@
 package com.arka.shipping;
 
+import com.arka.entities.ShippingDetail;
+import com.arka.entities.information.Address;
+import com.arka.entities.order.Order;
 import com.arka.shipping.dto.CreateShippingDetailIn;
 import com.arka.shipping.dto.ShippingDetailOut;
 import com.arka.shipping.gateway.ShippingDetailGateway;
 import com.arka.shipping.mapper.ShippingDetailMapper;
-import com.arka.model.ShippingDetail;
-import com.arka.model.information.Address;
-import com.arka.model.order.Order;
 import com.arka.party.service.AddressService;
 import com.arka.order.service.OrderService;
 import com.arka.shipping.mapper.ShippingDetailMapperImpl;

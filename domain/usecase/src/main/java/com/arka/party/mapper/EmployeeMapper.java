@@ -1,8 +1,8 @@
 package com.arka.party.mapper;
 
+import com.arka.entities.Employee;
+import com.arka.entities.information.Contact;
 import com.arka.party.dto.EmployeeOut;
-import com.arka.model.Employee;
-import com.arka.model.information.Contact;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

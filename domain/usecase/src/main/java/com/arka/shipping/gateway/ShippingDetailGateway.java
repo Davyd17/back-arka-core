@@ -1,6 +1,6 @@
 package com.arka.shipping.gateway;
 
-import com.arka.model.ShippingDetail;
+import com.arka.entities.ShippingDetail;
 
 public interface ShippingDetailGateway {
 

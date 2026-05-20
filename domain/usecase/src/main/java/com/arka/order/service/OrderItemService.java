@@ -1,8 +1,8 @@
 package com.arka.order.service;
 
+import com.arka.entities.order.OrderItem;
+import com.arka.entities.product.Product;
 import com.arka.enums.OrderType;
-import com.arka.model.order.OrderItem;
-import com.arka.model.product.Product;
 import com.arka.product.service.ProductService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import lombok.AllArgsConstructor;

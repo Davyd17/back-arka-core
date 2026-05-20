@@ -1,6 +1,6 @@
 package com.arka.order.gateway;
 
-import com.arka.model.order.Order;
+import com.arka.entities.order.Order;
 
 import java.math.BigDecimal;
 import java.time.Instant;

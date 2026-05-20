@@ -1,6 +1,7 @@
 package com.arka.inventory.dto;
 
-import com.arka.model.information.Address;
+
+import com.arka.entities.information.Address;
 
 public record WarehouseSummaryOut(
 

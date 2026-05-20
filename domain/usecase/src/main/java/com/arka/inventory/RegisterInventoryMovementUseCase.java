@@ -1,13 +1,13 @@
 package com.arka.inventory;
 
+import com.arka.entities.Employee;
+import com.arka.entities.inventory.WarehouseInventory;
 import com.arka.inventory.dto.CreateInventoryMovementIn;
 import com.arka.inventory.dto.CreateInventoryMovementOut;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.InventoryMovementMapper;
 import com.arka.inventory.mapper.InventoryMovementMapperImpl;
-import com.arka.model.Employee;
 import com.arka.enums.InventoryMovementType;
-import com.arka.model.inventory.WarehouseInventory;
 import com.arka.party.service.EmployeeService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import com.arka.util.NullValidator;

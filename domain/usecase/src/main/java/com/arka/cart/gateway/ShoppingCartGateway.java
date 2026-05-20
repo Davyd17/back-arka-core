@@ -1,6 +1,6 @@
 package com.arka.cart.gateway;
 
-import com.arka.model.cart.ShoppingCart;
+import com.arka.entities.cart.ShoppingCart;
 
 import java.util.List;
 import java.util.Optional;

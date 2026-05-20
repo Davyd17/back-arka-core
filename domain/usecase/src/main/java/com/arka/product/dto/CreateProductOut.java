@@ -1,6 +1,6 @@
 package com.arka.product.dto;
 
-import com.arka.model.product.ProductCategory;
+import com.arka.entities.product.ProductCategory;
 
 import java.math.BigDecimal;
 import java.util.Map;

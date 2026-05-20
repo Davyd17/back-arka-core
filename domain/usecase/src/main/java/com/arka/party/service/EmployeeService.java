@@ -1,8 +1,8 @@
 package com.arka.party.service;
 
+import com.arka.entities.Employee;
 import com.arka.exceptions.NotFoundException;
 import com.arka.party.gateway.EmployeeGateway;
-import com.arka.model.Employee;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package com.arka.party.gateway;
 
-import com.arka.model.information.Address;
+import com.arka.entities.information.Address;
 
 import java.util.Optional;
 

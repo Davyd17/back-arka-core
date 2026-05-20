@@ -1,6 +1,6 @@
 package com.arka.product.gateway;
 
-import com.arka.model.product.ProductCategory;
+import com.arka.entities.product.ProductCategory;
 
 import java.util.List;
 import java.util.Optional;

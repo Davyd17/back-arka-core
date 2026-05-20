@@ -1,6 +1,6 @@
 package com.arka.inventory.gateway;
 
-import com.arka.model.Warehouse;
+import com.arka.entities.Warehouse;
 
 import java.util.Optional;
 

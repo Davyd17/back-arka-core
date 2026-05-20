@@ -1,6 +1,6 @@
 package com.arka.inventory.gateway;
 
-import com.arka.model.inventory.InventoryMovement;
+import com.arka.entities.inventory.InventoryMovement;
 
 public interface InventoryMovementGateway {
 

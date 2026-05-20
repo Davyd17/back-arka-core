@@ -1,5 +1,7 @@
 package com.arka.usecase.shipping;
 
+import com.arka.entities.information.Address;
+import com.arka.entities.order.Order;
 import com.arka.shipping.RegisterShippingDetailsUseCase;
 import com.arka.shipping.dto.CreateShippingDetailIn;
 import com.arka.enums.AddressType;
@@ -8,8 +10,6 @@ import com.arka.enums.OrderType;
 import com.arka.exceptions.DuplicationException;
 import com.arka.shipping.gateway.ShippingDetailGateway;
 import com.arka.shipping.mapper.ShippingDetailMapper;
-import com.arka.model.information.Address;
-import com.arka.model.order.Order;
 import com.arka.party.service.AddressService;
 import com.arka.order.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;

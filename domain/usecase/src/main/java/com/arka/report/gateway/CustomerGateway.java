@@ -1,6 +1,5 @@
 package com.arka.report.gateway;
 
-
 import com.arka.report.dto.CustomerSalesReportOut;
 
 import java.time.Instant;

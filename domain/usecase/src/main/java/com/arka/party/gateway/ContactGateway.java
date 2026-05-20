@@ -1,6 +1,6 @@
 package com.arka.party.gateway;
 
-import com.arka.model.information.Contact;
+import com.arka.entities.information.Contact;
 
 import java.util.List;
 

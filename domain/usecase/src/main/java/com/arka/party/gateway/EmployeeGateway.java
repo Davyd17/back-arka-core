@@ -1,6 +1,6 @@
 package com.arka.party.gateway;
 
-import com.arka.model.Employee;
+import com.arka.entities.Employee;
 
 import java.util.Optional;
 

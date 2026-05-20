@@ -1,10 +1,10 @@
 package com.arka.product.service;
 
+import com.arka.model.product.Product;
 import com.arka.report.dto.ProductSalesReportOut;
 import com.arka.report.dto.InstantDateRange;
 import com.arka.exceptions.NotFoundException;
 import com.arka.product.gateway.ProductGateway;
-import com.arka.model.product.Product;
 import com.arka.util.DateRangeTypeParser;
 import com.arka.util.DateRangeValidator;
 import lombok.RequiredArgsConstructor;

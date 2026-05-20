@@ -1,8 +1,8 @@
 package com.arka.shipping.dto;
 
+import com.arka.entities.information.Address;
 import com.arka.order.dto.OrderSummaryOut;
 import com.arka.enums.ShippingStatus;
-import com.arka.model.information.Address;
 
 import java.time.Instant;
 

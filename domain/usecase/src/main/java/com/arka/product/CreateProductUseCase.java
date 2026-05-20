@@ -1,11 +1,11 @@
 package com.arka.product;
 
+import com.arka.entities.product.Product;
+import com.arka.entities.product.ProductCategory;
 import com.arka.product.dto.CreateProductIn;
 import com.arka.product.dto.CreateProductOut;
 import com.arka.product.gateway.ProductGateway;
 import com.arka.product.mapper.CreateProductOutMapper;
-import com.arka.model.product.Product;
-import com.arka.model.product.ProductCategory;
 import com.arka.product.mapper.CreateProductOutMapperImpl;
 import com.arka.product.service.ProductCategoryService;
 import com.arka.util.NullValidator;

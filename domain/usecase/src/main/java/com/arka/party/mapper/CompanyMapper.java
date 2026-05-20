@@ -1,7 +1,7 @@
 package com.arka.party.mapper;
 
+import com.arka.entities.Company;
 import com.arka.party.dto.CompanyOut;
-import com.arka.model.Company;
 import org.mapstruct.Mapper;
 
 @Mapper

@@ -1,14 +1,14 @@
 package com.arka.party;
 
+import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
+import com.arka.entities.product.ProductCategory;
 import com.arka.party.dto.CreateSupplierIn;
 
 import com.arka.party.dto.CompanyOut;
 import com.arka.party.gateway.SupplierGateway;
 import com.arka.party.mapper.CompanyMapper;
-import com.arka.model.Company;
 import com.arka.enums.CompanyRelationType;
-import com.arka.model.information.Contact;
-import com.arka.model.product.ProductCategory;
 import com.arka.party.mapper.CompanyMapperImpl;
 import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductCategoryService;

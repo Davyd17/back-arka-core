@@ -1,16 +1,16 @@
 package com.arka.usecase.order;
 
+import com.arka.entities.Company;
+import com.arka.entities.order.Order;
+import com.arka.entities.order.OrderItem;
+import com.arka.entities.product.Product;
+import com.arka.entities.product.ProductCategory;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.dto.UpdateOrderIn;
 import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.order.gateway.OrderGateway;
 import com.arka.order.mapper.OrderMapper;
-import com.arka.model.Company;
-import com.arka.model.order.Order;
-import com.arka.model.order.OrderItem;
-import com.arka.model.product.Product;
-import com.arka.model.product.ProductCategory;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;

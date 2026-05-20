@@ -1,7 +1,7 @@
 package com.arka.product.mapper;
 
+import com.arka.entities.product.Product;
 import com.arka.product.dto.ProductOut;
-import com.arka.model.product.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

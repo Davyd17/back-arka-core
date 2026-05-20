@@ -1,11 +1,11 @@
 package com.arka.usecase.party;
 
+import com.arka.entities.information.Contact;
+import com.arka.entities.product.ProductCategory;
 import com.arka.party.CreateSupplierUseCase;
 import com.arka.party.dto.CreateSupplierIn;
 import com.arka.enums.CompanyRelationType;
 import com.arka.party.gateway.SupplierGateway;
-import com.arka.model.information.Contact;
-import com.arka.model.product.ProductCategory;
 import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductCategoryService;
 import org.junit.jupiter.api.Test;

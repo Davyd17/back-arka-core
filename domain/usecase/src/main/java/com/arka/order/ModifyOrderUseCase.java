@@ -1,10 +1,10 @@
 package com.arka.order;
 
+import com.arka.entities.order.Order;
+import com.arka.entities.order.OrderItem;
 import com.arka.order.dto.UpdateOrderIn;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.order.mapper.OrderMapper;
-import com.arka.model.order.Order;
-import com.arka.model.order.OrderItem;
 import com.arka.order.gateway.OrderGateway;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;

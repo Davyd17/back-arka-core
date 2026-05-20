@@ -1,16 +1,16 @@
 package com.arka.usecase.inventory;
 
+import com.arka.entities.Employee;
+import com.arka.entities.Warehouse;
+import com.arka.entities.information.Contact;
+import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.entities.product.Product;
+import com.arka.entities.product.ProductCategory;
 import com.arka.inventory.RegisterInventoryMovementUseCase;
 import com.arka.inventory.dto.CreateInventoryMovementIn;
 import com.arka.enums.InventoryMovementType;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.InventoryMovementMapper;
-import com.arka.model.Employee;
-import com.arka.model.Warehouse;
-import com.arka.model.information.Contact;
-import com.arka.model.inventory.WarehouseInventory;
-import com.arka.model.product.Product;
-import com.arka.model.product.ProductCategory;
 import com.arka.party.service.EmployeeService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import org.junit.jupiter.api.BeforeEach;

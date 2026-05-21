@@ -16,7 +16,7 @@ CREATE TABLE companies (
 -- CONTACTS
 -- =========================
 CREATE TABLE contacts (
-    contact_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     "position" VARCHAR(100) NOT NULL,
@@ -25,7 +25,8 @@ CREATE TABLE contacts (
     updated_at TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     user_id BIGINT,
-    company_id BIGINT NOT NULL
+    company_id BIGINT NOT NULL,
+    CONSTRAINT fk_contacts_company FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
 CREATE INDEX idx_contacts_company_id ON contacts(company_id);
@@ -44,6 +45,7 @@ CREATE TABLE addresses (
     type VARCHAR(100) NOT NULL,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     contact_id BIGINT NOT NULL,
+    CONSTRAINT fk_addresses_contact FOREIGN KEY (contact_id) REFERENCES contacts(id),
     CONSTRAINT addresses_type_check CHECK (
         type IN ('WAREHOUSE', 'SUPPLIER', 'EMPLOYEE', 'CUSTOMER')
         )
@@ -63,7 +65,8 @@ CREATE TABLE phone_numbers (
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
-    contact_id BIGINT NOT NULL
+    contact_id BIGINT NOT NULL,
+    CONSTRAINT fk_phone_numbers_contact FOREIGN KEY (contact_id) REFERENCES contacts(id)
 );
 
 CREATE INDEX idx_phone_numbers_contact_id ON phone_numbers(contact_id);
@@ -72,10 +75,11 @@ CREATE INDEX idx_phone_numbers_contact_id ON phone_numbers(contact_id);
 -- EMPLOYEES
 -- =========================
 CREATE TABLE employees (
-    employee_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     code INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    contact_id BIGINT NOT NULL
+    contact_id BIGINT NOT NULL,
+    CONSTRAINT fk_employees_contact FOREIGN KEY (contact_id) REFERENCES contacts(id)
 );
 
 CREATE INDEX idx_employees_contact_id ON employees(contact_id);
@@ -102,7 +106,7 @@ CREATE UNIQUE INDEX idx_product_categories_slug ON product_categories(slug);
 -- =========================
 CREATE TABLE products (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sku VARCHAR(300),
+    sku VARCHAR(300) NOT NULL,
     name VARCHAR(200) NOT NULL,
     description TEXT NOT NULL,
     attributes JSONB,
@@ -111,6 +115,7 @@ CREATE TABLE products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     category_id BIGINT NOT NULL,
+    CONSTRAINT fk_products_category FOREIGN KEY (category_id) REFERENCES product_categories(id),
     CONSTRAINT products_base_price_check CHECK (
         base_price >= 0
         )
@@ -125,7 +130,9 @@ CREATE UNIQUE INDEX idx_products_sku ON products(sku);
 -- =========================
 CREATE TABLE companies_product_categories (
     company_id BIGINT NOT NULL,
-    product_category_id BIGINT NOT NULL
+    product_category_id BIGINT NOT NULL,
+    CONSTRAINT fk_cpc_company FOREIGN KEY (company_id) REFERENCES companies(id),
+    CONSTRAINT fk_cpc_category FOREIGN KEY (product_category_id) REFERENCES product_categories(id)
 );
 
 CREATE INDEX idx_cpc_company_id ON companies_product_categories(company_id);
@@ -144,6 +151,7 @@ CREATE TABLE orders (
     notes TEXT,
     type VARCHAR(100) NOT NULL,
     company_id BIGINT NOT NULL,
+    CONSTRAINT fk_orders_company FOREIGN KEY (company_id) REFERENCES companies(id),
     CONSTRAINT orders_status_check CHECK (
         status IN ('AUTHORIZED', 'CANCELLED', 'PROCESSING', 'PENDING')
         ),
@@ -165,9 +173,13 @@ CREATE TABLE order_items (
     order_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     quantity INTEGER NOT NULL,
-    unit_price NUMERIC(12,2) DEFAULT 0 NOT NULL,
+    unit_price_snapshot NUMERIC(12,2) DEFAULT 0 NOT NULL,
+    total_price NUMERIC(12,2) DEFAULT 0 NOT NULL,
+    CONSTRAINT fk_order_items_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_order_items_product FOREIGN KEY (product_id) REFERENCES products(id),
     CONSTRAINT order_items_quantity_check CHECK (quantity > 0),
-    CONSTRAINT order_items_unit_price_check CHECK (unit_price >= 0)
+    CONSTRAINT order_items_unit_price_snapshot_check CHECK (unit_price_snapshot >= 0),
+    CONSTRAINT order_items_total_price_check CHECK (total_price >= 0)
 );
 
 CREATE INDEX idx_order_items_order_id ON order_items(order_id);
@@ -187,6 +199,9 @@ CREATE TABLE shipping_details (
     order_id BIGINT NOT NULL,
     origin_address_id BIGINT NOT NULL,
     destination_address_id BIGINT NOT NULL,
+    CONSTRAINT fk_shipping_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_shipping_origin FOREIGN KEY (origin_address_id) REFERENCES addresses(id),
+    CONSTRAINT fk_shipping_destination FOREIGN KEY (destination_address_id) REFERENCES addresses(id),
     CONSTRAINT shipping_details_status_check CHECK (
         status IN ('SENT', 'RECEIVED', 'PENDING', 'DELIVERED', 'IN_DISPATCH')
         )
@@ -223,17 +238,19 @@ CREATE TABLE shopping_cart_items (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     quantity INTEGER NOT NULL,
     unit_price NUMERIC(12,2) DEFAULT 0 NOT NULL,
+    subtotal NUMERIC(12,2) DEFAULT 0 NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     shopping_cart_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
+    CONSTRAINT fk_cart_items_cart FOREIGN KEY (shopping_cart_id) REFERENCES shopping_carts(id),
+    CONSTRAINT fk_cart_items_product FOREIGN KEY (product_id) REFERENCES products(id),
     CONSTRAINT shopping_cart_items_quantity_check CHECK (quantity > 0),
     CONSTRAINT shopping_cart_items_unit_price_check CHECK (unit_price >= 0)
 );
 
 CREATE INDEX idx_cart_items_cart_id ON shopping_cart_items(shopping_cart_id);
 CREATE INDEX idx_cart_items_product_id ON shopping_cart_items(product_id);
-
 
 -- =========================
 -- WAREHOUSES
@@ -242,7 +259,8 @@ CREATE TABLE warehouses (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    address_id BIGINT NOT NULL
+    address_id BIGINT NOT NULL,
+    CONSTRAINT fk_warehouses_address FOREIGN KEY (address_id) REFERENCES addresses(id)
 );
 
 CREATE INDEX idx_warehouses_address_id ON warehouses(address_id);
@@ -257,13 +275,14 @@ CREATE TABLE warehouses_inventory (
     updated_at TIMESTAMP,
     warehouse_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
+    CONSTRAINT fk_inventory_warehouse FOREIGN KEY (warehouse_id) REFERENCES warehouses(id),
+    CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES products(id),
     CONSTRAINT warehouses_inventory_stock_check CHECK (stock >= 0)
 );
 
 CREATE INDEX idx_inventory_warehouse_id ON warehouses_inventory(warehouse_id);
 CREATE INDEX idx_inventory_product_id ON warehouses_inventory(product_id);
 
--- Avoid duplicates per product in a warehouse
 CREATE UNIQUE INDEX idx_inventory_unique
     ON warehouses_inventory(warehouse_id, product_id);
 
@@ -280,7 +299,10 @@ CREATE TABLE inventory_movements (
     registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     product_id BIGINT NOT NULL,
     employee_id BIGINT NOT NULL,
-    warehouse_id BIGINT NOT NULL,
+    warehouse_inventory_id BIGINT NOT NULL,
+    CONSTRAINT fk_movements_product FOREIGN KEY (product_id) REFERENCES products(id),
+    CONSTRAINT fk_movements_employee FOREIGN KEY (employee_id) REFERENCES employees(id),
+    CONSTRAINT fk_movements_warehouse_inventory FOREIGN KEY (warehouse_inventory_id) REFERENCES warehouses_inventory(id),
     CONSTRAINT inventory_movements_type_check CHECK (
         type IN ('IN', 'OUT')
         ),
@@ -291,6 +313,6 @@ CREATE TABLE inventory_movements (
 
 CREATE INDEX idx_movements_product_id ON inventory_movements(product_id);
 CREATE INDEX idx_movements_employee_id ON inventory_movements(employee_id);
-CREATE INDEX idx_movements_warehouse_id ON inventory_movements(warehouse_id);
+CREATE INDEX idx_movements_warehouse_id ON inventory_movements(warehouse_inventory_id);
 CREATE INDEX idx_movements_type ON inventory_movements(type);
 CREATE INDEX idx_movements_registered_at ON inventory_movements(registered_at);

@@ -1,11 +1,10 @@
 package com.arka.controller.product;
 
-import com.arka.dto.out.CreateProductOut;
-import com.arka.mappers.response.CreateResponseMapper;
-import com.arka.mappers.request.CreateProductRequestMapper;
+import com.arka.mappers.ProductRestMapper;
+import com.arka.product.dto.CreateProductOut;
 import com.arka.request.CreateProductRequest;
 import com.arka.response.save.CreateProductResponse;
-import com.arka.usecase.CreateProductUseCase;
+import com.arka.product.CreateProductUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,18 +21,17 @@ import java.net.URI;
 public class ProductController {
 
     private final CreateProductUseCase createProductUsecase;
-    private final CreateProductRequestMapper requestMapper;
-    private final CreateResponseMapper responseMapper;
+    private final ProductRestMapper productMapper;
 
     @PostMapping
     public ResponseEntity<CreateProductResponse> save(@Valid @RequestBody CreateProductRequest request){
 
         CreateProductOut product = createProductUsecase
-                .execute(requestMapper.toDomain(request));
+                .execute(productMapper.toInput(request));
 
         URI uri = URI.create(Long.toString(product.id()));
 
         return ResponseEntity.created(uri)
-                .body(responseMapper.toResponse(product));
+                .body(productMapper.toCreateResponse(product));
     }
 }

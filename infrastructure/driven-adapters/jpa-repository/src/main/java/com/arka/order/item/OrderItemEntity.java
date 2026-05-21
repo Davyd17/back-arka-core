@@ -4,6 +4,7 @@ import com.arka.order.OrderEntity;
 import com.arka.product.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
@@ -28,8 +29,12 @@ public class OrderItemEntity {
     private ProductEntity product;
 
     @Column(nullable = false)
+    @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private int quantity;
 
     @Column(nullable = false)
-    private BigDecimal unitPrice;
+    private BigDecimal unitPriceSnapshot = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 }

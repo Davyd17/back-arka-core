@@ -20,11 +20,11 @@ CREATE TABLE contacts (
     name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     "position" VARCHAR(100) NOT NULL,
-    email VARCHAR(200) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
-    user_id BIGINT,
+    user_id BIGINT UNIQUE,
     company_id BIGINT NOT NULL,
     CONSTRAINT fk_contacts_company FOREIGN KEY (company_id) REFERENCES companies(id)
 );
@@ -78,7 +78,7 @@ CREATE TABLE employees (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     code INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    contact_id BIGINT NOT NULL,
+    contact_id BIGINT NOT NULL UNIQUE,
     CONSTRAINT fk_employees_contact FOREIGN KEY (contact_id) REFERENCES contacts(id)
 );
 
@@ -91,7 +91,7 @@ CREATE UNIQUE INDEX idx_employees_code ON employees(code);
 CREATE TABLE product_categories (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    slug VARCHAR(200) NOT NULL,
+    slug VARCHAR(200) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     CONSTRAINT product_categories_slug_check CHECK (
@@ -106,8 +106,8 @@ CREATE UNIQUE INDEX idx_product_categories_slug ON product_categories(slug);
 -- =========================
 CREATE TABLE products (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sku VARCHAR(300) NOT NULL,
-    name VARCHAR(200) NOT NULL,
+    sku VARCHAR(300) NOT NULL UNIQUE,
+    name VARCHAR(200) NOT NULL UNIQUE,
     description TEXT NOT NULL,
     attributes JSONB,
     base_price NUMERIC(12,2) DEFAULT 0 NOT NULL,
@@ -143,7 +143,7 @@ CREATE INDEX idx_cpc_category_id ON companies_product_categories(product_categor
 -- =========================
 CREATE TABLE orders (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    number VARCHAR(100) NOT NULL,
+    number VARCHAR(100) NOT NULL UNIQUE,
     status VARCHAR(100) DEFAULT 'PENDING' NOT NULL,
     total_price NUMERIC(12,2) DEFAULT 0 NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -191,7 +191,7 @@ CREATE INDEX idx_order_items_product_id ON order_items(product_id);
 CREATE TABLE shipping_details (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     carrier VARCHAR(100) NOT NULL,
-    tracking_number VARCHAR(200) NOT NULL,
+    tracking_number VARCHAR(200) NOT NULL UNIQUE,
     notes TEXT,
     status VARCHAR(100) DEFAULT 'PENDING' NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -259,7 +259,7 @@ CREATE TABLE warehouses (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     is_active BOOLEAN DEFAULT TRUE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    address_id BIGINT NOT NULL,
+    address_id BIGINT NOT NULL UNIQUE,
     CONSTRAINT fk_warehouses_address FOREIGN KEY (address_id) REFERENCES addresses(id)
 );
 
@@ -270,7 +270,7 @@ CREATE INDEX idx_warehouses_address_id ON warehouses(address_id);
 -- =========================
 CREATE TABLE warehouses_inventory (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    stock INTEGER NOT NULL,
+    stock INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     warehouse_id BIGINT NOT NULL,

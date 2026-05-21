@@ -2,6 +2,7 @@ package com.arka.inventory.movements;
 
 import com.arka.employee.EmployeeEntity;
 import com.arka.enums.InventoryMovementType;
+import com.arka.inventory.warehouse.WarehouseInventoryEntity;
 import com.arka.product.ProductEntity;
 import com.arka.warehouse.WarehouseEntity;
 import jakarta.persistence.*;
@@ -28,13 +29,15 @@ public class InventoryMovementEntity {
     private InventoryMovementType type;
 
     @Column(nullable = false)
+    @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private int quantity;
 
     @Column(nullable = false)
+    @Min(value = 0, message = "Previous stock must be greater than or equal to 0")
     private int previousStock;
 
     @Column(nullable = false)
-    @Min(value = 0, message = "New stock must be greater than 0")
+    @Min(value = 0, message = "New stock must be greater than or equal to 0")
     private int newStock;
 
     private String notes;
@@ -52,8 +55,8 @@ public class InventoryMovementEntity {
     private EmployeeEntity employee;
 
     @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
-    private WarehouseEntity warehouse;
+    @JoinColumn(name = "warehouse_inventory_id", nullable = false)
+    private WarehouseInventoryEntity warehouseInventory;
 
 
 }

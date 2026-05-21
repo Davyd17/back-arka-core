@@ -23,7 +23,7 @@ public class ContactEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long contactId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -46,7 +46,7 @@ public class ContactEntity {
     @Column(name = "is_active", nullable = false)
     private boolean active;
 
-    @Column(nullable = true, unique = true)
+    @Column(unique = true)
     private Long userId;
 
     @ManyToOne

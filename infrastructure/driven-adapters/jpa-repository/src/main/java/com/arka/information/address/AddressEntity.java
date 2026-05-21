@@ -24,13 +24,11 @@ public class AddressEntity {
     @Column(nullable = false)
     private String city;
 
-    @Column(nullable = true)
     private String zipCode;
 
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = true)
     private String notes;
 
     @Column(nullable = false)

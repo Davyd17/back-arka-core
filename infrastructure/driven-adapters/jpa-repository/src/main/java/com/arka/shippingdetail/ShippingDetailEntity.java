@@ -6,6 +6,7 @@ import com.arka.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
@@ -31,13 +32,14 @@ public class ShippingDetailEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ShippingStatus status;
+    private ShippingStatus status = ShippingStatus.PENDING;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @Column(insertable = false)
+    @UpdateTimestamp
     private Instant updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -29,13 +29,14 @@ public class ShoppingCartEntity {
     private ShoppingCartStatus status = ShoppingCartStatus.ACTIVE;
 
     @Column(nullable = false)
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @UpdateTimestamp
+    @Column(insertable = false)
     private Instant updatedAt;
 
     @OneToMany(

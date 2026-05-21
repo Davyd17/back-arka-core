@@ -1,7 +1,7 @@
 package com.arka.cart;
 
 import com.arka.cart.item.ShoppingCartItemEntityMapper;
-import com.arka.model.cart.ShoppingCart;
+import com.arka.entities.cart.ShoppingCart;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring",

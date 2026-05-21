@@ -31,7 +31,7 @@ public class ShoppingCartItemEntity {
     private BigDecimal unitPrice = BigDecimal.ZERO;
 
     @Column(nullable = false)
-    private BigDecimal subtotal = BigDecimal.ZERO;
+    private BigDecimal subTotal = BigDecimal.ZERO;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp

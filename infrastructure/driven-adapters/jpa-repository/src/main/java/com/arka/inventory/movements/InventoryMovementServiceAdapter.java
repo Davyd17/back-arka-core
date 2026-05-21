@@ -1,7 +1,7 @@
 package com.arka.inventory.movements;
 
-import com.arka.gateway.repository.inventory.InventoryMovementGateway;
-import com.arka.model.inventory.InventoryMovement;
+import com.arka.entities.inventory.InventoryMovement;
+import com.arka.inventory.gateway.InventoryMovementGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

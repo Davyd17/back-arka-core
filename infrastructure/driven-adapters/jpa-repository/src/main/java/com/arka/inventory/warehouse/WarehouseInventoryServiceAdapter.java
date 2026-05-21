@@ -1,7 +1,7 @@
 package com.arka.inventory.warehouse;
 
-import com.arka.gateway.repository.inventory.WarehouseInventoryGateway;
-import com.arka.model.inventory.WarehouseInventory;
+import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
     public WarehouseInventory save(WarehouseInventory inventory) {
 
         WarehouseInventoryEntity inventoryEntity =
-                 mapper.toEntity(inventory) ;
+                mapper.toEntity(inventory);
 
         return mapper.toDomain(repository.save(inventoryEntity));
     }
@@ -43,13 +43,6 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
 
     @Override
     public int getTotalStockByProductId(Long productId) {
-
-        if(productId != null)
-
-            return repository.getTotalStockByProductId(productId);
-
-        else throw new IllegalArgumentException(
-                "Product ID can't be null"
-        );
+        return repository.getTotalStockByProductId(productId);
     }
 }

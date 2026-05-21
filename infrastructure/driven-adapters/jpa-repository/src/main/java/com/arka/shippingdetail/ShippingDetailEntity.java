@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -48,9 +49,9 @@ public class ShippingDetailEntity {
 
     @ManyToOne
     @JoinColumn(name = "origin_address_id", nullable = false)
-    private AddressEntity originAddress;
+    private AddressEntity origin;
 
     @ManyToOne
     @JoinColumn(name = "destination_address_id", nullable = false)
-    private AddressEntity destinationAddress;
+    private AddressEntity destination;
 }

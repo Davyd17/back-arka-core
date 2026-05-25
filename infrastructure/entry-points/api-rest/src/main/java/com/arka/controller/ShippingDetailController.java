@@ -1,10 +1,10 @@
 package com.arka.controller;
 
-import com.arka.dto.out.ShippingDetailOut;
+import com.arka.shipping.dto.ShippingDetailOut;
 import com.arka.mappers.ShippingDetailRestMapper;
 import com.arka.request.CreateShippingDetailRequest;
 import com.arka.response.save.CreateShippingDetailResponse;
-import com.arka.usecase.RegisterShippingDetailsUseCase;
+import com.arka.shipping.RegisterShippingDetailsUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.arka.product.service;
 
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
 import com.arka.report.dto.ProductSalesReportOut;
 import com.arka.report.dto.InstantDateRange;
 import com.arka.exceptions.NotFoundException;

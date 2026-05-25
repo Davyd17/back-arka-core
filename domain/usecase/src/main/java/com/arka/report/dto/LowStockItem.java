@@ -1,10 +1,10 @@
 package com.arka.report.dto;
 
-import com.arka.product.dto.ProductOut;
+import com.arka.product.dto.ProductSummaryOut;
 
 public record LowStockItem(
 
         int stock,
-        ProductOut product
+        ProductSummaryOut product
 ) {
 }

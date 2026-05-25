@@ -1,7 +1,7 @@
 package com.arka.product.mapper;
 
 import com.arka.entities.product.Product;
-import com.arka.product.dto.ProductOut;
+import com.arka.product.dto.ProductSummaryOut;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -9,5 +9,5 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
     @Mapping(target = "category", source = "domain.category.name")
-    ProductOut toOut(Product domain);
+    ProductSummaryOut toOut(Product domain);
 }

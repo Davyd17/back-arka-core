@@ -1,6 +1,6 @@
 package com.arka.product.gateway;
 
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
 import com.arka.report.dto.ProductSalesReportOut;
 
 import java.time.Instant;

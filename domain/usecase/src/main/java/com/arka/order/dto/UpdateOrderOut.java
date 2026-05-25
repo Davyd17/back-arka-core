@@ -1,10 +1,10 @@
 package com.arka.order.dto;
 
-import com.arka.entities.Company;
-import com.arka.entities.order.OrderItem;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
+import com.arka.product.dto.ProductSummaryOut;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -15,7 +15,20 @@ public record UpdateOrderOut(
         String notes,
         OrderType type,
         Instant updatedAt,
-        Company company,
-        List<OrderItem> items
+        OrderCompany company,
+        List<Item> items
 ) {
+    public record Item (
+            Long id,
+            ProductSummaryOut product,
+            int quantity,
+            BigDecimal unitPriceSnapshot,
+            BigDecimal totalPrice
+    ){}
+
+    public record OrderCompany(
+            Long id,
+            String name
+    ){
+    }
 }

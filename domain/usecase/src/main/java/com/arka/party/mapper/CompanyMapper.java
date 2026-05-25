@@ -1,6 +1,7 @@
 package com.arka.party.mapper;
 
 import com.arka.entities.Company;
+import com.arka.order.dto.UpdateOrderOut;
 import com.arka.party.dto.CompanyOut;
 import org.mapstruct.Mapper;
 
@@ -8,4 +9,6 @@ import org.mapstruct.Mapper;
 public interface CompanyMapper {
 
     CompanyOut toOut(Company domain);
+
+    UpdateOrderOut.OrderCompany toOderCompany(Company domain);
 }

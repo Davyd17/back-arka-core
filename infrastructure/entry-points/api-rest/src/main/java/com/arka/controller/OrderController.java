@@ -1,15 +1,14 @@
 package com.arka.controller;
 
-import com.arka.dto.out.CreateOrderOut;
-import com.arka.dto.out.UpdateOrderOut;
-import com.arka.mappers.request.OrderRequestMapper;
-import com.arka.mappers.response.OrderResponseMapper;
+import com.arka.mappers.OrderRestMapper;
+import com.arka.order.CreateOrderUseCase;
+import com.arka.order.dto.CreateOrderOut;
+import com.arka.order.dto.UpdateOrderOut;
 import com.arka.request.CreateOrderRequest;
 import com.arka.request.UpdateOrderRequest;
 import com.arka.response.update.UpdateOrderResponse;
 import com.arka.response.save.CreateOrderResponse;
-import com.arka.usecase.GenerateOrderUseCase;
-import com.arka.usecase.ModifyOrderUseCase;
+import com.arka.order.ModifyOrderUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +21,22 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final GenerateOrderUseCase createOrderUseCase;
+    private final CreateOrderUseCase createOrderUseCase;
     private final ModifyOrderUseCase modifyOrderUseCase;
 
-    private final OrderRequestMapper requestMapper;
-    private final OrderResponseMapper responseMapper;
+    private final OrderRestMapper mapper;
 
     @PostMapping
     public ResponseEntity<CreateOrderResponse> create(@Valid @RequestBody  CreateOrderRequest request){
 
         CreateOrderOut createOrderOut =
                 createOrderUseCase.execute(
-                        requestMapper.toDomain(request));
+                        mapper.toDomain(request));
 
         URI uri = URI.create(Long.toString(createOrderOut.id()));
 
         return ResponseEntity.created(uri).body(
-                responseMapper.toResponse(createOrderOut));
+                mapper.toResponse(createOrderOut));
 
     }
 
@@ -46,9 +44,9 @@ public class OrderController {
     public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request){
 
         UpdateOrderOut updatedOrder = modifyOrderUseCase.execute(
-                requestMapper.toDomain(request));
+                mapper.toDomain(request));
 
-        return ResponseEntity.ok(responseMapper.toResponse(updatedOrder));
+        return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }
 
 

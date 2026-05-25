@@ -11,6 +11,13 @@ public record UpdateOrderRequest(
         @Required(field = "notes")
         String notes,
         @Required(field = "items")
-        Set<UpdateOrderItemRequest> items
+        Set<Item> items
 ) {
+        public record Item(
+                @Required(field = "productId")
+                Long productId,
+
+                @Required(field = "quantity")
+                int quantity
+        ){}
 }

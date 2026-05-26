@@ -18,9 +18,17 @@ public record CreateOrderRequest(
         OrderType type,
 
         @NotEmpty(message = "There must be at least one item")
-        Set<CreateOrderItemRequest> items,
+        Set<Item> items,
 
         @Required(field = "company id")
         Long companyId
 ) {
+
+        public record Item(
+                @Required(field = "product id")
+                Long productId,
+
+                @Required(field = "quantity")
+                int quantity
+        ){}
 }

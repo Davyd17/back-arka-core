@@ -11,7 +11,7 @@ public record CreateShippingDetailResponse(
         String status,
         String createdAt,
         OrderSummaryResponse order,
-        AddressResponse originAddress,
-        AddressResponse destinationAddress
+        AddressResponse origin,
+        AddressResponse destination
 ) {
 }

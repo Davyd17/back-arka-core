@@ -1,7 +1,6 @@
 package com.arka.mappers;
 
-import com.arka.dto.in.ShoppingCartItemIn;
-import com.arka.dto.out.ShoppingCartItemOut;
+import com.arka.cart.dto.ShoppingCartItemOut;
 import com.arka.request.ShoppingCartItemRequest;
 import com.arka.response.save.ShoppingCartItemResponse;
 import org.mapstruct.Mapper;

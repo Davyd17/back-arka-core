@@ -11,11 +11,11 @@ public record CreateCompanyRequest(
 
         @NotEmpty(message =
                 "There must be at least one contact")
-        List<CreateContactRequest> contacts,
+        List<Long> contactIds,
 
         @NotEmpty(message =
                 "There must be at least one registered category")
-        List<SlugProductCategoryRequest> slugProductCategories
+        List<Long> productCategoryIds
 
 ) {
 

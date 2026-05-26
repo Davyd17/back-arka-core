@@ -1,8 +1,8 @@
 package com.arka.product;
 
-import com.arka.dto.out.ProductSalesReportOut;
-import com.arka.gateway.repository.product.ProductGateway;
-import com.arka.model.product.Product;
+import com.arka.entities.product.Product;
+import com.arka.report.dto.ProductSalesReportOut;
+import com.arka.product.gateway.ProductGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class ProductServiceAdapter implements ProductGateway {
     private final ProductEntityMapper mapper;
 
     @Override
-    public Product createProduct(Product product) {
+    public Product create(Product product) {
 
         if(Objects.nonNull(product)){
 

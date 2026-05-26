@@ -1,8 +1,8 @@
 package com.arka.cart;
 
+import com.arka.entities.cart.ShoppingCart;
 import com.arka.enums.ShoppingCartStatus;
-import com.arka.gateway.repository.ShoppingCartRepository;
-import com.arka.model.cart.ShoppingCart;
+import com.arka.cart.gateway.ShoppingCartGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,19 +11,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
+public class ShoppingCartServiceAdapter implements ShoppingCartGateway {
 
     private final ShoppingCartJpaRepository repository;
     private final ShoppingCartEntityMapper mapper;
 
     @Override
     public ShoppingCart save(ShoppingCart shoppingCart) {
-
-        return saveOperation(shoppingCart);
-    }
-
-    @Override
-    public ShoppingCart update(ShoppingCart shoppingCart) {
 
         return saveOperation(shoppingCart);
     }
@@ -49,8 +43,8 @@ public class ShoppingCartServiceAdapter implements ShoppingCartRepository {
     }
 
     @Override
-    public Optional<ShoppingCart> getActiveCartByUserId(Long userId) {
-        return repository.getActiveCartByUserId(userId)
+    public Optional<ShoppingCart> getLastCreatedCart(Long userId) {
+        return repository.findFirstByUserIdOrderByCreatedAtDesc(userId)
                 .map(mapper::toDomain);
     }
 }

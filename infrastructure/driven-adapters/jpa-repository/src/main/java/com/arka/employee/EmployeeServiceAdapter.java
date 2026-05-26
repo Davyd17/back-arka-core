@@ -1,7 +1,7 @@
 package com.arka.employee;
 
-import com.arka.gateway.repository.EmployeeGateway;
-import com.arka.model.Employee;
+import com.arka.entities.Employee;
+import com.arka.party.gateway.EmployeeGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

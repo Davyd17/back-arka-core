@@ -1,7 +1,7 @@
 package com.arka.shippingdetail;
 
+import com.arka.entities.ShippingDetail;
 import com.arka.information.address.AddressEntityMapper;
-import com.arka.model.ShippingDetail;
 import com.arka.order.OrderEntityMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

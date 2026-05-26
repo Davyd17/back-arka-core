@@ -2,12 +2,15 @@ package com.arka.product.category;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @Table(name = "product_categories")
@@ -23,13 +26,11 @@ public class ProductCategoryEntity {
     @Column(nullable = false, unique = true)
     private String slug;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     private Instant createdAt;
 
-    @Column(nullable = false)
+    @Column(insertable = false)
+    @UpdateTimestamp
     private Instant updatedAt;
-
-    public ProductCategoryEntity() {
-        this.createdAt = Instant.now();
-    }
 }

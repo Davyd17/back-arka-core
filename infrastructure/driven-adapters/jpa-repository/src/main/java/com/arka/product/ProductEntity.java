@@ -37,7 +37,7 @@ public class ProductEntity {
     private String description;
 
     @Column(nullable = false)
-    private BigDecimal basePrice;
+    private BigDecimal basePrice = BigDecimal.ZERO;
 
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> attributes;
@@ -46,7 +46,7 @@ public class ProductEntity {
     private boolean active;
 
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     @UpdateTimestamp

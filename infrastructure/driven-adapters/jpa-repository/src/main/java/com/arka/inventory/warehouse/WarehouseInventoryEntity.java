@@ -31,14 +31,14 @@ public class WarehouseInventoryEntity {
     private Long id;
 
     @Column(nullable = false)
-    @Min(value = 0, message = "Stock must be greater than 0")
+    @Min(value = 0, message = "Stock must be greater than or equal to 0")
     private int stock;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
-    @Column(nullable = false, insertable = false)
+    @Column(insertable = false)
     @UpdateTimestamp
     private Instant updatedAt;
 

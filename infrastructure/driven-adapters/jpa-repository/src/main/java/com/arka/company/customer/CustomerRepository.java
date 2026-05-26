@@ -1,7 +1,7 @@
 package com.arka.company.customer;
 
 import com.arka.company.CompanyEntity;
-import com.arka.dto.out.CustomerSalesReportOut;
+import com.arka.report.dto.CustomerSalesReportOut;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

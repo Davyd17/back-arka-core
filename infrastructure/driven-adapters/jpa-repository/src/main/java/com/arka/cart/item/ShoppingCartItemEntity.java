@@ -4,7 +4,7 @@ import com.arka.cart.ShoppingCartEntity;
 import com.arka.product.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,16 +24,21 @@ public class ShoppingCartItemEntity {
     private Long id;
 
     @Column(nullable = false)
+    @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private int quantity;
 
     @Column(nullable = false)
-    private BigDecimal unitPrice;
+    private BigDecimal unitPrice = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    private BigDecimal subTotal = BigDecimal.ZERO;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @UpdateTimestamp
+    @Column(insertable = false)
     private Instant updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)

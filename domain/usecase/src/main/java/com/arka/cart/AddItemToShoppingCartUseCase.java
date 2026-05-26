@@ -12,6 +12,7 @@ import com.arka.product.service.ProductService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 @RequiredArgsConstructor
 public class AddItemToShoppingCartUseCase {
@@ -22,7 +23,7 @@ public class AddItemToShoppingCartUseCase {
     private final WarehouseInventoryService inventoryService;
 
     private final ShoppingCartMapper mapper =
-            new ShoppingCartMapperImpl();
+            Mappers.getMapper(ShoppingCartMapper.class);
 
     public ShoppingCartOut execute(AddItemShoppingCartIn input){
 

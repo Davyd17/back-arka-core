@@ -9,6 +9,7 @@ import com.arka.inventory.mapper.WarehouseInventoryMapper;
 import com.arka.inventory.service.WarehouseService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class GenerateLowStockReportUseCase {
 
     private final WarehouseInventoryGateway inventoryGateway;
     private final WarehouseInventoryMapper mapper =
-            new WarehouseInventoryMapperImpl();
+            Mappers.getMapper(WarehouseInventoryMapper.class);
 
     private final WarehouseService warehouseService;
 

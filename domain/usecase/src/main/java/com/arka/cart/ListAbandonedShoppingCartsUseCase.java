@@ -6,6 +6,7 @@ import com.arka.exceptions.NotFoundException;
 import com.arka.cart.gateway.ShoppingCartGateway;
 import com.arka.cart.mapper.ShoppingCartMapper;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -13,8 +14,8 @@ import java.util.List;
 public class ListAbandonedShoppingCartsUseCase {
 
     private final ShoppingCartGateway cartGateway;
-    private final ShoppingCartMapper mapper
-            = new ShoppingCartMapperImpl();
+    private final ShoppingCartMapper mapper =
+            Mappers.getMapper(ShoppingCartMapper.class);
 
     public List<ShoppingCartOut> execute() {
 

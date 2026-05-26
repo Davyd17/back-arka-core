@@ -6,9 +6,11 @@ import com.arka.order.dto.UpdateOrderIn;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.order.mapper.OrderMapper;
 import com.arka.order.gateway.OrderGateway;
+import com.arka.order.mapper.OrderMapperImpl;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +21,8 @@ public class ModifyOrderUseCase {
     private final OrderService orderService;
     private final OrderItemService itemService;
 
-    private final OrderMapper orderMapper;
+    private final OrderMapper orderMapper =
+            Mappers.getMapper(OrderMapper.class);
 
     private final OrderGateway orderGateway;
 

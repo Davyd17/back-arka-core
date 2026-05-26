@@ -1,7 +1,5 @@
 package com.arka.product.dto;
 
-import com.arka.entities.product.ProductCategory;
-
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -12,6 +10,6 @@ public record CreateProductOut(
         String description,
         BigDecimal basePrice,
         Map<String, Object>attributes,
-        ProductCategory category
+        String category
 ) {
 }

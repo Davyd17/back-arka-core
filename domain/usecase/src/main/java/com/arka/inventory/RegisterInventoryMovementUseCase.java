@@ -12,12 +12,13 @@ import com.arka.party.service.EmployeeService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 @RequiredArgsConstructor
 public class RegisterInventoryMovementUseCase {
 
     private final InventoryMovementMapper movementMapper =
-            new InventoryMovementMapperImpl();
+            Mappers.getMapper(InventoryMovementMapper.class);
 
     private final WarehouseInventoryGateway inventoryGateway;
 

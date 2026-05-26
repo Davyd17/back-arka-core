@@ -14,6 +14,7 @@ import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductCategoryService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class CreateSupplierUseCase {
     private final SupplierGateway supplierGateway;
 
     private final CompanyMapper companyMapper =
-            new CompanyMapperImpl();
+            Mappers.getMapper(CompanyMapper.class);
 
     public CompanyOut execute(CreateSupplierIn input) {
 

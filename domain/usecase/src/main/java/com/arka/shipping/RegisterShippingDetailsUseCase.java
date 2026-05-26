@@ -12,6 +12,7 @@ import com.arka.order.service.OrderService;
 import com.arka.shipping.mapper.ShippingDetailMapperImpl;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 @RequiredArgsConstructor
 public class RegisterShippingDetailsUseCase {
@@ -21,7 +22,7 @@ public class RegisterShippingDetailsUseCase {
     private final AddressService addressService;
 
     private final ShippingDetailMapper shippingDetailMapper =
-            new ShippingDetailMapperImpl();
+            Mappers.getMapper(ShippingDetailMapper.class);
 
     public ShippingDetailOut execute(CreateShippingDetailIn input) {
 

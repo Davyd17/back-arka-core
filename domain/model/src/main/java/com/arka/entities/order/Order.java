@@ -3,6 +3,7 @@ package com.arka.entities.order;
 import com.arka.entities.Company;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
+import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class Order {
     private Instant updatedAt;
 
     public static Order create(String number,
-                               String notes,
+                               @Nullable String notes,
                                OrderType type,
                                Company company) {
 

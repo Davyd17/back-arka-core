@@ -1,13 +1,11 @@
 package com.arka.controller;
 
-import com.arka.mappers.request.CompanyRequestMapper;
-import com.arka.mappers.response.CompanySaveResponseMapper;
-import com.arka.model.Company;
+import com.arka.mappers.CompanyRestMapper;
+import com.arka.party.dto.CompanyOut;
 import com.arka.request.CreateCompanyRequest;
 import com.arka.response.save.CreateCompanyResponse;
-import com.arka.usecase.CreateSupplierUseCase;
-import com.arka.usecase.ListSuppliersByCategoryUseCase;
-import com.arka.mappers.response.CompanyResponseMapper;
+import com.arka.party.CreateSupplierUseCase;
+import com.arka.party.ListSuppliersByCategoryUseCase;
 import com.arka.response.get.CompanyResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -15,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -28,31 +27,34 @@ public class SupplierController {
     private final ListSuppliersByCategoryUseCase listSupplierByCategory;
     private final CreateSupplierUseCase createSupplierUseCase;
 
-    private final CompanyResponseMapper responseMapper;
-    private final CompanyRequestMapper requestMapper;
-    private final CompanySaveResponseMapper saveResponseMapper;
+    private final CompanyRestMapper mapper;
 
 
 
-    @GetMapping("/categories/{slug}")
-    public List<CompanyResponse> listByCategorySlug(@PathVariable @NotBlank String slug) {
+    @GetMapping("/categories/{id}")
+    public List<CompanyResponse> listById(@PathVariable @NotBlank Long id) {
 
-        return listSupplierByCategory.execute(slug)
+        return listSupplierByCategory.execute(id)
                         .stream()
-                        .map(responseMapper::toResponse)
+                        .map(mapper::toResponse)
                         .toList();
     }
 
     @PostMapping
     public ResponseEntity<CreateCompanyResponse> save(@Valid @RequestBody CreateCompanyRequest request){
 
-        Company savedSupplier = createSupplierUseCase
-                .execute(requestMapper.toDomain(request));
+        CompanyOut savedSupplier = createSupplierUseCase
+                .execute(mapper.toInput(request));
 
-        URI uri = URI.create(Long.toString(savedSupplier.getId()));
+        CreateCompanyResponse response = mapper.toCreateResponse(savedSupplier);
 
-        return ResponseEntity.created(uri).body(
-                saveResponseMapper.toSaveResponse(savedSupplier));
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(response);
     }
 
 }

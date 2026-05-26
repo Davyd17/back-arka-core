@@ -1,22 +1,14 @@
 package com.arka.util.export.csv;
 
-import com.arka.dto.out.LowStockReportOut;
-import com.arka.dto.value.LowStockItem;
-import com.arka.util.export.ExportFormat;
-import com.arka.util.export.FormatExporter;
+import com.arka.report.dto.LowStockReportOut;
+import com.arka.report.dto.LowStockItem;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Component
-public class LowStockInventoryCsvExporter
-        implements FormatExporter<LowStockReportOut> {
-
-    @Override
-    public ExportFormat getFormat() {
-        return ExportFormat.CSV;
-    }
+public class LowStockReportCsvExporter
+        extends AbstractCsvExporter<LowStockReportOut> {
 
     @Override
     public Class<LowStockReportOut> getDataType() {
@@ -40,17 +32,5 @@ public class LowStockInventoryCsvExporter
         }
 
         return csvBuilder.toString().getBytes(StandardCharsets.UTF_8);
-    }
-
-    private static String escape(String value){
-
-        if(value == null) {
-            return "";
-        }
-
-        if (value.contains(",") || value.contains("\"")){
-            value = value.replace("\"", "\"\"");
-            return "\"" + value + "\"";
-        } return value;
     }
 }

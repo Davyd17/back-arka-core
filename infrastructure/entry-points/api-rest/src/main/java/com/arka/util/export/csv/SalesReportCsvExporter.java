@@ -1,27 +1,17 @@
 package com.arka.util.export.csv;
 
-import com.arka.dto.out.CustomerSalesReportOut;
-import com.arka.dto.out.ProductSalesReportOut;
-import com.arka.dto.out.SalesReportOut;
-import com.arka.util.export.ExportFormat;
-import com.arka.util.export.FormatExporter;
+import com.arka.report.dto.CustomerSalesReportOut;
+import com.arka.report.dto.ProductSalesReportOut;
+import com.arka.report.dto.SalesReportOut;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.arka.util.export.csv.CsvEscaper.escape;
-
 @Component
-public class SevenDaysSalesReportCsvExporter
-        implements FormatExporter<SalesReportOut> {
-
-
-    @Override
-    public ExportFormat getFormat() {
-        return ExportFormat.CSV;
-    }
+public class SalesReportCsvExporter
+        extends AbstractCsvExporter<SalesReportOut> {
 
     @Override
     public Class<SalesReportOut> getDataType() {

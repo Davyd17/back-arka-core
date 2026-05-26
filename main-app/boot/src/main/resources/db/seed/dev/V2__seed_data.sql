@@ -92,54 +92,67 @@ INSERT INTO products (sku, name, description, attributes, base_price, is_active,
     ('COMP-001', 'Lenovo ThinkPad E14 Gen 5',
      'Portátil empresarial con procesador Intel Core i5, 16GB RAM, 512GB SSD',
      '{"processor": "Intel Core i5-1335U", "ram": "16GB", "storage": "512GB SSD", "display": "14 pulgadas FHD"}',
+     3850000.00, true, 1),
 
     ('COMP-002', 'HP ProBook 450 G10',
      'Portátil profesional con procesador Intel Core i7, 16GB RAM, 1TB SSD',
      '{"processor": "Intel Core i7-1355U", "ram": "16GB", "storage": "1TB SSD", "display": "15.6 pulgadas FHD"}',
+     4950000.00, true, 1),
 
     ('COMP-003', 'Dell OptiPlex 7010',
      'Desktop empresarial compacto con Intel Core i5, 8GB RAM, 256GB SSD',
      '{"processor": "Intel Core i5-13500T", "ram": "8GB", "storage": "256GB SSD", "form_factor": "Micro"}',
+     2800000.00, true, 1),
 
     ('SMRT-001', 'Samsung Galaxy A54 5G',
      'Smartphone empresarial con pantalla AMOLED 6.4 pulgadas, 128GB',
      '{"display": "6.4 pulgadas AMOLED", "storage": "128GB", "ram": "6GB", "network": "5G"}',
+     1250000.00, true, 2),
 
     ('SMRT-002', 'iPhone 15',
      'Smartphone Apple con chip A16, 128GB, cámara 48MP',
      '{"chip": "A16 Bionic", "storage": "128GB", "camera": "48MP", "display": "6.1 pulgadas"}',
+     4200000.00, true, 2),
 
     ('TABL-001', 'Samsung Galaxy Tab A9+',
      'Tablet empresarial 11 pulgadas, 128GB, WiFi + 5G',
      '{"display": "11 pulgadas TFT", "storage": "128GB", "ram": "8GB", "network": "WiFi + 5G"}',
+     1100000.00, true, 2),
 
     ('ACCS-001', 'Logitech MX Keys S',
      'Teclado inalámbrico empresarial con retroiluminación inteligente',
      '{"connection": "Bluetooth + USB", "backlight": true, "layout": "Español"}',
+     420000.00, true, 3),
 
     ('ACCS-002', 'Logitech MX Master 3S',
      'Mouse inalámbrico de alta precisión para profesionales',
      '{"connection": "Bluetooth + USB", "dpi": "8000", "buttons": 7}',
+     380000.00, true, 3),
 
     ('ACCS-003', 'Monitor LG 27UK850',
      'Monitor 4K UHD 27 pulgadas con USB-C',
      '{"resolution": "3840x2160", "panel": "IPS", "ports": "HDMI, DP, USB-C", "size": "27 pulgadas"}',
+     1850000.00, true, 3),
 
     ('NET-001', 'Cisco Switch 24 puertos',
      'Switch empresarial gestionable 24 puertos Gigabit',
      '{"ports": 24, "speed": "1Gbps", "managed": true, "poe": false}',
+     1500000.00, true, 4),
 
     ('NET-002', 'Ubiquiti UniFi AP Pro',
      'Access Point WiFi 6 empresarial con 4x4 MIMO',
      '{"wifi_standard": "WiFi 6", "mimo": "4x4", "coverage": "150m2", "poe": true}',
+     1220000.00, true, 4),
 
     ('STR-001', 'Western Digital 1TB SSD NVMe',
      'Disco sólido NVMe M.2 1TB para laptops empresariales',
      '{"capacity": "1TB", "interface": "NVMe M.2", "read_speed": "3500MB/s", "write_speed": "3000MB/s"}',
+     450000.00, true, 5),
 
     ('STR-002', 'Seagate NAS 4TB',
      'Disco duro para NAS empresarial 4TB 7200RPM',
      '{"capacity": "4TB", "rpm": 7200, "interface": "SATA", "use": "NAS"}',
+     650000.00, true, 5),
 
     ('AUD-001', 'Jabra Evolve2 55',
      'Auriculares inalámbricos con cancelación de ruido para empresas',
@@ -232,3 +245,30 @@ INSERT INTO order_items (order_id, product_id, quantity, unit_price_snapshot, to
 INSERT INTO shipping_details (carrier, tracking_number, notes, status, order_id, origin_address_id, destination_address_id) VALUES
     ('Servientrega', 'SRV-2024-001234', 'Entrega en sede principal', 'DELIVERED', 1, 8, 5),
     ('Coordinadora', 'COO-2024-005678', 'Entrega parcial primer envío', 'IN_DISPATCH', 3, 8, 7);
+
+-- =========================
+-- SHOPPING CARTS
+-- =========================
+INSERT INTO shopping_carts (status, total_amount, user_id) VALUES
+    -- Active cart for Carlos containing some accessories
+    ('ACTIVE', 1530000.00, 1),
+    -- Past processed cart that correlates to an ordered set of items
+    ('PROCESSED', 15750000.00, 1),
+    -- An abandoned cart from a previous session
+    ('ABANDONED', 4200000.00, 1);
+
+-- =========================
+-- SHOPPING CART ITEMS
+-- =========================
+INSERT INTO shopping_cart_items (quantity, unit_price, sub_total, shopping_cart_id, product_id) VALUES
+    -- Items for Cart 1 (ACTIVE)
+    (1, 1150000.00, 1150000.00, 1, 14), -- 1x Jabra Evolve2 55
+    (1, 380000.00,  380000.00,  1, 8),  -- 1x Logitech MX Master 3S
+
+    -- Items for Cart 2 (PROCESSED) - Matches ORD-2024-003 quantities/prices
+    (2, 4950000.00, 9900000.00, 2, 2),  -- 2x HP ProBook 450
+    (3, 1250000.00, 3750000.00, 2, 4),  -- 3x Samsung Galaxy A54
+    (1, 1150000.00, 1150000.00, 2, 14), -- 1x Jabra Evolve2 55
+
+    -- Items for Cart 3 (ABANDONED) - Matches ORD-2024-004
+    (1, 4200000.00, 4200000.00, 3, 5);  -- 1x iPhone 15

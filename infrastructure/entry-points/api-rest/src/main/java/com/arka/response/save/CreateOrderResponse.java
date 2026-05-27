@@ -2,6 +2,7 @@ package com.arka.response.save;
 
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
+import com.arka.response.get.ProductSummaryResponse;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -20,7 +21,7 @@ public record CreateOrderResponse(
 ) {
     public record Item(
             Long id,
-            CreateProductResponse product,
+            ProductSummaryResponse product,
             int quantity,
             BigDecimal unitPriceSnapshot,
             BigDecimal totalPrice

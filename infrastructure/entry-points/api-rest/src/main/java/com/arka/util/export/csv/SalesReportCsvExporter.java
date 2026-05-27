@@ -29,10 +29,13 @@ public class SalesReportCsvExporter
 
         buildCsv(csv, data);
 
-        return csv.toString().getBytes(StandardCharsets.UTF_8);
+        return ("\uFEFF" + csv).getBytes(StandardCharsets.UTF_8);
     }
 
     private void buildCsv(StringBuilder csv, SalesReportOut data){
+
+        //Set delimiter
+        csv.append("sep=,\n");
 
         appendTopSellingProducts(csv, data.topSellingProducts());
 

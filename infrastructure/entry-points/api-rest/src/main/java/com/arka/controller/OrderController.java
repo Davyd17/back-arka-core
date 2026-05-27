@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
@@ -33,7 +34,11 @@ public class OrderController {
                 createOrderUseCase.execute(
                         mapper.toDomain(request));
 
-        URI uri = URI.create(Long.toString(createOrderOut.id()));
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createOrderOut.id())
+                .toUri();
 
         return ResponseEntity.created(uri).body(
                 mapper.toResponse(createOrderOut));

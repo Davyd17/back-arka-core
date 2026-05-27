@@ -13,7 +13,7 @@ public record CreateProductRequest (
         @Required(field = "sku")
         String sku,
 
-        @Required(field = "id")
+        @Required(field = "name")
         String name,
 
         @Required(field = "description")

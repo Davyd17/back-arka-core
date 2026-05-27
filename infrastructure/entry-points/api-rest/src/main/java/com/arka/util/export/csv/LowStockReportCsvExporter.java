@@ -19,6 +19,9 @@ public class LowStockReportCsvExporter
 
         StringBuilder csvBuilder = new StringBuilder();
 
+        //Set delimiter
+        csvBuilder.append("sep=,\n");
+
         // Add CSV header
         csvBuilder.append("name,sku,category,stock\n");
 
@@ -31,6 +34,6 @@ public class LowStockReportCsvExporter
 
         }
 
-        return csvBuilder.toString().getBytes(StandardCharsets.UTF_8);
+        return ("\uFEFF" + csvBuilder).getBytes(StandardCharsets.UTF_8);
     }
 }

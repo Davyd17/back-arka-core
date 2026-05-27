@@ -3,10 +3,7 @@ package com.arka.entities.inventory;
 import com.arka.entities.Employee;
 import com.arka.entities.product.Product;
 import com.arka.enums.InventoryMovementType;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.Instant;
 

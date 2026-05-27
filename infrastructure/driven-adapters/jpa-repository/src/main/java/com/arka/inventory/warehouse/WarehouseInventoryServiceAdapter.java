@@ -2,6 +2,7 @@ package com.arka.inventory.warehouse;
 
 import com.arka.entities.inventory.WarehouseInventory;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
+import com.arka.inventory.movements.InventoryMovementEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +25,12 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
 
     @Override
     public WarehouseInventory save(WarehouseInventory inventory) {
-
         WarehouseInventoryEntity inventoryEntity =
                 mapper.toEntity(inventory);
+
+        for(InventoryMovementEntity movement : inventoryEntity.getInventoryMovements()){
+                movement.setWarehouseInventory(inventoryEntity);
+        }
 
         return mapper.toDomain(repository.save(inventoryEntity));
     }

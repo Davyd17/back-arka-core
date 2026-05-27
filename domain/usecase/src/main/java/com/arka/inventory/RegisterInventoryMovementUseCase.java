@@ -1,6 +1,7 @@
 package com.arka.inventory;
 
 import com.arka.entities.Employee;
+import com.arka.entities.inventory.InventoryMovement;
 import com.arka.entities.inventory.WarehouseInventory;
 import com.arka.inventory.dto.CreateInventoryMovementIn;
 import com.arka.inventory.dto.CreateInventoryMovementOut;
@@ -41,9 +42,16 @@ public class RegisterInventoryMovementUseCase {
         else
             inventory.removeStock(input.quantity(), foundEmployee);
 
+        addNotesToMovementIfPresent(
+                inventory.getInventoryMovements().peek(), input.notes());
 
-        inventoryGateway.save(inventory);
+        WarehouseInventory saved = inventoryGateway.save(inventory);
 
-        return movementMapper.toOut(inventory.getInventoryMovements().peek());
+        return movementMapper.toOut(saved.getInventoryMovements().peek());
+    }
+
+    private void addNotesToMovementIfPresent(InventoryMovement movement, String notes){
+        if(!notes.isBlank() && movement != null)
+            movement.updateNotes(notes);
     }
 }

@@ -5,6 +5,7 @@ import com.arka.enums.InventoryMovementType;
 import com.arka.inventory.warehouse.WarehouseInventoryEntity;
 import com.arka.product.ProductEntity;
 import com.arka.warehouse.WarehouseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -14,6 +15,7 @@ import java.time.Instant;
 
 @Getter
 @Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -56,6 +58,7 @@ public class InventoryMovementEntity {
 
     @ManyToOne
     @JoinColumn(name = "warehouse_inventory_id", nullable = false)
+    @JsonBackReference
     private WarehouseInventoryEntity warehouseInventory;
 
 

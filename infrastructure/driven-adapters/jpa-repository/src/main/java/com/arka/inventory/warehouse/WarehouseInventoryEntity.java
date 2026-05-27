@@ -1,18 +1,18 @@
 package com.arka.inventory.warehouse;
 
+import com.arka.inventory.movements.InventoryMovementEntity;
 import com.arka.product.ProductEntity;
 import com.arka.warehouse.WarehouseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -22,7 +22,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name= "warehouses_inventory")
+@Table(name = "warehouses_inventory")
 @Valid
 public class WarehouseInventoryEntity {
 
@@ -49,4 +49,10 @@ public class WarehouseInventoryEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
+
+    @OneToMany(mappedBy = "warehouseInventory",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    @JsonManagedReference
+    private List<InventoryMovementEntity> inventoryMovements;
 }

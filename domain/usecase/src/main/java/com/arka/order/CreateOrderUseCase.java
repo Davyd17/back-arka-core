@@ -8,10 +8,12 @@ import com.arka.order.dto.CreateOrderIn;
 import com.arka.order.dto.CreateOrderOut;
 import com.arka.order.gateway.OrderGateway;
 import com.arka.order.mapper.OrderMapper;
+import com.arka.order.mapper.OrderMapperImpl;
 import com.arka.party.service.CompanyService;
 import com.arka.product.service.ProductService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.*;
 
@@ -20,7 +22,8 @@ public class CreateOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    private final OrderMapper orderMapper;
+    private final OrderMapper orderMapper =
+            Mappers.getMapper(OrderMapper.class);
 
     private final CompanyService companyService;
     private final ProductService productService;

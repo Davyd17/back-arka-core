@@ -7,6 +7,7 @@ import com.arka.party.gateway.SupplierGateway;
 import com.arka.party.mapper.CompanyMapperImpl;
 import com.arka.product.service.ProductCategoryService;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ListSuppliersByCategoryUseCase {
     private final ProductCategoryService productCategoryService;
     private final SupplierGateway supplierGateway;
     private final CompanyMapper companyMapper =
-            new CompanyMapperImpl();
+            Mappers.getMapper(CompanyMapper.class);
 
     public List<CompanyOut> execute(Long productCategoryId) {
 

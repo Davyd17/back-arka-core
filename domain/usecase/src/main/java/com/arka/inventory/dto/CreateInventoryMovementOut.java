@@ -9,6 +9,7 @@ import java.time.Instant;
 public record CreateInventoryMovementOut(
         Long id,
         InventoryMovementType type,
+        int quantity,
         int previousStock,
         int newStock,
         String notes,

@@ -1,6 +1,6 @@
 package com.arka.controller;
 
-import com.arka.mappers.request.InventoryMovementMapper;
+import com.arka.mappers.InventoryMovementRestMapper;
 import com.arka.request.CreateInventoryMovementRequest;
 import com.arka.inventory.RegisterInventoryMovementUseCase;
 import com.arka.response.save.CreateInventoryMovementResponse;
@@ -22,7 +22,7 @@ public class InventoryMovementController {
 
     private final RegisterInventoryMovementUseCase registerInventoryMovementUseCase;
 
-    private final InventoryMovementMapper mapper;
+    private final InventoryMovementRestMapper mapper;
 
     @PostMapping
     public ResponseEntity<CreateInventoryMovementResponse> create(@Valid @RequestBody CreateInventoryMovementRequest request){

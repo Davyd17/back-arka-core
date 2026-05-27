@@ -9,7 +9,5 @@ import org.mapstruct.Mapper;
         uses = ProductRestMapper.class)
 public interface ShoppingCartItemRestMapper {
 
-    ShoppingCartItemIn toInDto(ShoppingCartItemRequest request);
-
     ShoppingCartItemResponse toResponse(ShoppingCartItemOut outDTO);
 }

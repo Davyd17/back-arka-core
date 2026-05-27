@@ -5,11 +5,11 @@ import com.arka.entities.product.ProductCategory;
 import com.arka.product.dto.CreateProductIn;
 import com.arka.product.dto.CreateProductOut;
 import com.arka.product.gateway.ProductGateway;
-import com.arka.product.mapper.CreateProductOutMapper;
-import com.arka.product.mapper.CreateProductOutMapperImpl;
+import com.arka.product.mapper.ProductMapper;
 import com.arka.product.service.ProductCategoryService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 
 @RequiredArgsConstructor
 public class CreateProductUseCase {
@@ -17,8 +17,8 @@ public class CreateProductUseCase {
     private final ProductGateway productGateway;
     private final ProductCategoryService categoryService;
 
-    private final CreateProductOutMapper outMapper =
-            new CreateProductOutMapperImpl();
+    private final ProductMapper outMapper =
+            Mappers.getMapper(ProductMapper.class);
 
     public CreateProductOut execute(CreateProductIn input){
 
@@ -37,7 +37,7 @@ public class CreateProductUseCase {
             if(input.attributes() != null && !input.attributes().isEmpty())
                  input.attributes().forEach(product::addAttribute);
 
-            return outMapper.toDTO(productGateway.create(product));
+            return outMapper.toCreateOut(productGateway.create(product));
 
     }
 }

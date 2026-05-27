@@ -12,6 +12,6 @@ public record CreateProductResponse(
         String description,
         BigDecimal basePrice,
         Map<String, Object>attributes,
-        ProductCategoryResponse category
+        String category
 ) {
 }

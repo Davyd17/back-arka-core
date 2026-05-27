@@ -4,6 +4,7 @@ import com.arka.party.dto.CompanyOut;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.product.dto.CreateProductOut;
+import com.arka.product.dto.ProductSummaryOut;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -23,7 +24,7 @@ public record CreateOrderOut (
 ){
     public record Item(
             Long id,
-            CreateProductOut product,
+            ProductSummaryOut product,
             int quantity,
             BigDecimal unitPriceSnapshot,
             BigDecimal totalPrice

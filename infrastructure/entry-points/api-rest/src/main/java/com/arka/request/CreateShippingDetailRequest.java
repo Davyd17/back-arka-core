@@ -13,10 +13,7 @@ public record CreateShippingDetailRequest(
 
         String notes,
 
-        @Required(field = "status")
-        ShippingStatus status,
-
-        @Required(field = "id")
+        @Required(field = "orderId")
         Long orderId,
 
         @Required(field = "originAddressId")

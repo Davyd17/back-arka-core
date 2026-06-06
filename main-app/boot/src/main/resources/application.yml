@@ -42,3 +42,13 @@ management:
 
 jwt-provider:
   secret: ${JWT_SECRET}
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui.html"
+    operationsSorter: method
+    tagsSorter: alpha
+    docExpansion: none
+    defaultModelsExpandDepth: -1
+  api-docs:
+    path: /v3/api-docs

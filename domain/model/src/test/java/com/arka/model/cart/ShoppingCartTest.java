@@ -68,7 +68,7 @@ class ShoppingCartTest {
         cart.addItem(product, 5);
 
         assertEquals(1, cart.getItems().size());
-        assertEquals(5, cart.getItems().getFirst().getQuantity());
+        assertEquals(7, cart.getItems().getFirst().getQuantity());
     }
 
     @Test

@@ -9,6 +9,5 @@ public interface AddressEntityMapper {
 
     Address toDomain(AddressEntity addressEntity);
 
-    @Mapping(target = "id", ignore = true)
     AddressEntity addressToEntity(Address domain);
 }

@@ -50,7 +50,7 @@ public class ShoppingCart {
         Optional<ShoppingCartItem> item = getExistingItem(product);
 
         if(item.isPresent()){
-            item.get().updateQuantity(quantity);
+            item.get().updateQuantity(item.get().getQuantity() + quantity);
         } else
             this.items.add(ShoppingCartItem.create(quantity, product));
 

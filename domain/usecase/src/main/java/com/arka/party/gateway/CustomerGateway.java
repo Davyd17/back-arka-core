@@ -1,4 +1,4 @@
-package com.arka.report.gateway;
+package com.arka.party.gateway;
 
 import com.arka.report.dto.CustomerSalesReportOut;
 

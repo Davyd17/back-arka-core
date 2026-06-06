@@ -6,10 +6,12 @@ import com.arka.order.OrderEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
@@ -31,13 +33,14 @@ public class ShippingDetailEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ShippingStatus status;
+    private ShippingStatus status = ShippingStatus.PENDING;
 
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 
     @Column(insertable = false)
+    @UpdateTimestamp
     private Instant updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,9 +49,9 @@ public class ShippingDetailEntity {
 
     @ManyToOne
     @JoinColumn(name = "origin_address_id", nullable = false)
-    private AddressEntity originAddress;
+    private AddressEntity origin;
 
     @ManyToOne
     @JoinColumn(name = "destination_address_id", nullable = false)
-    private AddressEntity destinationAddress;
+    private AddressEntity destination;
 }

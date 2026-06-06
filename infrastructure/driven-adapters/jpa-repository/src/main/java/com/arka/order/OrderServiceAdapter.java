@@ -1,14 +1,12 @@
 package com.arka.order;
 
-import com.arka.gateway.repository.order.OrderGateway;
-import com.arka.model.order.Order;
+import com.arka.entities.order.Order;
+import com.arka.order.gateway.OrderGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -19,59 +17,26 @@ public class OrderServiceAdapter implements OrderGateway {
     private final OrderEntityMapper mapper;
 
     @Override
-    public Order createOrder(Order newOrder) {
+    public Order save(Order newOrder) {
 
-        if(Objects.nonNull(newOrder)){
+        OrderEntity newOrderEntity = mapper.toEntity(newOrder);
 
-            OrderEntity newOrderEntity = mapper.toEntity(newOrder);
+        newOrderEntity.getItems().forEach(item -> {
+            item.setOrder(newOrderEntity);
+        });
 
-            newOrderEntity.getItems().forEach(item -> {
-                item.setOrder(newOrderEntity);
-            });
-
-            OrderEntity savedOrder = repository
-                    .save(newOrderEntity);
-
-            return mapper.toDomain(savedOrder);
-
-        } else throw new IllegalArgumentException(
-                "Order can't be null");
+        return mapper.toDomain(repository.save(newOrderEntity));
     }
 
     @Override
     public Optional<Order> findById(Long id) {
+        return repository.findById(id)
+                .map(mapper::toDomain);
 
-        if(Objects.nonNull(id))
-            return repository.findById(id)
-                    .map(mapper::toDomain);
-
-        else throw new IllegalArgumentException(
-                "Order id can't be null");
-    }
-
-    @Override
-    public Order update(Order order) {
-
-        if(Objects.nonNull(order)){
-
-            OrderEntity orderEntity = mapper.toEntity(order);
-
-            orderEntity.getItems().forEach(item -> {
-                item.setOrder(orderEntity);
-            });
-
-            OrderEntity updatedOrder = repository
-                    .save(orderEntity);
-
-            return mapper.toDomain(updatedOrder);
-
-        } else throw new IllegalArgumentException(
-                "Order can't be null");
     }
 
     @Override
     public BigDecimal getTotalRevenueFromDateRange(Instant since, Instant until) {
-
         return repository.getTotalRevenueFromDateRange(since, until);
     }
 }

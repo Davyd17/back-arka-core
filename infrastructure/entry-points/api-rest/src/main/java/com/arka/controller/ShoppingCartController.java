@@ -1,12 +1,12 @@
 package com.arka.controller;
 
-import com.arka.dto.in.AddItemShoppingCartIn;
-import com.arka.dto.out.ShoppingCartOut;
+import com.arka.cart.dto.AddItemShoppingCartIn;
+import com.arka.cart.dto.ShoppingCartOut;
 import com.arka.mappers.ShoppingCartRestMapper;
 import com.arka.request.AddItemShoppingCartRequest;
 import com.arka.response.save.ShoppingCartResponse;
-import com.arka.usecase.AddItemToShoppingCartUseCase;
-import com.arka.usecase.ListAbandonedShoppingCartsUseCase;
+import com.arka.cart.AddItemToShoppingCartUseCase;
+import com.arka.cart.ListAbandonedShoppingCartsUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

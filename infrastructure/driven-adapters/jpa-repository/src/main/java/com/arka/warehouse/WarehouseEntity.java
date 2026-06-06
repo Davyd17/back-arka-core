@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.Instant;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -21,11 +24,15 @@ public class WarehouseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Boolean isActive;
+    @Column(nullable = false, name = "is_active")
+    private Boolean active;
 
     @OneToOne
     @JoinColumn(name = "address_id", nullable = false, unique = true)
     private AddressEntity address;
+
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Instant createdAt;
 
 }

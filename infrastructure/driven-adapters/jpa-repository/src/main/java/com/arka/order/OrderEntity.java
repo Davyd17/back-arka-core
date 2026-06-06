@@ -43,9 +43,9 @@ public class OrderEntity {
     private String notes;
 
     @Column(nullable = false)
-    private BigDecimal totalPrice;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Instant createdAt;
 

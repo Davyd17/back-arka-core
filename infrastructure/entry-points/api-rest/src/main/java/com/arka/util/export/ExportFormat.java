@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 @RequiredArgsConstructor
 public enum ExportFormat {
 
-    CSV(MediaType.TEXT_PLAIN);
+    CSV(MediaType.parseMediaType("text/csv; charset=UTF-8"));
 
     private final MediaType mediaType;
 

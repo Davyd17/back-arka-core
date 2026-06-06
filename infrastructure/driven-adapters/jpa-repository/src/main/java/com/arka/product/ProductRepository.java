@@ -1,6 +1,6 @@
 package com.arka.product;
 
-import com.arka.dto.out.ProductSalesReportOut;
+import com.arka.report.dto.ProductSalesReportOut;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

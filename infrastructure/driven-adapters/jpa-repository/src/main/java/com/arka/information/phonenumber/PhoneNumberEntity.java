@@ -3,13 +3,17 @@ package com.arka.information.phonenumber;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "phone_numbers")
 public class PhoneNumberEntity {
@@ -21,7 +25,6 @@ public class PhoneNumberEntity {
     @Column(nullable = false)
     private String countryCode;
 
-    @Column(nullable = true)
     private String extension;
 
     @Column(nullable = false)
@@ -30,15 +33,13 @@ public class PhoneNumberEntity {
     @Column(name = "is_active", nullable = false)
     private boolean active;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
     private Instant createdAt;
 
-    @Column(nullable = true)
+    @Column(insertable = false)
+    @UpdateTimestamp
     private Instant updatedAt;
-
-    public PhoneNumberEntity() {
-         this.createdAt = Instant.now();
-    }
 }
 
 

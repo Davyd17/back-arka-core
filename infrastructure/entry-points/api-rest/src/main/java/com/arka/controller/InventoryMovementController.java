@@ -1,9 +1,9 @@
 package com.arka.controller;
 
-import com.arka.mappers.request.InventoryMovementRequestMapper;
-import com.arka.model.inventory.InventoryMovement;
+import com.arka.mappers.InventoryMovementRestMapper;
 import com.arka.request.CreateInventoryMovementRequest;
-import com.arka.usecase.GenerateInventoryMovementUseCase;
+import com.arka.inventory.RegisterInventoryMovementUseCase;
+import com.arka.response.save.CreateInventoryMovementResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +20,20 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class InventoryMovementController {
 
-    private final GenerateInventoryMovementUseCase itemEntryToInventoryUseCase;
+    private final RegisterInventoryMovementUseCase registerInventoryMovementUseCase;
 
-    private final InventoryMovementRequestMapper mapper;
+    private final InventoryMovementRestMapper mapper;
 
     @PostMapping
-    public ResponseEntity<InventoryMovement> create(@Valid @RequestBody CreateInventoryMovementRequest request){
+    public ResponseEntity<CreateInventoryMovementResponse> create(@Valid @RequestBody CreateInventoryMovementRequest request){
 
-        InventoryMovement inventory =
-                itemEntryToInventoryUseCase.execute(mapper.toInDTO(request));
+        CreateInventoryMovementResponse inventory = mapper.toCreateResponse(
+                registerInventoryMovementUseCase.execute(mapper.toInput(request)));
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(inventory.getId())
+                .buildAndExpand(inventory.id())
                 .toUri();
 
         return ResponseEntity.created(uri).body(inventory);

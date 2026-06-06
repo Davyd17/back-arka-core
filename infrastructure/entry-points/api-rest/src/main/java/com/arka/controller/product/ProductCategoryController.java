@@ -1,7 +1,7 @@
 package com.arka.controller.product;
 
-import com.arka.model.product.ProductCategory;
-import com.arka.usecase.ListProductCategoriesUseCase;
+import com.arka.entities.product.ProductCategory;
+import com.arka.product.ListProductCategoriesUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,8 +2,8 @@ package com.arka.company.supplier;
 
 import com.arka.company.CompanyEntity;
 import com.arka.company.CompanyEntityMapper;
-import com.arka.model.Company;
-import com.arka.gateway.repository.party.SupplierGateway;
+import com.arka.entities.Company;
+import com.arka.party.gateway.SupplierGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

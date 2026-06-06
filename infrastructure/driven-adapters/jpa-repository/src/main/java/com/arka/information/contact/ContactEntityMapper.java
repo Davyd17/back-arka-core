@@ -1,6 +1,6 @@
 package com.arka.information.contact;
 
-import com.arka.model.information.Contact;
+import com.arka.entities.information.Contact;
 import com.arka.information.address.AddressEntityMapper;
 import com.arka.information.phonenumber.PhoneNumberEntityMapper;
 import org.mapstruct.Mapper;
@@ -17,6 +17,7 @@ public interface ContactEntityMapper {
 
     @Mappings({
             @Mapping(target = "updatedAt", ignore = true),
+            @Mapping(target = "createdAt", ignore = true),
             @Mapping(target = "company", ignore = true)
     })
     ContactEntity contactToEntity(Contact domain);

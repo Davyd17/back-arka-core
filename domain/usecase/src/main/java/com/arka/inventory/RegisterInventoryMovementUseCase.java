@@ -1,0 +1,57 @@
+package com.arka.inventory;
+
+import com.arka.entities.Employee;
+import com.arka.entities.inventory.InventoryMovement;
+import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.inventory.dto.CreateInventoryMovementIn;
+import com.arka.inventory.dto.CreateInventoryMovementOut;
+import com.arka.inventory.gateway.WarehouseInventoryGateway;
+import com.arka.inventory.mapper.InventoryMovementMapper;
+import com.arka.inventory.mapper.InventoryMovementMapperImpl;
+import com.arka.enums.InventoryMovementType;
+import com.arka.party.service.EmployeeService;
+import com.arka.inventory.service.WarehouseInventoryService;
+import com.arka.util.NullValidator;
+import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
+
+@RequiredArgsConstructor
+public class RegisterInventoryMovementUseCase {
+
+    private final InventoryMovementMapper movementMapper =
+            Mappers.getMapper(InventoryMovementMapper.class);
+
+    private final WarehouseInventoryGateway inventoryGateway;
+
+    private final EmployeeService employeeService;
+    private final WarehouseInventoryService inventoryService;
+
+    public CreateInventoryMovementOut execute(CreateInventoryMovementIn input) {
+
+        NullValidator.validate(input, "input");
+
+        Employee foundEmployee = employeeService.findById(input.employeeId());
+
+        WarehouseInventory inventory = inventoryService.findByProductAndWarehouse(
+                input.productId(),
+                input.warehouseId()
+        );
+
+        if(input.type().equals(InventoryMovementType.IN))
+            inventory.addStock(input.quantity(), foundEmployee);
+        else
+            inventory.removeStock(input.quantity(), foundEmployee);
+
+        addNotesToMovementIfPresent(
+                inventory.getInventoryMovements().peek(), input.notes());
+
+        WarehouseInventory saved = inventoryGateway.save(inventory);
+
+        return movementMapper.toOut(saved.getInventoryMovements().peek());
+    }
+
+    private void addNotesToMovementIfPresent(InventoryMovement movement, String notes){
+        if(movement != null || !notes.isBlank())
+            movement.updateNotes(notes);
+    }
+}

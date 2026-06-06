@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.arka.product.category.ProductCategoryEntity;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.util.List;
@@ -36,7 +37,8 @@ public class CompanyEntity {
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
-    @Column(nullable = true)
+    @Column(insertable = false)
+    @UpdateTimestamp
     private Instant updatedAt;
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)

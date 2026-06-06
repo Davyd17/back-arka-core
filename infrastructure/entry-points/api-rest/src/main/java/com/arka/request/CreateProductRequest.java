@@ -1,6 +1,5 @@
 package com.arka.request;
 
-import com.arka.dto.in.SlugProductCategoryIn;
 import com.arka.exceptions.Required;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -14,7 +13,7 @@ public record CreateProductRequest (
         @Required(field = "sku")
         String sku,
 
-        @Required(field = "id")
+        @Required(field = "name")
         String name,
 
         @Required(field = "description")
@@ -27,8 +26,8 @@ public record CreateProductRequest (
 
         Map<String, Object> attributes,
 
-        @NotNull(message = "Missing required field: category slug")
-        SlugProductCategoryIn slugCategory
+        @NotNull(message = "Missing required field: categoryId")
+        Long categoryId
 ){
 
 }

@@ -1,7 +1,7 @@
 package com.arka.mappers;
 
-import com.arka.dto.in.CreateShippingDetailIn;
-import com.arka.dto.out.ShippingDetailOut;
+import com.arka.shipping.dto.CreateShippingDetailIn;
+import com.arka.shipping.dto.ShippingDetailOut;
 import com.arka.request.CreateShippingDetailRequest;
 import com.arka.response.save.CreateShippingDetailResponse;
 import org.mapstruct.Mapper;

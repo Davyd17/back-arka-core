@@ -1,7 +1,7 @@
 package com.arka.company.customer;
 
-import com.arka.dto.out.CustomerSalesReportOut;
-import com.arka.gateway.repository.party.CustomerGateway;
+import com.arka.report.dto.CustomerSalesReportOut;
+import com.arka.party.gateway.CustomerGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,5 @@
 package com.arka.order.item;
-import com.arka.model.order.OrderItem;
+import com.arka.entities.order.OrderItem;
 import com.arka.product.ProductEntityMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

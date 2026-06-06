@@ -1,7 +1,7 @@
 package com.arka.order;
 
 import com.arka.company.CompanyEntityMapper;
-import com.arka.model.order.Order;
+import com.arka.entities.order.Order;
 import com.arka.order.item.OrderItemEntityMapper;
 import org.mapstruct.Mapper;
 

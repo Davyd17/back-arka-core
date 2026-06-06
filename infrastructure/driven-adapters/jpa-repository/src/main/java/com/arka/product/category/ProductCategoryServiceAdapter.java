@@ -1,7 +1,7 @@
 package com.arka.product.category;
 
-import com.arka.model.product.ProductCategory;
-import com.arka.gateway.repository.product.ProductCategoryGateway;
+import com.arka.entities.product.ProductCategory;
+import com.arka.product.gateway.ProductCategoryGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +15,10 @@ public class ProductCategoryServiceAdapter implements ProductCategoryGateway {
     private final ProductCategoryRepository repository;
     private final ProductCategoryMapper mapper;
 
+
     @Override
-    public Optional<ProductCategory> findProductCategoryBySlug(String slug) {
-        return repository.findBySlug(slug)
-                .map(mapper::toDomain);
+    public Optional<ProductCategory> findById(Long id) {
+        return repository.findById(id).map(mapper::toDomain);
     }
 
     @Override
@@ -26,5 +26,13 @@ public class ProductCategoryServiceAdapter implements ProductCategoryGateway {
         return repository.findAll().stream()
                 .map(mapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public List<ProductCategory> findAllByIds(List<Long> ids) {
+        return repository.findAllByIdIn(ids).stream()
+                .map(mapper::toDomain)
+                .toList();
+
     }
 }

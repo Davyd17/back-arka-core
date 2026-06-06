@@ -51,7 +51,7 @@ public class RegisterInventoryMovementUseCase {
     }
 
     private void addNotesToMovementIfPresent(InventoryMovement movement, String notes){
-        if(!notes.isBlank() && movement != null)
+        if(movement != null || !notes.isBlank())
             movement.updateNotes(notes);
     }
 }

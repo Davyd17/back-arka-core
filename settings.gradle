@@ -11,13 +11,15 @@ include(":boot",
         ":jpa-repository",
         ":usecase",
         ":api-rest",
-        ":security"
+        ":security",
+        ":export-data"
 )
 
 project(":boot").projectDir = file("./main-app/boot")
 project(":model").projectDir = file("./domain/model")
 project(":usecase").projectDir = file("./domain/usecase")
 project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/jpa-repository")
+project(":export-data").projectDir = file("./infrastructure/driven-adapters/export-data")
 project(":api-rest").projectDir = file("./infrastructure/entry-points/api-rest")
 project(":security").projectDir = file("./infrastructure/entry-points/security")
 

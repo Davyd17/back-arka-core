@@ -1,5 +1,7 @@
-package com.arka.util.export;
+package com.arka;
 
+import com.arka.report.ExportFormat;
+import com.arka.report.gateway.ExportGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,15 +20,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class ExportService {
+public class ExportServiceAdapter implements ExportGateway {
 
     /**
      * Internal registry of all available export strategies detected by the Spring container.
      */
     private final List<ReportExporter<?>> exporters;
 
+    @Override
     @SuppressWarnings("unchecked")
-    public <T> byte[] export(ExportFormat format, T data) {
+    public <T> byte[] export(T data, ExportFormat format) {
 
         ReportExporter<T> strategy = (ReportExporter<T>) exporters.stream()
                 .filter(e -> e.getFormat() == format)

@@ -1,21 +1,21 @@
-package com.arka.util.export.csv;
+package com.arka.strategy.csv;
 
-import com.arka.report.dto.LowStockReportOut;
 import com.arka.report.dto.LowStockItem;
+import com.arka.report.dto.LowStockReportData;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
 @Component
 public class LowStockReportCsvExporter
-        extends AbstractCsvExporter<LowStockReportOut> {
+        extends AbstractCsvExporter<LowStockReportData> {
 
     @Override
-    public Class<LowStockReportOut> getDataType() {
-        return LowStockReportOut.class;
+    public Class<LowStockReportData> getDataType() {
+        return LowStockReportData.class;
     }
 
-    public byte[] export(LowStockReportOut report) {
+    public byte[] export(LowStockReportData report) {
 
         StringBuilder csvBuilder = new StringBuilder();
 

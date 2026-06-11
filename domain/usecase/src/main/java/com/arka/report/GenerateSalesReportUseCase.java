@@ -2,10 +2,11 @@ package com.arka.report;
 
 import com.arka.report.dto.CustomerSalesReportOut;
 import com.arka.report.dto.ProductSalesReportOut;
-import com.arka.report.dto.SalesReportOut;
+import com.arka.report.dto.SalesReportData;
 import com.arka.party.service.CustomerService;
 import com.arka.order.service.OrderService;
 import com.arka.product.service.ProductService;
+import com.arka.report.gateway.ExportGateway;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;
@@ -19,7 +20,9 @@ public class GenerateSalesReportUseCase {
     private final CustomerService customerService;
     private final ProductService productService;
 
-    public SalesReportOut execute(){
+    private final ExportGateway exportGateway;
+
+    public byte[] execute(ExportFormat format){
 
         LocalDate sevenDaysAgo = LocalDate.now().minusDays(7);
         LocalDate now = LocalDate.now();
@@ -36,10 +39,12 @@ public class GenerateSalesReportUseCase {
                 .getTotalRevenue(
                         sevenDaysAgo, now);
 
-        return new SalesReportOut(
+        SalesReportData data = new SalesReportData(
                 totalRevenueLast7Days,
                 topLast7DaysSellingProducts,
                 must7DaysFrequentBuyers
         );
+
+        return exportGateway.export(data, format);
     }
 }

@@ -1,13 +1,11 @@
 package com.arka.controller;
 
-import com.arka.report.dto.LowStockReportOut;
-import com.arka.report.dto.SalesReportOut;
+import com.arka.report.ExportFormat;
 import com.arka.report.GenerateLowStockReportUseCase;
 import com.arka.report.GenerateSalesReportUseCase;
-import com.arka.util.export.ExportFormat;
-import com.arka.util.export.ExportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +22,6 @@ public class ReportController {
 
     private final GenerateLowStockReportUseCase generateLowStockReportUseCase;
 
-    private final ExportService exportService;
-
     /**
      * Generates a low stock report for a specific warehouse.
      *
@@ -40,17 +36,18 @@ public class ReportController {
             @RequestParam(defaultValue = "40") int threshold,
             @RequestParam(defaultValue = "CSV") ExportFormat format){
 
-        LowStockReportOut lowStockReport = generateLowStockReportUseCase
-                .execute(warehouseInventoryId, threshold);
-
-        byte[] file = exportService.export(format, lowStockReport);
+        byte[] file = generateLowStockReportUseCase.execute(
+                warehouseInventoryId,
+                threshold,
+                format
+        );
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=low-stock-report."
                                 + format.name().toLowerCase())
 
-                .contentType(format.getMediaType())
+                .contentType(MediaType.parseMediaType(format.getMimeType()))
                 .body(file);
     }
 
@@ -62,19 +59,16 @@ public class ReportController {
      * @return downloadable file with sales data
      */
     @GetMapping("sales/seven-days-ago")
-    public ResponseEntity<byte[]>  generate7DaysSalesReport(
+    public ResponseEntity<byte[]> generateWeekSalesReport(
             @RequestParam(defaultValue = "CSV") ExportFormat format
     ){
-        SalesReportOut salesReport = generateSalesReportUseCase.execute();
-
-        byte[] file = exportService.export(format, salesReport);
+        byte[] file = generateSalesReportUseCase.execute(format);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=sales-report."
-                                + format.name().toLowerCase())
-
-                .contentType(format.getMediaType())
+                                + format.getFileExtension())
+                .contentType(MediaType.parseMediaType(format.getMimeType()))
                 .body(file);
     }
 

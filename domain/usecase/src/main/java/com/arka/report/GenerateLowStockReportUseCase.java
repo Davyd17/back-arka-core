@@ -1,12 +1,12 @@
 package com.arka.report;
 
-import com.arka.inventory.mapper.WarehouseInventoryMapperImpl;
-import com.arka.report.dto.LowStockReportOut;
+import com.arka.report.dto.LowStockReportData;
 import com.arka.report.dto.LowStockItem;
 import com.arka.exceptions.NotFoundException;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.mapper.WarehouseInventoryMapper;
 import com.arka.inventory.service.WarehouseService;
+import com.arka.report.gateway.ExportGateway;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -17,12 +17,13 @@ import java.util.List;
 public class GenerateLowStockReportUseCase {
 
     private final WarehouseInventoryGateway inventoryGateway;
+    private final ExportGateway exportGateway;
     private final WarehouseInventoryMapper mapper =
             Mappers.getMapper(WarehouseInventoryMapper.class);
 
     private final WarehouseService warehouseService;
 
-    public LowStockReportOut execute(Long warehouseId, int threshold) {
+    public byte[] execute(Long warehouseId, int threshold, ExportFormat format) {
 
         NullValidator.validate(warehouseId, "warehouseId");
 
@@ -42,6 +43,6 @@ public class GenerateLowStockReportUseCase {
                     "No low stock items found for warehouse with id " + warehouseId
             );
 
-        } else return new LowStockReportOut(items);
+        } else return exportGateway.export(new LowStockReportData(items), format);
     }
 }

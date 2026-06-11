@@ -1,4 +1,6 @@
-package com.arka.util.export;
+package com.arka;
+
+import com.arka.report.ExportFormat;
 
 /**
  * Strategy interface for exporting domain-specific report data.

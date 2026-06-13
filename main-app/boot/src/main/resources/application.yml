@@ -43,6 +43,10 @@ management:
 jwt-provider:
   secret: ${JWT_SECRET}
 
+security:
+  internal-api:
+    key: ${API_KEY}
+
 springdoc:
   swagger-ui:
     path: "/swagger-ui.html"

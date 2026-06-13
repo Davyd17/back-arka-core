@@ -12,8 +12,8 @@ include(":boot",
         ":usecase",
         ":api-rest",
         ":security",
-        ":export-data"
-)
+        ":export-data",
+        ":aws-provider")
 
 project(":boot").projectDir = file("./main-app/boot")
 project(":model").projectDir = file("./domain/model")
@@ -22,5 +22,5 @@ project(":jpa-repository").projectDir = file("./infrastructure/driven-adapters/j
 project(":export-data").projectDir = file("./infrastructure/driven-adapters/export-data")
 project(":api-rest").projectDir = file("./infrastructure/entry-points/api-rest")
 project(":security").projectDir = file("./infrastructure/entry-points/security")
-
+project(":aws-provider").projectDir = file("./infrastructure/driven-adapters/aws-provider")
 

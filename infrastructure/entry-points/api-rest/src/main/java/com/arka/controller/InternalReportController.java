@@ -6,31 +6,30 @@ import com.arka.report.ExportFormat;
 import com.arka.request.EmailMessageRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * REST controller providing administrative endpoints for triggering internal reports.
+ * <p>
+ * Access to this controller is restricted to the internal network port
+ * via the security filter layer.
+ * </p>
+ */
 @RestController
 @RequestMapping(path = "api/v1/reports/internal")
 @RequiredArgsConstructor
 public class InternalReportController {
-
-    @Value("${security.internal-api.key}")
-    private String INTERNAL_TRIGGER_TOKEN;
 
     private final SendWeeklySalesReportUseCase salesReportUseCase;
     private final EmailRestMapper mapper;
 
     @PostMapping("/sales/weekly")
     public ResponseEntity<String> triggerWeeklySalesReport(
-            @RequestHeader(value = "X-Internal-Trigger", required = false) String token,
             @RequestParam(defaultValue = "CSV") ExportFormat format,
             @Valid @RequestBody EmailMessageRequest emailRequest) {
-
-        if (isTokenInvalid(token))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("Unauthorized trigger attempt.");
 
         try {
 
@@ -43,10 +42,6 @@ public class InternalReportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to generate report: " + e.getMessage());
         }
-    }
-
-    private boolean isTokenInvalid(String token){
-        return token == null || !token.equals(INTERNAL_TRIGGER_TOKEN);
     }
 }
 

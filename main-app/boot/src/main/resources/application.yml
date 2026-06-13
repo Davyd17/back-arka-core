@@ -2,6 +2,10 @@ server:
   port: 8080
   address: 0.0.0.0
 
+internal:
+  server:
+    port: 8082
+
 spring:
 
   jackson:

@@ -2,6 +2,10 @@ server:
   port: 8080
   address: 0.0.0.0
 
+internal:
+  server:
+    port: 8082
+
 spring:
 
   jackson:
@@ -42,6 +46,10 @@ management:
 
 jwt-provider:
   secret: ${JWT_SECRET}
+
+security:
+  internal-api:
+    key: ${API_KEY}
 
 springdoc:
   swagger-ui:

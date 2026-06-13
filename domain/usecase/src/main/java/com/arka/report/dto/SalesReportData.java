@@ -1,7 +1,5 @@
 package com.arka.report.dto;
 
-import lombok.Builder;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -11,9 +9,4 @@ public record SalesReportData(
         List<ProductSalesReportOut> topSellingProducts,
         List<CustomerSalesReportOut> mostFrequentBuyers
 ) {
-
-    @Builder(toBuilder = true)
-    public SalesReportData {
-
-    }
 }

@@ -1,8 +1,8 @@
-package com.arka.util.export.csv;
+package com.arka.strategy.csv;
 
 import com.arka.report.dto.CustomerSalesReportOut;
 import com.arka.report.dto.ProductSalesReportOut;
-import com.arka.report.dto.SalesReportOut;
+import com.arka.report.dto.SalesReportData;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -11,15 +11,15 @@ import java.util.List;
 
 @Component
 public class SalesReportCsvExporter
-        extends AbstractCsvExporter<SalesReportOut> {
+        extends AbstractCsvExporter<SalesReportData> {
 
     @Override
-    public Class<SalesReportOut> getDataType() {
-        return SalesReportOut.class;
+    public Class<SalesReportData> getDataType() {
+        return SalesReportData.class;
     }
 
     @Override
-    public byte[] export(SalesReportOut data) {
+    public byte[] export(SalesReportData data) {
 
         if (data == null) {
             return new byte[0];
@@ -32,7 +32,7 @@ public class SalesReportCsvExporter
         return ("\uFEFF" + csv).getBytes(StandardCharsets.UTF_8);
     }
 
-    private void buildCsv(StringBuilder csv, SalesReportOut data){
+    private void buildCsv(StringBuilder csv, SalesReportData data){
 
         //Set delimiter
         csv.append("sep=,\n");

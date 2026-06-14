@@ -1,47 +1,38 @@
 package com.arka.report;
 
-import com.arka.inventory.mapper.WarehouseInventoryMapperImpl;
-import com.arka.report.dto.LowStockReportOut;
-import com.arka.report.dto.LowStockItem;
-import com.arka.exceptions.NotFoundException;
-import com.arka.inventory.gateway.WarehouseInventoryGateway;
-import com.arka.inventory.mapper.WarehouseInventoryMapper;
+import com.arka.report.dto.LowStockReportData;
 import com.arka.inventory.service.WarehouseService;
+import com.arka.report.gateway.ExportGateway;
+import com.arka.report.service.StockDataService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 public class GenerateLowStockReportUseCase {
 
-    private final WarehouseInventoryGateway inventoryGateway;
-    private final WarehouseInventoryMapper mapper =
-            Mappers.getMapper(WarehouseInventoryMapper.class);
+    private final ExportGateway exportGateway;
 
+    private final StockDataService stockDataService;
     private final WarehouseService warehouseService;
 
-    public LowStockReportOut execute(Long warehouseId, int threshold) {
+    public byte[] execute(Long warehouseId, int threshold, ExportFormat format) {
+
+        validateInput(warehouseId, threshold, format);
+
+        LowStockReportData data = stockDataService
+                .getLowStockByWarehouse(warehouseId, threshold);
+
+        return exportGateway.export(data, format);
+    }
+
+    private void validateInput(Long warehouseId, int threshold, ExportFormat format){
 
         NullValidator.validate(warehouseId, "warehouseId");
+        NullValidator.validate(format, "ExportFormat");
 
         if(threshold < 0 )
             throw new IllegalArgumentException("Threshold should be greater than 0");
 
         warehouseService.findById(warehouseId);
-
-        List<LowStockItem> items = inventoryGateway
-                .listLowStockInventoryByWarehouseId(warehouseId, threshold)
-                .stream()
-                .map(mapper::toOutDTO)
-                .toList();
-
-        if (items.isEmpty()) {
-            throw new NotFoundException(
-                    "No low stock items found for warehouse with id " + warehouseId
-            );
-
-        } else return new LowStockReportOut(items);
     }
 }

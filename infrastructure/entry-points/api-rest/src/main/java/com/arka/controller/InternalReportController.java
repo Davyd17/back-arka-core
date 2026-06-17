@@ -1,6 +1,7 @@
 package com.arka.controller;
 
 import com.arka.mappers.EmailRestMapper;
+import com.arka.notification.SendWeeklyLowStockReportUseCase;
 import com.arka.notification.SendWeeklySalesReportUseCase;
 import com.arka.report.ExportFormat;
 import com.arka.request.EmailMessageRequest;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * REST controller providing administrative endpoints for triggering internal reports.
  * <p>
- * Access to this controller is restricted to the internal network port
- * via the security filter layer.
+ * Access to this controller is restricted to the internal network previous specified
+ * port via the security filter layer.
  * </p>
  */
 @RestController
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.*;
 public class InternalReportController {
 
     private final SendWeeklySalesReportUseCase salesReportUseCase;
-    private final EmailRestMapper mapper;
+    private final SendWeeklyLowStockReportUseCase lowStockReportUseCase;
+    private final EmailRestMapper emailMapper;
 
     @PostMapping("/sales/weekly")
     public ResponseEntity<String> triggerWeeklySalesReport(
@@ -33,15 +35,40 @@ public class InternalReportController {
 
         try {
 
-            salesReportUseCase.execute(mapper.toDomain(emailRequest), format);
+            salesReportUseCase.execute(emailMapper.toDomain(emailRequest), format);
             return ResponseEntity.ok(
                     "Weekly report generated and email sent successfully.");
 
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to generate report: " + e.getMessage());
         }
+    }
+
+    @PostMapping("warehouse/{warehouseId}/low-stock/weekly")
+    public ResponseEntity<String> triggerWeeklyLowStockReport(
+            @RequestParam(defaultValue = "40") int threshold,
+            @RequestParam(defaultValue = "CSV") ExportFormat format,
+            @PathVariable Long warehouseId,
+            @Valid @RequestBody EmailMessageRequest emailMessageRequest
+    ){
+
+        try{
+
+            lowStockReportUseCase.execute(
+                    emailMapper.toDomain(emailMessageRequest),
+                    format,
+                    warehouseId,
+                    threshold);
+
+            return ResponseEntity.ok(
+                    "Weekly report generated and email sent successfully.");
+
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to generate report: " + e.getMessage());
+        }
+
     }
 }
 

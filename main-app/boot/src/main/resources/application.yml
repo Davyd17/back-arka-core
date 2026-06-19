@@ -47,9 +47,15 @@ management:
 jwt-provider:
   secret: ${JWT_SECRET}
 
-security:
-  internal-api:
-    key: ${API_KEY}
+cloud-provider:
+  aws:
+    s3:
+      bucket-name: ${BUCKET_NAME}
+      templates:
+        html-template-order-state-email: ${S3_KEY_HTML_TEMPLATE_ORDER_STATE_EMAIL}
+    ses:
+      sender: ${SES_SENDER_EMAIL}
+
 
 springdoc:
   swagger-ui:

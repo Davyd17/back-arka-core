@@ -2,6 +2,8 @@ dependencies {
     implementation project(":usecase")
     implementation project(":model")
 
+    implementation("software.amazon.awssdk:s3")
+
     implementation("software.amazon.awssdk:ses")
     implementation("org.eclipse.angus:jakarta.mail")
 

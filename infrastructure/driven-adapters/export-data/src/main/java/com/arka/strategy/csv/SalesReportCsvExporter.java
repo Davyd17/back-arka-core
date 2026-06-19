@@ -69,7 +69,7 @@ public class SalesReportCsvExporter
             (StringBuilder csv, List<CustomerSalesReportOut> customers) {
 
         csv.append("MOST FREQUENT BUYERS\n");
-        csv.append("Company Name,Total Orders\n");
+        csv.append("company Name,Total Orders\n");
 
         for (CustomerSalesReportOut customer : customers) {
             csv.append(escape(customer.companyName())).append(",")

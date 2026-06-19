@@ -1,5 +1,6 @@
 package com.arka;
 
+import com.arka.exceptions.EmailDeliveryException;
 import com.arka.notification.EmailGateway;
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
@@ -34,37 +35,38 @@ public class SESEmailAdapter implements EmailGateway {
     private final SesClient client;
 
     @Override
-    public void send(EmailMessage input,
-                     EmailAttachment attachment) {
+    public void send(EmailMessage email, EmailAttachment attachment) {
+        sendRaw(email, attachment);
+    }
 
-        try {
+    @Override
+    public void send(EmailMessage email) {
+        sendRaw(email, null);
+    }
+
+    private void sendRaw(EmailMessage email, EmailAttachment attachment){
+
+        try{
 
             Session session = Session.getDefaultInstance(new Properties());
 
             MimeMessage message = new MimeMessage(session);
             MimeMultipart multipart = new MimeMultipart("mixed");
 
-            buildEmail(message, multipart, input, attachment);
+            setEmailHeaders(message, email);
+            addEmailTextBody(email.body(), multipart);
+
+            if(attachment != null)
+                addEmailAttachment(attachment, multipart);
+
+            message.setContent(multipart);
 
             sendEmail(mimeToRawMessage(message));
 
         } catch (Exception e) {
-            log.error("SES error: {}", e.getMessage());
-            throw new RuntimeException("Failed to send email via AWS SES", e);
+            log.error("SES error sending to {}: {}", email.recipient(), e.getMessage());
+            throw new EmailDeliveryException("Failed to send email via AWS SES", e);
         }
-    }
-
-    private void buildEmail(MimeMessage message,
-                            MimeMultipart multipart,
-                            EmailMessage input,
-                            EmailAttachment attachment) throws MessagingException{
-
-        setEmailHeaders(message, input);
-
-        addEmailTextBody(input.body(), multipart);
-        addEmailAttachment(attachment, multipart);
-
-        message.setContent(multipart);
     }
 
     private void setEmailHeaders(MimeMessage message,

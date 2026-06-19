@@ -51,7 +51,7 @@ class CreateOrderUseCaseTest {
 
     @BeforeEach
     void setUp(){
-        company = new Company(1L, "Test Company", CompanyRelationType.CUSTOMER,
+        company = new Company(1L, "Test company", CompanyRelationType.CUSTOMER,
                 new ArrayList<>(), new ArrayList<>());
     }
 

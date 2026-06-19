@@ -1,5 +1,6 @@
 package com.arka;
 
+import com.arka.exceptions.EmailDeliveryException;
 import com.arka.notification.EmailGateway;
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
@@ -63,8 +64,8 @@ public class SESEmailAdapter implements EmailGateway {
             sendEmail(mimeToRawMessage(message));
 
         } catch (Exception e) {
-            log.error("SES error: {}", e.getMessage());
-            throw new RuntimeException("Failed to send email via AWS SES", e);
+            log.error("SES error sending to {}: {}", email.recipient(), e.getMessage());
+            throw new EmailDeliveryException("Failed to send email via AWS SES", e);
         }
     }
 

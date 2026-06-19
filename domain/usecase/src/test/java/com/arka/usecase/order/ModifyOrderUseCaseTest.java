@@ -57,7 +57,7 @@ class ModifyOrderUseCaseTest {
     private Company buildCompany(long id){
         return new Company(
                 id,
-                "Test Company " + id,
+                "Test company " + id,
                 CompanyRelationType.CUSTOMER,
                 new ArrayList<>(),
                 new ArrayList<>()

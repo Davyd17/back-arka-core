@@ -1,9 +1,7 @@
 package com.arka.order.dto;
 
-import com.arka.party.dto.CompanyOut;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
-import com.arka.product.dto.CreateProductOut;
 import com.arka.product.dto.ProductSummaryOut;
 
 import java.math.BigDecimal;

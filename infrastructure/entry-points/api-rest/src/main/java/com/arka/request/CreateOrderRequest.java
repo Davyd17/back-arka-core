@@ -10,9 +10,6 @@ import java.util.Set;
 
 public record CreateOrderRequest(
 
-        @Required(field = "number")
-        String number,
-
         String notes,
 
         @NotNull(message = "Order type is required")

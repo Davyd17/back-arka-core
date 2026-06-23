@@ -46,7 +46,6 @@ public class CreateOrderUseCase {
                 .findById(input.companyId());
 
         return Order.create(
-                input.number(),
                 input.notes(),
                 input.type(),
                 foundCompany

@@ -11,8 +11,11 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -30,19 +33,28 @@ public class Order {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static Order create(String number,
-                               @Nullable String notes,
+    public static Order create(@Nullable String notes,
                                OrderType type,
                                Company company) {
 
         return Order.builder()
-                .number(number)
+                .number(generateNumber())
                 .status(OrderStatus.PENDING)
                 .notes(notes)
                 .type(type)
                 .company(company)
                 .items(new ArrayList<>())
                 .build();
+    }
+
+    private static String generateNumber(){
+        String randomSuffix =
+                UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+
+        String formatedDate = LocalDate.now()
+                .format(DateTimeFormatter.BASIC_ISO_DATE);
+
+        return "ORD-" + formatedDate + "-" + randomSuffix;
     }
 
     public void addItem(OrderItem item){

@@ -3,12 +3,7 @@ package com.arka.product;
 import com.arka.entities.product.Product;
 import com.arka.report.dto.ProductSalesReportOut;
 import com.arka.product.gateway.ProductGateway;
-import com.arka.util.PageableMapper;
-import com.arka.util.pagination.PageWrapper;
-import com.arka.util.pagination.PageableIn;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -48,14 +43,5 @@ public class ProductServiceAdapter implements ProductGateway {
         return repository.getTopSellingProductsFromDateRange(since, until)
                 .stream()
                 .toList();
-    }
-
-    @Override
-    public PageWrapper<Product> findAll(PageableIn input) {
-
-        Page<ProductEntity> result = repository.findAll(
-                PageableMapper.toPageable(input));
-
-        return PageableMapper.toPageWrapper(result, mapper::toDomain);
     }
 }

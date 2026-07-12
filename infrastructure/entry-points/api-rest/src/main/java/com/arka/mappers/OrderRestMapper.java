@@ -1,6 +1,5 @@
 package com.arka.mappers;
 
-import com.arka.entities.order.Order;
 import com.arka.order.dto.*;
 import com.arka.request.CreateOrderRequest;
 import com.arka.request.UpdateOrderRequest;

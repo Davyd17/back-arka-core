@@ -36,9 +36,6 @@ class CreateOrderUseCaseTest {
     private OrderGateway orderGateway;
 
     @Mock
-    private OrderMapper orderMapper;
-
-    @Mock
     private CompanyService companyService;
 
     @Mock
@@ -84,7 +81,6 @@ class CreateOrderUseCaseTest {
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
         CreateOrderIn input = new CreateOrderIn(
-                "001",
                 null,
                 OrderType.SALES,
                 1L,
@@ -113,7 +109,6 @@ class CreateOrderUseCaseTest {
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
         CreateOrderIn input = new CreateOrderIn(
-                "001",
                 null,
                 OrderType.SALES,
                 1L,

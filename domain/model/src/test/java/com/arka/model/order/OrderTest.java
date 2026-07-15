@@ -26,7 +26,7 @@ class OrderTest {
 
         //GIVEN
 
-        order = Order.create("ORD-001", "notes", OrderType.SALES, null);
+        order = Order.create("Test notes", OrderType.SALES, null);
 
         item1 = OrderItem.create(
                 buildProduct(1L, BigDecimal.valueOf(10.00)),

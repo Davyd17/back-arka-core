@@ -18,12 +18,6 @@ class WarehouseInventoryServiceTest {
     @Mock
     private WarehouseInventoryGateway warehouseInventoryGateway;
 
-    @Mock
-    private ProductService productService;
-
-    @Mock
-    private WarehouseService warehouseService;
-
     @InjectMocks
     private WarehouseInventoryService warehouseInventoryService;
 

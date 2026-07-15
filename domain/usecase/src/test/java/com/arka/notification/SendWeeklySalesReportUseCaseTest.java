@@ -3,9 +3,9 @@ package com.arka.notification;
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
 import com.arka.report.ExportFormat;
-import com.arka.report.dto.LowStockReportData;
+import com.arka.report.dto.SalesReportData;
 import com.arka.report.gateway.ExportGateway;
-import com.arka.report.service.StockDataService;
+import com.arka.report.service.SalesReportService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,25 +17,22 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class SendWeeklyLowStockReportUseCaseTest {
+class SendWeeklySalesReportUseCaseTest {
 
     @Mock
+    private SalesReportService salesReportService;
+    @Mock
     private ExportGateway exportGateway;
-
     @Mock
     private EmailGateway emailGateway;
 
-    @Mock
-    private StockDataService stockDataService;
-
     @InjectMocks
-    private SendWeeklyLowStockReportUseCase useCase;
+    private SendWeeklySalesReportUseCase useCase;
 
     private EmailMessage email;
 
     @BeforeEach
     void setUp() {
-
         email = new EmailMessage(
                 "sender@arka.com", "recipient@arka.com", "Subject", "Body");
     }
@@ -43,13 +40,13 @@ class SendWeeklyLowStockReportUseCaseTest {
     @Test
     void shouldSendEmailWithAttachmentWhenInputIsValid() {
 
-        LowStockReportData data = mock(LowStockReportData.class);
+        SalesReportData data = mock(SalesReportData.class);
         byte[] exported = new byte[]{1, 2, 3};
 
-        when(stockDataService.getLowStockByWarehouse(1L, 5)).thenReturn(data);
+        when(salesReportService.getWeekSalesReport()).thenReturn(data);
         when(exportGateway.export(data, ExportFormat.CSV)).thenReturn(exported);
 
-        useCase.execute(email, ExportFormat.CSV, 1L, 5);
+        useCase.execute(email, ExportFormat.CSV);
 
         verify(emailGateway).send(eq(email), any(EmailAttachment.class));
     }
@@ -57,7 +54,7 @@ class SendWeeklyLowStockReportUseCaseTest {
     @Test
     void shouldThrowWhenEmailIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> useCase.execute(null, ExportFormat.CSV, 1L, 5));
+                () -> useCase.execute(null, ExportFormat.CSV));
 
         verifyNoInteractions(emailGateway);
     }
@@ -65,8 +62,9 @@ class SendWeeklyLowStockReportUseCaseTest {
     @Test
     void shouldThrowWhenFormatIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> useCase.execute(email, null, 1L, 5));
+                () -> useCase.execute(email, null));
 
         verifyNoInteractions(emailGateway);
     }
 }
+

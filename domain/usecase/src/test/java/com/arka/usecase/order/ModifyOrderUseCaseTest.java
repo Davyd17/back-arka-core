@@ -40,9 +40,6 @@ class ModifyOrderUseCaseTest {
     @Mock
     private OrderGateway orderGateway;
 
-    @Mock
-    private OrderMapper orderMapper;
-
     @InjectMocks
     private ModifyOrderUseCase useCase;
 
@@ -51,7 +48,7 @@ class ModifyOrderUseCaseTest {
     @BeforeEach
     void setUp() {
 
-        order = Order.create("ORD-001", "old notes", OrderType.SALES, this.buildCompany(1L));
+        order = Order.create("old notes", OrderType.SALES, this.buildCompany(1L));
     }
 
     private Company buildCompany(long id){

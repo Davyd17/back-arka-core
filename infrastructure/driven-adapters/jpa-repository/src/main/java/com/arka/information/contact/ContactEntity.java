@@ -5,14 +5,12 @@ import com.arka.information.address.AddressEntity;
 import com.arka.information.phonenumber.PhoneNumberEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -44,7 +42,7 @@ public class ContactEntity {
     private Instant updatedAt;
 
     @Column(name = "is_active", nullable = false)
-    private boolean active;
+    private boolean active = true;
 
     @Column(unique = true)
     private Long userId;

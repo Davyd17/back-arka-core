@@ -44,6 +44,7 @@ public class Order {
                 .type(type)
                 .company(company)
                 .items(new ArrayList<>())
+                .totalPrice(BigDecimal.ZERO)
                 .build();
     }
 

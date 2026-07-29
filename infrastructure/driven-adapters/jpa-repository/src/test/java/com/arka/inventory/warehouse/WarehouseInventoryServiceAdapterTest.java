@@ -1,7 +1,14 @@
 package com.arka.inventory.warehouse;
 
+import com.arka.employee.EmployeeEntityMapper;
+import com.arka.employee.EmployeeEntityMapperImpl;
+import com.arka.employee.EmployeeRepository;
+import com.arka.entities.Employee;
+import com.arka.entities.inventory.InventoryMovement;
 import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.inventory.movements.InventoryMovementEntity;
 import com.arka.inventory.movements.InventoryMovementEntityMapperImpl;
+import com.arka.inventory.movements.InventoryMovementRepository;
 import com.arka.product.ProductEntity;
 import com.arka.product.ProductEntityMapper;
 import com.arka.product.ProductEntityMapperImpl;
@@ -11,6 +18,7 @@ import com.arka.warehouse.WarehouseEntity;
 import com.arka.warehouse.WarehouseEntityMapper;
 import com.arka.warehouse.WarehouseEntityMapperImpl;
 import com.arka.warehouse.WarehouseRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
         WarehouseInventoryEntityMapperImpl.class,
         InventoryMovementEntityMapperImpl.class,
         ProductEntityMapperImpl.class,
+        EmployeeEntityMapperImpl.class,
         WarehouseEntityMapperImpl.class})
 @ActiveProfiles("test")
 class WarehouseInventoryServiceAdapterTest {
@@ -55,15 +64,21 @@ class WarehouseInventoryServiceAdapterTest {
     @Autowired
     private WarehouseInventoryServiceAdapter warehouseInventoryServiceAdapter;
 
+    @Autowired
+    private EmployeeEntityMapper employeeEntityMapper;
 
-    @Test
-    void shouldSaveWarehouseInventoryRelationship() {
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-        //Given
-        WarehouseEntity warehouse =
-                warehouseRepository.findById(1L).orElseThrow();
+    @Autowired
+    private InventoryMovementRepository inventoryMovementRepository;
 
-        ProductEntity savedProduct = productRepository.save(ProductEntity.builder()
+    private ProductEntity persistedProduct;
+
+    @BeforeEach
+    void setUp(){
+
+        persistedProduct = productRepository.save(ProductEntity.builder()
                 .name("test product")
                 .category(categoryRepository.findById(1L).orElseThrow())
                 .attributes(new HashMap<>())
@@ -72,11 +87,20 @@ class WarehouseInventoryServiceAdapterTest {
                 .basePrice(BigDecimal.TEN)
                 .sku("Test-001")
                 .build());
+    }
+
+
+    @Test
+    void shouldSaveWarehouseInventory() {
+
+        //Given
+        WarehouseEntity warehouse =
+                warehouseRepository.findById(1L).orElseThrow();
 
         WarehouseInventory warehouseInventory =
                 WarehouseInventory.create(
                         warehouseEntityMapper.toDomain(warehouse),
-                        productEntityMapper.toDomain(savedProduct),
+                        productEntityMapper.toDomain(persistedProduct),
                         50);
 
         //When
@@ -93,5 +117,45 @@ class WarehouseInventoryServiceAdapterTest {
         assertEquals(savedInventory.getStock(), foundInventory.get().getStock());
         assertEquals(savedInventory.getProduct().getName(),
                 foundInventory.get().getProduct().getName());
+    }
+
+    @Test
+    void shouldMaintainInventoryMovementBidirectionalRelationShipWhenAddStock(){
+
+        //Given
+        WarehouseEntity warehouse =
+                warehouseRepository.findById(1L).orElseThrow();
+
+        Employee employee = employeeEntityMapper.toDomain(
+                employeeRepository.findById(1L).orElseThrow());
+
+        WarehouseInventory warehouseInventory =
+                WarehouseInventory.create(
+                        warehouseEntityMapper.toDomain(warehouse),
+                        productEntityMapper.toDomain(persistedProduct),
+                        50);
+
+        //Add stock which record a new movement
+        warehouseInventory.addStock(60, employee);
+
+        //When
+        WarehouseInventory savedInventory =
+                warehouseInventoryServiceAdapter.save(warehouseInventory);
+
+        //Then
+        assertFalse(savedInventory.getInventoryMovements().isEmpty());
+        assertNotNull(savedInventory.getInventoryMovements().getFirst());
+
+        WarehouseInventoryEntity movement = warehouseInventoryRepository
+                .findById(savedInventory.getId()).orElseThrow();
+
+        assertFalse(movement.getInventoryMovements().isEmpty());
+
+        movement.getInventoryMovements().forEach(m ->
+                assertNotNull(m.getWarehouseInventory(),
+                        "Each movement should reference back to its warehouse inventory"));
+
+
+
     }
 }

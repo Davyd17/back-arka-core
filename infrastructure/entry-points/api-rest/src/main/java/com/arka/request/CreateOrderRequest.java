@@ -2,6 +2,7 @@ package com.arka.request;
 
 import com.arka.exceptions.Required;
 import com.arka.enums.OrderType;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public record CreateOrderRequest(
         OrderType type,
 
         @NotEmpty(message = "There must be at least one item")
+        @Valid
         Set<Item> items,
 
         @Required(field = "company id")

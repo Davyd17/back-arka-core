@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
@@ -33,7 +34,11 @@ public class ProductController {
         CreateProductOut product = createProductUsecase
                 .execute(productMapper.toInput(request));
 
-        URI uri = URI.create(Long.toString(product.id()));
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.id())
+                .toUri();
 
         return ResponseEntity.created(uri)
                 .body(productMapper.toCreateResponse(product));

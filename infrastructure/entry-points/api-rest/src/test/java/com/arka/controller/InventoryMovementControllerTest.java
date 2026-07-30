@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 SecurityFilterAutoConfiguration.class
         })
 @ActiveProfiles("test")
-@Import(InventoryMovementRestMapperImpl.class)
+@Import({InventoryMovementRestMapperImpl.class})
 class InventoryMovementControllerTest {
 
 
@@ -97,7 +97,7 @@ class InventoryMovementControllerTest {
     void shouldReturn400BadRequestWhenQuantityIsLessThanOne() throws Exception {
         // given - Quantity is 0 (violates @Min(1)) and missing required IDs
         Map<String, Object> invalidRequest = Map.of(
-                "type", "INBOUND",
+                "type", "IN",
                 "quantity", 0,
                 "notes", "Invalid quantity entry"
         );
@@ -107,6 +107,7 @@ class InventoryMovementControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
+
     }
 
     @Test

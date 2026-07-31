@@ -1,7 +1,9 @@
 # -------- Build Stage --------
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:21 AS build
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:21-al2023-jdk AS build
 
 WORKDIR /app
+
+RUN yum install -y findutils
 
 COPY . .
 

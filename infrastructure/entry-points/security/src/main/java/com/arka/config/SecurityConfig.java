@@ -5,6 +5,7 @@ import com.arka.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,7 +29,8 @@ public class SecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfig.corsConfigurationSource()))
+                .cors(corsConfigurer ->
+                        corsConfigurer.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
                         .requestMatchers(
@@ -36,9 +38,37 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/api/v1/reports/internal/**").permitAll()
-                                .anyRequest().authenticated())
 
+                        //PUBLIC BROWSING
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/products/**",
+                                "/api/v1/product-categories/**").permitAll()
+
+                        //PUBLIC INTERNAL
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/reports/internal/**").permitAll()
+
+                        //ADMIN OPERATIONS
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/suppliers/categories/**",
+                                "/api/v1/reports/**",
+                                "/api/v1/shopping-carts/abandoned").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/products",
+                                "/api/v1/suppliers",
+                                "/api/v1/inventory-movements",
+                                "/api/v1/shipping-details").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/v1/orders/{orderId}/status").hasRole("ADMIN")
+
+                        //USER / CUSTOMER
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/orders",
+                                "/api/v1/shopping-carts/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/v1/orders").hasAnyRole("USER", "ADMIN")
+
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(internalPortFilter, UsernamePasswordAuthenticationFilter.class)

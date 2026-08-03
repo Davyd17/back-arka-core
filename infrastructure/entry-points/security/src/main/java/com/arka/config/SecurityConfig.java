@@ -2,6 +2,7 @@ package com.arka.config;
 
 import com.arka.InternalPortFilter;
 import com.arka.JwtAuthenticationFilter;
+import com.arka.SecurityExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     private final CorsConfig corsConfig;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final InternalPortFilter internalPortFilter;
+    private final SecurityExceptionHandler securityExceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -69,6 +71,11 @@ public class SecurityConfig {
                                 "/api/v1/orders").hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated())
+
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(securityExceptionHandler)
+                        .authenticationEntryPoint(securityExceptionHandler))
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(internalPortFilter, UsernamePasswordAuthenticationFilter.class)

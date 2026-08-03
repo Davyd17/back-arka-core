@@ -1,5 +1,7 @@
 package com.arka.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,7 +15,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTransitionStatusException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidTransitionStatus(InvalidTransitionStatusException ex){
+    public ResponseEntity<ErrorResponse> handleInvalidTransitionStatus(InvalidTransitionStatusException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponse("INVALID_STATUS_TRANSITION", ex.getMessage(), LocalDateTime.now()));
 
@@ -21,7 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailDeliveryException.class)
-    public ResponseEntity<ErrorResponse> handleEmailDeliveryError(EmailDeliveryException ex){
+    public ResponseEntity<ErrorResponse> handleEmailDeliveryError(EmailDeliveryException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ErrorResponse("ERROR_SENDIND_EMAIL", ex.getMessage(), LocalDateTime.now()));
     }
@@ -42,6 +44,27 @@ public class GlobalExceptionHandler {
                         "INVALID_INPUT",
                         "Invalid value provided",
                         LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(InvalidEditableStatusException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEditableStatus(InvalidEditableStatusException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(
+                        "INVALID_STATUS", ex.getMessage(),LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+
+        String message = "The request conflicts with existing data or violates a database constraint";
+
+        String detail = ex.getMostSpecificCause().getMessage();
+        if (detail != null && detail.contains("Detail:")) {
+            message = detail.substring(detail.indexOf("Detail:")).trim();
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("DATA_INTEGRITY_VIOLATION", message, LocalDateTime.now()));
     }
 
     @ExceptionHandler(RuntimeException.class)

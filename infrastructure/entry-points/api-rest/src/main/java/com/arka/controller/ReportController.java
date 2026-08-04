@@ -58,7 +58,7 @@ public class ReportController {
      * @param format export format — CSV or PDF (default: CSV)
      * @return downloadable file with sales data
      */
-    @GetMapping("sales/seven-days-ago")
+    @GetMapping("sales/seven-days")
     public ResponseEntity<byte[]> generateWeekSalesReport(
             @RequestParam(defaultValue = "CSV") ExportFormat format
     ){

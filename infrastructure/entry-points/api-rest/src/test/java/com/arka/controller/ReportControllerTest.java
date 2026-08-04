@@ -88,7 +88,7 @@ class ReportControllerTest {
                 .thenReturn(fakeCsvBytes);
 
         // when & then
-        mockMvc.perform(get("/api/v1/reports/sales/seven-days-ago"))
+        mockMvc.perform(get("/api/v1/reports/sales/seven-days"))
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=sales-report." + ExportFormat.CSV.getFileExtension()))
@@ -105,7 +105,7 @@ class ReportControllerTest {
                 .when(generateSalesReportUseCase).execute(any());
 
         // when & then
-        mockMvc.perform(get("/api/v1/reports/sales/seven-days-ago"))
+        mockMvc.perform(get("/api/v1/reports/sales/seven-days"))
                 .andExpect(status().isInternalServerError());
     }
 }

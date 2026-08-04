@@ -1,11 +1,15 @@
 package com.arka;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(
@@ -38,27 +43,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String jwt = authHeader.substring(7);
+        try {
 
-        final String userEmail = jwtService.extractEmail(jwt);
+            final String jwt = authHeader.substring(7);
 
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            final String userEmail = jwtService.extractEmail(jwt);
 
-            request.setAttribute("userEmail", jwtService.extractEmail(jwt));
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            if (!jwtService.isTokenExpired(jwt)) {
+                request.setAttribute("userEmail", jwtService.extractEmail(jwt));
 
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        userEmail,
-                        null,
-                        jwtService.extractAuthorities(jwt)
-                );
+                if (!jwtService.isTokenExpired(jwt)) {
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    var authToken = new UsernamePasswordAuthenticationToken(
+                            userEmail,
+                            null,
+                            jwtService.extractAuthorities(jwt)
+                    );
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
-        }
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtException ex){
+
+            log.warn("Expired JWT token for request: {}", request.getRequestURI());
+
+            writeErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "TOKEN_EXPIRED", "Your session has expired, please log in again");
+
+        } catch (JwtException ex){
+
+            log.warn("Invalid JWT token: {}", ex.getMessage());
+            writeErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "INVALID_TOKEN", "Invalid authentication token");
+        }
+    }
+
+    private void writeErrorResponse(HttpServletResponse response,
+                                    int status, String code, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.getWriter().write(
+                String.format("{\"code\": \"%s\", \"message\": \"%s\"}", code, message));
     }
 }

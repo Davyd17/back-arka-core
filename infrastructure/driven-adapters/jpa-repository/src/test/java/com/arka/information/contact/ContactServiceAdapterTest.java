@@ -36,7 +36,7 @@ class ContactServiceAdapterTest {
         Contact newContact = Contact.create(
                 "John",
                 "Doe",
-                "john.doe@arka.com"
+                "john@arka.com"
         );
         newContact.setCompanyPosition("Lead Software Engineer");
 

@@ -20,6 +20,6 @@ public interface ContactEntityMapper {
             @Mapping(target = "createdAt", ignore = true),
             @Mapping(target = "company", ignore = true)
     })
-    ContactEntity contactToEntity(Contact domain);
+    ContactEntity toEntity(Contact domain);
 
 }

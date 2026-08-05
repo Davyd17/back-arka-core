@@ -1,6 +1,7 @@
 package com.arka.party.service;
 
 import com.arka.entities.information.Contact;
+import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.NotFoundException;
 import com.arka.party.gateway.ContactGateway;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,15 @@ public class ContactService {
             throw new NotFoundException("one or more contacts not found");
 
         return foundContacts;
+    }
+
+    public Contact save(Contact contact){
+
+        boolean exists = contactGateway.existsByEmail(contact.getEmail());
+
+        if(exists)
+            throw new AlreadyExistsException("Entered email already exists");
+
+        else return contactGateway.save(contact);
     }
 }

@@ -13,7 +13,7 @@ public interface EmployeeMapper {
     @Mappings({
             @Mapping(target = "fullName", source = "contact"),
             @Mapping(target = "email", source = "contact.email"),
-            @Mapping(target = "position", source = "contact.position")
+            @Mapping(target = "position", source = "contact.companyPosition")
     })
     EmployeeOut toOut(Employee domain);
 

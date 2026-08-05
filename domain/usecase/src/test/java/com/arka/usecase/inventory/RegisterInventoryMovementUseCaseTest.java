@@ -58,7 +58,7 @@ class RegisterInventoryMovementUseCaseTest {
 
         Contact contact =
                 new Contact(1L, "Jhon", "Doe", "warehouse manager",
-                        "employee@arka.com", new ArrayList<>(), new ArrayList<>(), true, 2L);
+                        "employee@arka.com", new ArrayList<>(), new ArrayList<>(), true);
 
         employee = new Employee(1L, 1234, contact);
 

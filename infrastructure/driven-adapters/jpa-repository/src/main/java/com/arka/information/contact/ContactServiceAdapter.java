@@ -20,4 +20,15 @@ public class ContactServiceAdapter implements ContactGateway {
                 .map(mapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    @Override
+    public Contact save(Contact contact) {
+        ContactEntity contactEntity = mapper.toEntity(contact);
+        return mapper.toDomain(repository.save(contactEntity));
+    }
 }

@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContactTest {
@@ -22,12 +23,7 @@ class ContactTest {
 
     @BeforeEach
     void setUp() {
-        contact = Contact.create(
-                "John", "Doe", "CEO", "john@test.com",
-                new ArrayList<>(List.of(buildAddress(1L))),
-                new ArrayList<>(List.of(buildPhoneNumber(1L))),
-                null
-        );
+        contact = Contact.create("John", "Doe", "john@test.com");
     }
 
     private Address buildAddress(Long id) {
@@ -57,28 +53,6 @@ class ContactTest {
         assertTrue(contact.isActive());
     }
 
-    @Test
-    void shouldThrowWhenAddressesIsNullOrEmpty() {
-        assertThrows(IllegalArgumentException.class, () ->
-                Contact.create("John", "Doe", "CEO", "john@test.com",
-                        null, List.of(buildPhoneNumber(1L)), null));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                Contact.create("John", "Doe", "CEO", "john@test.com",
-                        new ArrayList<>(), List.of(buildPhoneNumber(1L)), null));
-    }
-
-    @Test
-    void shouldThrowWhenPhoneNumbersIsNullOrEmpty() {
-        assertThrows(IllegalArgumentException.class, () ->
-                Contact.create("John", "Doe", "CEO", "john@test.com",
-                        List.of(buildAddress(1L)), null, null));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                Contact.create("John", "Doe", "CEO", "john@test.com",
-                        List.of(buildAddress(1L)), new ArrayList<>(), null));
-    }
-
     // --- activate / deactivate ---
 
     @Test
@@ -97,7 +71,15 @@ class ContactTest {
     // --- addresses ---
 
     @Test
+    void shouldRemoveAddress(){
+        contact.addAddress(buildAddress(1L));
+        contact.removeAddress(1L);
+        assertTrue(contact.getAddresses().isEmpty());
+    }
+
+    @Test
     void shouldThrowWhenAddingDuplicateAddress() {
+        contact.addAddress(buildAddress(1L));
         assertThrows(AlreadyExistsException.class,
                 () -> contact.addAddress(buildAddress(1L)));
     }
@@ -109,9 +91,17 @@ class ContactTest {
     }
 
     // --- phone numbers ---
+    @Test
+    void shouldRemovePhoneNumber(){
+        contact.addPhoneNumber(buildPhoneNumber(1L));
+        contact.removePhoneNumber(1L);
+        assertTrue(contact.getPhoneNumbers().isEmpty());
+    }
 
     @Test
     void shouldThrowWhenAddingDuplicatePhoneNumber() {
+
+        contact.addPhoneNumber(buildPhoneNumber(1L));
         assertThrows(AlreadyExistsException.class,
                 () -> contact.addPhoneNumber(buildPhoneNumber(1L)));
     }

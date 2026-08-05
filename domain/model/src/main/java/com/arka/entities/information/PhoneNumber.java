@@ -13,7 +13,7 @@ public class PhoneNumber {
     private Long id;
     private String countryCode;
     private String extension;
-    private String phone;
+    private String number;
     private boolean active;
     private Instant createdAt;
 
@@ -23,7 +23,7 @@ public class PhoneNumber {
 
         return PhoneNumber.builder()
                 .countryCode("+" + countryCode)
-                .phone(phone)
+                .number(phone)
                 .active(true)
                 .build();
     }

@@ -48,7 +48,8 @@ public class SecurityConfig {
 
                         //PUBLIC INTERNAL
                         .requestMatchers(HttpMethod.POST,
-                                "/api/v1/reports/internal/**").permitAll()
+                                "/api/v1/reports/internal/**",
+                                "/api/v1/internal/contacts").permitAll()
 
                         //ADMIN OPERATIONS
                         .requestMatchers(HttpMethod.GET,

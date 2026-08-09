@@ -14,25 +14,11 @@ public record CreateContactRequest(
         @Required(field = "Name")
         String name,
 
-        @Required(field = "Last id")
+        @Required(field = "Last Name")
         String lastName,
-
-        @Required(field = "Position")
-        String position,
-
 
         @Required(field = "Email")
         @Email(message = "Enter a valid email")
-        String email,
-
-        @NotEmpty(message =
-                "There must be at least one address")
-        List<CreateAddressRequest> addresses,
-
-        @NotEmpty(message =
-                "There must be at least one phone number")
-        List<CreatePhoneNumberRequest> phoneNumbers,
-
-        Long userId
+        String email
 ) {
 }

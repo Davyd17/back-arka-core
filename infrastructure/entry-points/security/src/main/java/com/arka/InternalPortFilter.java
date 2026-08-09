@@ -36,8 +36,10 @@ public class InternalPortFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (request.getRequestURI().startsWith("/api/v1/reports/internal")
+        if ((request.getRequestURI().startsWith("/api/v1/reports/internal") ||
+                request.getRequestURI().startsWith("/api/v1/internal"))
                 && request.getLocalPort() != internalPort){
+
             response.setStatus(HttpStatus.FORBIDDEN.value());
             return;
         }

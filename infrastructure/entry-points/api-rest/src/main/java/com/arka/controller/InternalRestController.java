@@ -4,7 +4,6 @@ import com.arka.mappers.ContactRestMapper;
 import com.arka.party.CreateContactUseCase;
 import com.arka.party.dto.ContactOutput;
 import com.arka.request.CreateContactRequest;
-import com.arka.response.AppResponse;
 import com.arka.response.get.ContactResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

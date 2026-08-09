@@ -18,15 +18,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("api/v1/contacts")
+@RequestMapping("api/v1/internal")
 @RequiredArgsConstructor
-public class ContactController {
+public class InternalRestController {
 
     private final CreateContactUseCase createContactUseCase;
     private final ContactRestMapper contactRestMapper;
 
-    @PostMapping
-    public ResponseEntity<AppResponse<ContactResponse>> save(
+    @PostMapping("/contacts")
+    public ResponseEntity<ContactResponse> save(
             @Valid @RequestBody CreateContactRequest request){
 
         ContactOutput contactOutput = createContactUseCase.execute(
@@ -38,9 +38,7 @@ public class ContactController {
                 .buildAndExpand(contactOutput.id())
                 .toUri();
 
-        return ResponseEntity.created(uri).body(new AppResponse<>(
-                "RESOURCE_CREATED",
-                "Contact created successfully",
-                contactRestMapper.toResponse(contactOutput)));
+        return ResponseEntity.created(uri).body(
+                contactRestMapper.toResponse(contactOutput));
     }
 }

@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ContactController.class,
+@WebMvcTest(controllers = InternalRestController.class,
         excludeAutoConfiguration = {
                 SecurityAutoConfiguration.class,
                 UserDetailsServiceAutoConfiguration.class})
@@ -63,14 +61,12 @@ class ContactControllerTest {
         when(contactRestMapper.toResponse(output)).thenReturn(response);
 
         // when & then
-        mockMvc.perform(post("/api/v1/contacts")
+        mockMvc.perform(post("/api/v1/internal/contacts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.code").value("RESOURCE_CREATED"))
-                .andExpect(jsonPath("$.message").value("Contact created successfully"))
-                .andExpect(jsonPath("$.data.id").value(1L))
-                .andExpect(jsonPath("$.data.email").value("john.doe@arka.com"));
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.email").value("john.doe@arka.com"));
 
         verify(createContactUseCase).execute(input);
     }
@@ -81,7 +77,7 @@ class ContactControllerTest {
         String invalidJsonPayload = "{}";
 
         // when & then
-        mockMvc.perform(post("/api/v1/contacts")
+        mockMvc.perform(post("/api/v1/internal/contacts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidJsonPayload))
                 .andExpect(status().isBadRequest());

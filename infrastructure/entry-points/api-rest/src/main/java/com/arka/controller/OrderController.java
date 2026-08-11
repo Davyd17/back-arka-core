@@ -17,6 +17,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,11 +39,13 @@ public class OrderController {
     private final OrderRestMapper mapper;
 
     @PostMapping
-    public ResponseEntity<CreateOrderResponse> create(@Valid @RequestBody CreateOrderRequest request) {
+    public ResponseEntity<CreateOrderResponse> create(@Valid @RequestBody CreateOrderRequest request,
+                                                      @AuthenticationPrincipal Jwt jwt) {
+
+        String email = jwt.getSubject();
 
         CreateOrderOut createOrderOut =
-                createOrderUseCase.execute(
-                        mapper.toDomain(request));
+                createOrderUseCase.execute(mapper.toDomain(request), email);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -55,10 +59,13 @@ public class OrderController {
     }
 
     @PatchMapping
-    public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request) {
+    public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request,
+                                                      @AuthenticationPrincipal Jwt jwt) {
+
+        String email = jwt.getSubject();
 
         UpdateOrderOut updatedOrder = modifyOrderUseCase.execute(
-                mapper.toDomain(request));
+                mapper.toDomain(request), email);
 
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }

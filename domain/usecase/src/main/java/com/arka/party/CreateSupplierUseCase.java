@@ -22,7 +22,6 @@ import java.util.List;
 public class CreateSupplierUseCase {
 
     private final ProductCategoryService categoryService;
-    private final ContactService contactService;
 
     private final SupplierGateway supplierGateway;
 
@@ -33,9 +32,6 @@ public class CreateSupplierUseCase {
 
         NullValidator.validate(input, "input");
 
-        List<Contact> foundContacts =
-                contactService.findAllByIds(input.contactIds());
-
         List<ProductCategory> foundCategories =
                 categoryService.findAllByIds(input.productCategoryIds());
 
@@ -43,7 +39,6 @@ public class CreateSupplierUseCase {
         Company newSupplier = Company.createSupplier(
                 input.name(),
                 CompanyRelationType.SUPPLIER,
-                foundContacts,
                 foundCategories);
 
         return companyMapper.toOut(supplierGateway.createCompany(newSupplier));

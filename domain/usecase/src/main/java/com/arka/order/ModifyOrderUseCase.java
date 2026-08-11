@@ -2,13 +2,14 @@ package com.arka.order;
 
 import com.arka.entities.order.Order;
 import com.arka.entities.order.OrderItem;
+import com.arka.exceptions.UnauthorizedException;
 import com.arka.order.dto.UpdateOrderIn;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.order.mapper.OrderMapper;
 import com.arka.order.gateway.OrderGateway;
-import com.arka.order.mapper.OrderMapperImpl;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;
+import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 
@@ -26,12 +27,15 @@ public class ModifyOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    public UpdateOrderOut execute(UpdateOrderIn input) {
+    public UpdateOrderOut execute(UpdateOrderIn input, String callerEmail) {
 
-        if (input == null)
-            throw new IllegalArgumentException("Order cannot be null");
+        NullValidator.validate(input, "orderInput");
+        NullValidator.validate(callerEmail, "userEmail");
 
         Order existingOrder = orderService.findById(input.id());
+
+        String ownerEmail = existingOrder.getContact().getEmail();
+        verifyOwnership(ownerEmail, callerEmail);
 
         if(hasItems(input))
             updateItems(existingOrder, input.items());
@@ -40,6 +44,11 @@ public class ModifyOrderUseCase {
             existingOrder.updateNotes(input.notes());
 
         return orderMapper.toUpdateDTO(orderGateway.save(existingOrder));
+    }
+
+    private void verifyOwnership(String ownerEmail, String currentEmail){
+        if(!ownerEmail.equals(currentEmail))
+            throw new UnauthorizedException("You don't have access to this order");
     }
 
     private boolean hasItems(UpdateOrderIn input){

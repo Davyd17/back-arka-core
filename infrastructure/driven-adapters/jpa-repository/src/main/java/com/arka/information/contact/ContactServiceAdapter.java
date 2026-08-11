@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +31,10 @@ public class ContactServiceAdapter implements ContactGateway {
     public Contact save(Contact contact) {
         ContactEntity contactEntity = mapper.toEntity(contact);
         return mapper.toDomain(repository.save(contactEntity));
+    }
+
+    @Override
+    public Optional<Contact> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 }

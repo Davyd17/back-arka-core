@@ -4,6 +4,7 @@ import com.arka.company.CompanyEntityMapper;
 import com.arka.company.CompanyEntityMapperImpl;
 import com.arka.company.customer.CustomerRepository;
 import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
 import com.arka.entities.order.Order;
 import com.arka.entities.order.OrderItem;
 import com.arka.entities.product.Product;
@@ -18,6 +19,7 @@ import com.arka.product.ProductEntityMapperImpl;
 import com.arka.product.ProductRepository;
 import com.arka.product.category.ProductCategoryMapper;
 import com.arka.product.category.ProductCategoryMapperImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,25 +54,29 @@ class OrderServiceAdapterTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
     private ProductEntityMapper productEntityMapper;
 
     @Autowired
-    private CompanyEntityMapper companyEntityMapper;
-
-    @Autowired
     private OrderServiceAdapter orderServiceAdapter;
+
+    private Contact buildContact(Long id){
+        return new Contact(
+                id,
+                "John",
+                "Conor",
+                "Test Position",
+                null,
+                "jhon.conor@example.com",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
+    }
 
     @Test
     void shouldSaveOrder() {
 
         // given
-        Company company = companyEntityMapper.toDomain(
-                customerRepository.findById(1L).orElseThrow());
-
-        Order order = Order.create(null, OrderType.SALES, company);
+        Order order = Order.create(null, OrderType.SALES, buildContact(1L));
 
         // when
         Order saved = orderServiceAdapter.save(order);
@@ -86,13 +93,10 @@ class OrderServiceAdapterTest {
     void shouldMaintainOrderItemBidirectionalRelationshipWhenSaved() {
 
         // given
-        Company company = companyEntityMapper.toDomain(
-                customerRepository.findById(1L).orElseThrow());
-
         Product product = productEntityMapper.toDomain(
                 productRepository.findById(1L).orElseThrow());
 
-        Order order = Order.create(null, OrderType.SALES, company);
+        Order order = Order.create(null, OrderType.SALES, buildContact(1L));
         order.addItem(OrderItem.create(product, 2));
 
         // when

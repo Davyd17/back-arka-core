@@ -1,5 +1,7 @@
 package com.arka.entities.information;
 
+import com.arka.entities.Company;
+import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
 import com.arka.util.ExistenceValidator;
@@ -16,7 +18,8 @@ public class Contact {
     private Long id;
     private String name;
     private String lastName;
-    @Nullable @Setter private String companyPosition;
+    @Nullable private String companyPosition;
+    @Nullable private Company company;
     private String email;
     private List<Address> addresses;
     private List<PhoneNumber> phoneNumbers;
@@ -98,4 +101,18 @@ public class Contact {
                     String.format("PhoneNumber with id [%s] not found", phoneNumberId));
         }
     }
+
+    public void assignCompany(Company company, String companyPosition){
+
+        if(this.company != null)
+            throw new AlreadyExistsException("This contact already has a company assigned");
+
+        this.company = company;
+        this.companyPosition = companyPosition;
+    }
+
+    public boolean hasCompanyAssigned(){
+        return company != null;
+    }
+
 }

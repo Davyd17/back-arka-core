@@ -67,6 +67,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("DATA_INTEGRITY_VIOLATION", message, LocalDateTime.now()));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAccess(UnauthorizedException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("FORBIDDEN",
+                        "You don't have access to this resource",
+                        LocalDateTime.now()));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

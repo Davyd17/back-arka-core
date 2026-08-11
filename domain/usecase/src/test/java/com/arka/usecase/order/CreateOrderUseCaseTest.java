@@ -1,15 +1,13 @@
 package com.arka.usecase.order;
 
-import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
 import com.arka.entities.product.ProductCategory;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.dto.CreateOrderIn;
-import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.order.gateway.OrderGateway;
-import com.arka.order.mapper.OrderMapper;
-import com.arka.party.service.CompanyService;
+import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +34,7 @@ class CreateOrderUseCaseTest {
     private OrderGateway orderGateway;
 
     @Mock
-    private CompanyService companyService;
+    private ContactService contactService;
 
     @Mock
     private ProductService productService;
@@ -44,15 +42,25 @@ class CreateOrderUseCaseTest {
     @InjectMocks
     private CreateOrderUseCase useCase;
 
-    private Company company;
+    private Contact contact;
+
+    private final String OWNER_EMAIL = "jhon.conor@example.com";
 
     @BeforeEach
-    void setUp(){
-        company = new Company(1L, "Test company", CompanyRelationType.CUSTOMER,
-                new ArrayList<>(), new ArrayList<>());
+    void setUp() {
+        contact = new Contact(
+                1L,
+                "Jhon",
+                "Conor",
+                "Test Position",
+                null,
+                OWNER_EMAIL,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
     }
 
-    private Product buildProduct(long id, BigDecimal basePrice){
+    private Product buildProduct(long id, BigDecimal basePrice) {
         return new Product(
                 id,
                 "PT-00" + id,
@@ -69,41 +77,37 @@ class CreateOrderUseCaseTest {
 
     @Test
     void shouldThrowWhenInputIsNull() {
-
         assertThrows(IllegalArgumentException.class,
-                () -> useCase.execute(null));
-
+                () -> useCase.execute(null, null));
     }
 
     @Test
-    void shouldCreateOrderWithInputItems(){
+    void shouldCreateOrderWithInputItems() {
         //Arrange
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
         CreateOrderIn input = new CreateOrderIn(
                 null,
                 OrderType.SALES,
-                1L,
                 List.of(new CreateOrderIn.Item(1L, 10)));
 
-        when(companyService.findById(1L)).thenReturn(company);
-
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(1L)).thenReturn(product);
 
         when(orderGateway.save(any()))
                 .thenAnswer(i -> i.getArgument(0));
 
         //Act
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         //Assert
         verify(orderGateway).save(argThat(order ->
                 order.getItems().size() == 1 &&
-                order.getItems().getFirst().getQuantity() == 10));
+                        order.getItems().getFirst().getQuantity() == 10));
     }
 
     @Test
-    void shouldAlwaysCallGatewaySave(){
+    void shouldAlwaysCallGatewaySave() {
 
         //Arrange
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
@@ -111,18 +115,15 @@ class CreateOrderUseCaseTest {
         CreateOrderIn input = new CreateOrderIn(
                 null,
                 OrderType.SALES,
-                1L,
                 List.of(new CreateOrderIn.Item(1L, 10)));
 
-        when(companyService.findById(1L)).thenReturn(company);
-
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(1L)).thenReturn(product);
-
         when(orderGateway.save(any()))
                 .thenAnswer(i -> i.getArgument(0));
 
         //Act
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         //Assert
         verify(orderGateway).save(any());

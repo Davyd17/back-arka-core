@@ -17,25 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompanyTest {
 
     private Company company;
-    private Contact contact;
     private ProductCategory category;
 
     @BeforeEach
     void setUp() {
-        contact = buildContact(1L);
         category = buildCategory(1L);
 
         company = Company.createSupplier(
                 "Test Company",
                 CompanyRelationType.CUSTOMER,
-                List.of(contact),
                 List.of(category)
         );
-    }
-
-    private Contact buildContact(Long id) {
-        return new Contact(id, "John", "Doe", "CEO",
-                "john@test.com", new ArrayList<>(), new ArrayList<>(), true);
     }
 
     private ProductCategory buildCategory(Long id) {
@@ -47,55 +39,25 @@ class CompanyTest {
     @Test
     void shouldThrowWhenContactsIsNull() {
         assertThrows(IllegalArgumentException.class, () ->
-                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, null, List.of()));
+                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of()));
     }
 
     @Test
     void shouldThrowWhenContactsIsEmpty() {
         assertThrows(IllegalArgumentException.class, () ->
-                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of(), List.of()));
+                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of()));
     }
 
     @Test
     void shouldThrowWhenCategoriesIsNull() {
         assertThrows(IllegalArgumentException.class, () ->
-                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of(), null));
+                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, null));
     }
 
     @Test
     void shouldThrowWhenCategoriesIsEmpty() {
         assertThrows(IllegalArgumentException.class, () ->
-                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of(), List.of()));
-    }
-
-    // --- addContact ---
-
-    @Test
-    void shouldAddContactSuccessfully() {
-        company.addContact(buildContact(2L));
-
-        assertEquals(2, company.getContacts().size());
-    }
-
-    @Test
-    void shouldThrowWhenAddingDuplicateContact() {
-        assertThrows(AlreadyExistsException.class, () ->
-                company.addContact(buildContact(1L)));
-    }
-
-    // --- removeContact ---
-
-    @Test
-    void shouldRemoveContactSuccessfully() {
-        company.removeContact(1L);
-
-        assertTrue(company.getContacts().isEmpty());
-    }
-
-    @Test
-    void shouldThrowWhenRemovingNonExistentContact() {
-        assertThrows(NotFoundException.class, () ->
-                company.removeContact(99L));
+                Company.createSupplier("Test", CompanyRelationType.CUSTOMER, List.of()));
     }
 
     // --- addProductCategory ---

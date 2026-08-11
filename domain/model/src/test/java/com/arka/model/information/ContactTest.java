@@ -1,9 +1,11 @@
 package com.arka.model.information;
 
+import com.arka.entities.Company;
 import com.arka.entities.information.Address;
 import com.arka.entities.information.Contact;
 import com.arka.entities.information.PhoneNumber;
 import com.arka.enums.AddressType;
+import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
 import com.arka.exceptions.InvalidActivationStateException;
 import com.arka.exceptions.NotFoundException;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +45,14 @@ class ContactTest {
                 "123456789",
                 true,
                 Instant.now());
+    }
+    
+    private Company buildCompany(Long id){
+        return new Company(
+                id,
+                "TestCompany",
+                CompanyRelationType.CUSTOMER,
+                new ArrayList<>());
     }
 
     // --- create ---
@@ -110,6 +119,37 @@ class ContactTest {
     void shouldThrowWhenRemovingNonExistentPhoneNumber() {
         assertThrows(NotFoundException.class,
                 () -> contact.removePhoneNumber(99L));
+    }
+
+    // -- belongs to company
+
+    @Test
+    void shouldAssingOne(){
+        Company company = buildCompany(1L);
+        contact.assignCompany(company, "Test Position");
+
+        assertNotNull(contact.getCompany());
+        assertThat(contact.getCompany().getId()).isEqualTo(1L);
+        assertThat(contact.getCompanyPosition()).isEqualTo("Test Position");
+    }
+    
+    @Test
+    void shouldThrowWhenCompanyAlreadyAssigned(){
+        Company company = buildCompany(1L);
+        contact.assignCompany(company, "Test Position");
+
+        Company company1 = buildCompany(2L);
+
+        assertThrows(AlreadyExistsException.class,
+                () -> contact.assignCompany(company1, "New Test Position"));
+    }
+
+    @Test
+    void shouldReturnTrueIfHasCompanyAssigned(){
+        Company company = buildCompany(1L);
+        contact.assignCompany(company, "Test Position");
+
+        assertThat(contact.hasCompanyAssigned()).isTrue();
     }
 
 }

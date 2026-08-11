@@ -1,5 +1,6 @@
 package com.arka.controller;
 
+import com.arka.JwtService;
 import com.arka.enums.ShippingStatus;
 import com.arka.mappers.ShippingDetailRestMapperImpl;
 import com.arka.shipping.RegisterShippingDetailsUseCase;
@@ -7,8 +8,7 @@ import com.arka.shipping.dto.ShippingDetailOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -25,11 +25,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = ShippingDetailController.class,
-        excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
-        })
+@WebMvcTest(controllers = ShippingDetailController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @Import(ShippingDetailRestMapperImpl.class)
 class ShippingDetailControllerTest {
@@ -39,6 +36,9 @@ class ShippingDetailControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private RegisterShippingDetailsUseCase registerShippingDetailsUseCase;

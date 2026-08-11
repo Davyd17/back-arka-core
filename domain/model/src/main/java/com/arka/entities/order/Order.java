@@ -1,6 +1,7 @@
 package com.arka.entities.order;
 
 import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import jakarta.annotation.Nullable;
@@ -28,21 +29,21 @@ public class Order {
     private String notes;
     private OrderType type;
     private BigDecimal totalPrice;
-    private Company company;
+    private Contact contact;
     private List<OrderItem> items;
     private Instant createdAt;
     private Instant updatedAt;
 
     public static Order create(@Nullable String notes,
                                OrderType type,
-                               Company company) {
+                               Contact contact) {
 
         return Order.builder()
                 .number(generateNumber())
                 .status(OrderStatus.PENDING)
                 .notes(notes)
                 .type(type)
-                .company(company)
+                .contact(contact)
                 .items(new ArrayList<>())
                 .totalPrice(BigDecimal.ZERO)
                 .build();

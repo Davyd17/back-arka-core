@@ -35,4 +35,10 @@ public class ContactService {
 
         else return contactGateway.save(contact);
     }
+
+    public Contact findByEmail(String email){
+        return contactGateway.findByEmail(email).orElseThrow(() ->
+                new NotFoundException(String.format(
+                        "Contact with email %s not found", email)));
+    }
 }

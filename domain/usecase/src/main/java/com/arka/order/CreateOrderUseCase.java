@@ -1,6 +1,6 @@
 package com.arka.order;
 
-import com.arka.entities.Company;
+import com.arka.entities.information.Contact;
 import com.arka.entities.order.Order;
 import com.arka.entities.order.OrderItem;
 import com.arka.entities.product.Product;
@@ -8,8 +8,7 @@ import com.arka.order.dto.CreateOrderIn;
 import com.arka.order.dto.CreateOrderOut;
 import com.arka.order.gateway.OrderGateway;
 import com.arka.order.mapper.OrderMapper;
-import com.arka.order.mapper.OrderMapperImpl;
-import com.arka.party.service.CompanyService;
+import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductService;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +24,16 @@ public class CreateOrderUseCase {
     private final OrderMapper orderMapper =
             Mappers.getMapper(OrderMapper.class);
 
-    private final CompanyService companyService;
+    private final ContactService contactService;
     private final ProductService productService;
 
-    public CreateOrderOut execute(CreateOrderIn input) {
+    public CreateOrderOut execute(CreateOrderIn input, String email) {
 
         NullValidator.validate(input, "input");
 
-        Order newOrder = this.buildOrder(input);
+        Contact existingContact = contactService.findByEmail(email);
+
+        Order newOrder = this.buildOrder(input, existingContact);
 
         this.addItemsToOrder(newOrder, input.items());
 
@@ -40,15 +41,12 @@ public class CreateOrderUseCase {
 
     }
 
-    private Order buildOrder(CreateOrderIn input) {
-
-        Company foundCompany = companyService
-                .findById(input.companyId());
+    private Order buildOrder(CreateOrderIn input, Contact existingContact) {
 
         return Order.create(
                 input.notes(),
                 input.type(),
-                foundCompany
+                existingContact
         );
     }
 

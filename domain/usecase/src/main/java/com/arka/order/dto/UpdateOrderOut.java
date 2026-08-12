@@ -15,7 +15,7 @@ public record UpdateOrderOut(
         String notes,
         OrderType type,
         Instant updatedAt,
-        OrderCompany company,
+        OrderContact contact,
         List<Item> items
 ) {
     public record Item (
@@ -26,9 +26,12 @@ public record UpdateOrderOut(
             BigDecimal totalPrice
     ){}
 
-    public record OrderCompany(
+    public record OrderContact(
             Long id,
-            String name
+            String name,
+            String lastName,
+            String companyName,
+            String email
     ){
     }
 }

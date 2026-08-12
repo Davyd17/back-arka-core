@@ -1,5 +1,6 @@
 package com.arka.controller;
 
+import com.arka.JwtService;
 import com.arka.cart.AddItemToShoppingCartUseCase;
 import com.arka.cart.ListAbandonedShoppingCartsUseCase;
 import com.arka.cart.dto.AddItemShoppingCartIn;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -33,11 +35,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ShoppingCartController.class,
-        excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
-        })
+@WebMvcTest(controllers = ShoppingCartController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @Import({ShoppingCartRestMapperImpl.class,
         ShoppingCartItemRestMapperImpl.class,
@@ -49,6 +48,9 @@ class ShoppingCartControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private AddItemToShoppingCartUseCase addItemToShoppingCartUseCase;

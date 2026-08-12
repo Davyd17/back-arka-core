@@ -1,6 +1,8 @@
 package com.arka.adapters;
 
+import com.arka.entities.Company;
 import com.arka.entities.information.Contact;
+import com.arka.enums.CompanyRelationType;
 import com.arka.information.address.AddressEntityMapperImpl;
 import com.arka.information.contact.ContactEntityMapperImpl;
 import com.arka.information.contact.ContactRepository;
@@ -12,6 +14,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,6 +34,14 @@ class ContactServiceAdapterTest {
     @Autowired
     private ContactRepository repository;
 
+    private Company buildCompany(Long id){
+        return new Company(
+                id,
+                "TestCompany",
+                CompanyRelationType.CUSTOMER,
+                new ArrayList<>());
+    }
+
     @Test
     void shouldSaveAndPersistNewContactSuccessfully() {
         // given
@@ -38,7 +50,6 @@ class ContactServiceAdapterTest {
                 "Doe",
                 "john@arka.com"
         );
-        newContact.setCompanyPosition("Lead Software Engineer");
 
         // when
         Contact savedContact = contactAdapter.save(newContact);
@@ -68,7 +79,7 @@ class ContactServiceAdapterTest {
 
         // when: deactivate domain object and save updates
         persistedContact.deactivate();
-        persistedContact.setCompanyPosition("CTO");
+        persistedContact.assignCompany(buildCompany(1L), "CTO");
 
         Long repositoryCountBeforeUpdate = repository.count();
         Contact updatedContact = contactAdapter.save(persistedContact);

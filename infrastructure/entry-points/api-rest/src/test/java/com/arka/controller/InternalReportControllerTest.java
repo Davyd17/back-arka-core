@@ -1,5 +1,8 @@
 package com.arka.controller;
 
+import com.arka.JwtAuthenticationFilter;
+import com.arka.JwtService;
+import com.arka.config.SecurityConfig;
 import com.arka.mappers.EmailRestMapperImpl;
 import com.arka.notification.SendWeeklyLowStockReportUseCase;
 import com.arka.notification.SendWeeklySalesReportUseCase;
@@ -7,8 +10,10 @@ import com.arka.report.ExportFormat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -26,14 +31,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = InternalReportController.class,
-        excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
-        })
+@WebMvcTest(controllers = InternalReportController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-@Import(EmailRestMapperImpl.class)
+@Import({EmailRestMapperImpl.class})
 class InternalReportControllerTest {
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;

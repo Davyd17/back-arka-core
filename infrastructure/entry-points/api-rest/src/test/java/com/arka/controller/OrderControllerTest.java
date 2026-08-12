@@ -1,23 +1,23 @@
 package com.arka.controller;
 
+import com.arka.JwtService;
 import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
+import com.arka.exceptions.UnauthorizedException;
 import com.arka.mappers.OrderRestMapperImpl;
 import com.arka.notification.SendEmailOrderStatusChangeUseCase;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
-import com.arka.order.dto.CreateOrderOut;
-import com.arka.order.dto.UpdateOrderOut;
+import com.arka.order.dto.OrderOutput;
 import com.arka.product.dto.ProductSummaryOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,17 +32,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = OrderController.class,
-        excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
-        })
+@WebMvcTest(controllers = OrderController.class) // drop excludeAutoConfiguration
 @ActiveProfiles("test")
-@Import(OrderRestMapperImpl.class)
+@Import({OrderRestMapperImpl.class,
+        JwtService.class})
 class OrderControllerTest {
 
     @Autowired
@@ -50,6 +48,9 @@ class OrderControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtDecoder jwtDecoder;
 
     @MockitoBean
     private CreateOrderUseCase createOrderUseCase;
@@ -63,26 +64,66 @@ class OrderControllerTest {
     @MockitoBean
     private SendEmailOrderStatusChangeUseCase notifyChangeStatusUsecase;
 
-    private ProductSummaryOut buildProductOutput(Long id){
+    private final String OWNER_EMAIL = "john.wick@example.com";
+
+    private ProductSummaryOut buildProductOutput(Long id) {
         return new ProductSummaryOut(
                 id, "PR-TEST-001", "Test product", "Test Category");
     }
 
-    private CreateOrderOut.OrderCompany buildCompany(Long id) {
-        return new CreateOrderOut.OrderCompany(id, "Company Test");
-    }
+    private OrderOutput.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
 
-    private CreateOrderOut.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
-
-        return new CreateOrderOut.Item(
+        return new OrderOutput.Item(
                 id, buildProductOutput(productId), quantity, new BigDecimal("75.00"),
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
     }
 
-    private UpdateOrderOut.Item buildUpdateOrderItem(Long id, Long productId, int quantity){
+    private UpdateOrderOut.Item buildUpdateOrderItem(Long id, Long productId, int quantity) {
         return new UpdateOrderOut.Item(
                 id, buildProductOutput(productId), quantity, new BigDecimal("75.00"),
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    private OrderOutput.OrderContact buildCreateContact(Long id){
+        return new OrderOutput.OrderContact(
+                id,
+                "Test",
+                "Contact",
+                "test.contact@example.com",
+                "Test Company");
+    }
+
+    private UpdateOrderOut.OrderContact buildUpdateContact(Long id){
+        return new UpdateOrderOut.OrderContact(
+                id,
+                "Test",
+                "Contact",
+                "Test Company");
+    }
+
+    @Test
+    void shouldReturn403WhenCallerIsNotOrderOwner() throws Exception {
+        Long orderId = 1L;
+
+        when(modifyOrderUseCase.execute(any(), eq("intruder@example.com")))
+                .thenThrow(new UnauthorizedException("You don't have access to this order"));
+
+        Map<String, Object> item = Map.of(
+                "productId", 1L,
+                "quantity", 5
+        );
+
+        Map<String, Object> request = Map.of(
+                "id", orderId,
+                "notes", "Updated order notes",
+                "items", Set.of(item)
+        );
+
+        mockMvc.perform(patch("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject("intruder@example.com")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -91,39 +132,38 @@ class OrderControllerTest {
         // given
         Long expectedOrderId = 500L;
 
-        CreateOrderOut mockOutput = new CreateOrderOut(
+        OrderOutput mockOutput = new OrderOutput(
                 expectedOrderId,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
                 "Test notes",
                 OrderType.PURCHASE,
                 new BigDecimal("75.00"),
-                new CreateOrderOut.OrderCompany(10L, "Company Test"),
+                buildCreateContact(1L),
                 Set.of(buildCreateOrderItem(1L, 1L, 5)),
                 Instant.now());
 
-        when(createOrderUseCase.execute(any())).thenReturn(mockOutput);
+        when(createOrderUseCase.execute(any(), eq(OWNER_EMAIL))).thenReturn(mockOutput);
 
         Map<String, Object> item = Map.of(
                 "productId", 1L,
-                "quantity", 5
-        );
+                "quantity", 5);
 
         Map<String, Object> request = Map.of(
                 "notes", "Urgent restock order",
                 "type", "PURCHASE",
-                "companyId", 10L,
-                "items", Set.of(item)
-        );
+                "items", Set.of(item));
 
         // when & then
         mockMvc.perform(post("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/api/v1/orders/" + expectedOrderId))
                 .andExpect(jsonPath("$.id").value(expectedOrderId))
-                .andExpect(jsonPath("$.type").value("PURCHASE"));
+                .andExpect(jsonPath("$.type").value("PURCHASE"))
+                .andExpect(jsonPath("$.contact.id").value(1L));
     }
 
     @Test
@@ -132,12 +172,12 @@ class OrderControllerTest {
         Map<String, Object> invalidRequest = Map.of(
                 "notes", "Empty order",
                 "type", "PURCHASE",
-                "companyId", 10L,
                 "items", List.of() // Violates @NotEmpty(message = "There must be at least one item")
         );
 
         // when & then
         mockMvc.perform(post("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
@@ -146,18 +186,18 @@ class OrderControllerTest {
     @Test
     void shouldReturn400BadRequestWhenItemQuantityIsLessThanOne() throws Exception {
 
-        CreateOrderOut mockOutput = new CreateOrderOut(
+        OrderOutput mockOutput = new OrderOutput(
                 1L,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
                 "Test notes",
                 OrderType.PURCHASE,
                 new BigDecimal("75.00"),
-                buildCompany(10L),
+                buildCreateContact(1L),
                 Set.of(buildCreateOrderItem(1L, 1L, 0)),
                 Instant.now());
 
-        when(createOrderUseCase.execute(any())).thenReturn(mockOutput);
+        when(createOrderUseCase.execute(any(), eq(OWNER_EMAIL))).thenReturn(mockOutput);
 
         // given - Item quantity is 0 (violates @Min(1))
         Map<String, Object> invalidItem = Map.of(
@@ -167,27 +207,31 @@ class OrderControllerTest {
 
         Map<String, Object> invalidRequest = Map.of(
                 "type", "PURCHASE",
-                "companyId", 10L,
                 "items", Set.of(invalidItem)
         );
 
         // when & then
         mockMvc.perform(post("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void shouldReturn400BadRequestWhenTypeOrCompanyIdAreMissing() throws Exception {
+    void shouldReturn400BadRequestWhenTypeIsMissing() throws Exception {
         // given - Missing type and companyId
-        Map<String, Object> item = Map.of("productId", 1L, "quantity", 2);
+        Map<String, Object> item = Map.of(
+                "productId", 1L,
+                "quantity", 2);
+
         Map<String, Object> invalidRequest = Map.of(
                 "items", Set.of(item)
         );
 
         // when & then
         mockMvc.perform(post("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
@@ -204,11 +248,11 @@ class OrderControllerTest {
                 "Updated order notes",
                 OrderType.PURCHASE,
                 Instant.now(),
-                new UpdateOrderOut.OrderCompany(10L, "Test Company"),
+                buildUpdateContact(1L),
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 
-        when(modifyOrderUseCase.execute(any())).thenReturn(mockOutput);
+        when(modifyOrderUseCase.execute(any(), eq(OWNER_EMAIL))).thenReturn(mockOutput);
 
         Map<String, Object> item = Map.of(
                 "productId", 1L,
@@ -223,6 +267,7 @@ class OrderControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -237,6 +282,7 @@ class OrderControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/v1/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
@@ -266,6 +312,7 @@ class OrderControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/v1/orders/{orderId}/status", orderId)
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .requestAttr("userEmail", userEmail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -300,6 +347,7 @@ class OrderControllerTest {
 
         // when & then - Request without setting "userEmail" attribute (passes null to notify use case)
         mockMvc.perform(patch("/api/v1/orders/{orderId}/status", orderId)
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

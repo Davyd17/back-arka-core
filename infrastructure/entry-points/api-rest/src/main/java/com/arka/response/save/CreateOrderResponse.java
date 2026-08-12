@@ -17,7 +17,7 @@ public record CreateOrderResponse(
         BigDecimal totalPrice,
         Instant createdAt,
         Set<Item> items,
-        OrderCompany company
+        OrderContact contact
 ) {
     public record Item(
             Long id,
@@ -27,8 +27,11 @@ public record CreateOrderResponse(
             BigDecimal totalPrice
     ){}
 
-    public record OrderCompany(
+    public record OrderContact(
             Long id,
-            String name
+            String name,
+            String lastName,
+            String email,
+            String companyName
     ){}
 }

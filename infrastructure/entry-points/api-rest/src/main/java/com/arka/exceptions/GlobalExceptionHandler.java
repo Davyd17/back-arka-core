@@ -67,6 +67,20 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("DATA_INTEGRITY_VIOLATION", message, LocalDateTime.now()));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAccess(UnauthorizedException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("FORBIDDEN",
+                        "You don't have access to this resource",
+                        LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundResource(NotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(
+                        "NOT_FOUND", ex.getMessage(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

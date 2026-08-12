@@ -1,6 +1,8 @@
 dependencies {
     implementation project(":model")
     implementation project(":usecase")
+    implementation project(":security")
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.15")
 
@@ -8,7 +10,7 @@ dependencies {
     implementation 'org.springframework:spring-tx'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly files("${project(':boot').projectDir}/src/main/resources")
 }
 
 //config to resolve SQL native query parameters

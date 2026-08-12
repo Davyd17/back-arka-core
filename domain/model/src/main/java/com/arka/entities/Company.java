@@ -1,6 +1,5 @@
 package com.arka.entities;
 
-import com.arka.entities.information.Contact;
 import com.arka.entities.product.ProductCategory;
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.AlreadyExistsException;
@@ -18,19 +17,13 @@ public class Company {
     private Long id;
     private String name;
     private CompanyRelationType relation;
-    private List<Contact> contacts;
     private List<ProductCategory> productCategories;
 
     public static Company createSupplier(
             String name,
             CompanyRelationType relation,
-            List<Contact> contacts,
             List<ProductCategory> categories
     ) {
-
-        if (contacts == null || contacts.isEmpty())
-            throw new IllegalArgumentException(
-                    "Supplier should have at least one contact");
 
         if (categories == null || categories.isEmpty())
             throw new IllegalArgumentException(
@@ -41,41 +34,11 @@ public class Company {
                 .name(name)
                 .relation(relation)
                 .productCategories(new ArrayList<>())
-                .contacts(new ArrayList<>())
                 .build();
 
-        contacts.forEach(company::addContact);
         categories.forEach(company::addProductCategory);
 
         return company;
-    }
-
-    public void addContact(Contact newContact) {
-
-        validateContactDuplication(newContact.getId());
-        this.contacts.add(newContact);
-    }
-
-    private void validateContactDuplication(Long contactId) {
-
-        boolean alreadyExists = this.contacts.stream()
-                .anyMatch(contact -> contact.getId().equals(contactId));
-
-        if (alreadyExists) {
-            throw new AlreadyExistsException(Contact.class, contactId);
-        }
-
-    }
-
-    public void removeContact(Long contactId) {
-
-        boolean removed = this.contacts.removeIf(c ->
-                contactId.equals(c.getId()));
-
-        if (!removed)
-            throw new NotFoundException(
-                    String.format("Contact with id [%s] not found", contactId)
-            );
     }
 
     public void addProductCategory(ProductCategory category) {

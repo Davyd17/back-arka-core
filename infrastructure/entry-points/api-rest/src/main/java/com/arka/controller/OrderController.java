@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,28 +38,32 @@ public class OrderController {
     private final OrderRestMapper mapper;
 
     @PostMapping
-    public ResponseEntity<CreateOrderResponse> create(@Valid @RequestBody CreateOrderRequest request) {
+    public ResponseEntity<CreateOrderResponse> create(
+            @Valid @RequestBody CreateOrderRequest request,
+            Authentication authentication) {
 
-        CreateOrderOut createOrderOut =
-                createOrderUseCase.execute(
-                        mapper.toDomain(request));
+        String email = authentication.getName();
+        CreateOrderOut orderOutput =
+                createOrderUseCase.execute(mapper.toDomain(request), email);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createOrderOut.id())
+                .buildAndExpand(orderOutput.id())
                 .toUri();
 
         return ResponseEntity.created(uri).body(
-                mapper.toResponse(createOrderOut));
+                mapper.toResponse(orderOutput));
 
     }
 
     @PatchMapping
-    public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request) {
+    public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request,
+                                                      Authentication authentication) {
 
+        String email = authentication.getName();
         UpdateOrderOut updatedOrder = modifyOrderUseCase.execute(
-                mapper.toDomain(request));
+                mapper.toDomain(request), email);
 
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }

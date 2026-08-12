@@ -19,6 +19,6 @@ public interface OrderRestMapper {
 
     UpdateOrderResponse toResponse(UpdateOrderOut output);
 
-    @Mapping(target = "company", source = "company.name")
+    @Mapping(target = "companyName", source = "contact.companyName")
     OrderEmailDataIn toEmailData(UpdateOrderOut output);
 }

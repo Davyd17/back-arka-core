@@ -9,6 +9,7 @@ import com.arka.party.ListSuppliersByCategoryUseCase;
 import com.arka.response.get.CompanyResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,7 +33,7 @@ public class SupplierController {
 
 
     @GetMapping("/categories/{id}")
-    public List<CompanyResponse> listById(@PathVariable @NotBlank Long id) {
+    public List<CompanyResponse> listById(@PathVariable @NotNull Long id) {
 
         return listSupplierByCategory.execute(id)
                         .stream()

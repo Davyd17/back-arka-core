@@ -1,5 +1,6 @@
 package com.arka.entities.cart;
 
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.util.NullValidator;
@@ -27,16 +28,14 @@ public class ShoppingCart {
     private List<ShoppingCartItem> items;
     private Instant createdAt;
     private Instant updatedAt;
-    private final Long userId;
+    private Contact contact;
 
-    public static ShoppingCart create(
-            Long userId
-    ){
+    public static ShoppingCart create(Contact contact){
 
         return ShoppingCart.builder()
                 .status(ShoppingCartStatus.ACTIVE)
                 .items(new ArrayList<>())
-                .userId(userId)
+                .contact(contact)
                 .totalAmount(BigDecimal.ZERO)
                 .build();
     }

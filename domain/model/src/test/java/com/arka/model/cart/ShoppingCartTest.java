@@ -1,6 +1,7 @@
 package com.arka.model.cart;
 
 import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.exceptions.InvalidEditableStatusException;
@@ -20,12 +21,12 @@ class ShoppingCartTest {
 
     private ShoppingCart cart;
     private Product product;
+    private final String OWNER_EMAIL = "jhon.conor@example.com";
 
     @BeforeEach
     void setUp() {
         product = buildProduct(1L, BigDecimal.valueOf(10.00), true);
-
-        cart = ShoppingCart.create(1L);
+        cart = ShoppingCart.create(buildContact(1L));
     }
 
     private Product buildProduct(Long id, BigDecimal price, boolean active) {
@@ -37,7 +38,20 @@ class ShoppingCartTest {
                                    Instant createdAt,
                                    Instant updatedAt) {
         return new ShoppingCart(null, status, BigDecimal.ZERO,
-                new ArrayList<>(), createdAt, updatedAt, 1L);
+                new ArrayList<>(), createdAt, updatedAt, buildContact(1L));
+    }
+
+    private Contact buildContact(Long id) {
+        return new Contact(
+                1L,
+                "Jhon",
+                "Conor",
+                "Test Position",
+                null,
+                OWNER_EMAIL,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
     }
 
     // --- create ---

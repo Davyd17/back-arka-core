@@ -9,8 +9,7 @@ import com.arka.notification.SendEmailOrderStatusChangeUseCase;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
-import com.arka.order.dto.CreateOrderOut;
-import com.arka.order.dto.UpdateOrderOut;
+import com.arka.order.dto.OrderOutput;
 import com.arka.product.dto.ProductSummaryOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -72,13 +71,9 @@ class OrderControllerTest {
                 id, "PR-TEST-001", "Test product", "Test Category");
     }
 
-    private CreateOrderOut.OrderCompany buildCompany(Long id) {
-        return new CreateOrderOut.OrderCompany(id, "Company Test");
-    }
+    private OrderOutput.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
 
-    private CreateOrderOut.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
-
-        return new CreateOrderOut.Item(
+        return new OrderOutput.Item(
                 id, buildProductOutput(productId), quantity, new BigDecimal("75.00"),
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
     }
@@ -87,6 +82,23 @@ class OrderControllerTest {
         return new UpdateOrderOut.Item(
                 id, buildProductOutput(productId), quantity, new BigDecimal("75.00"),
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
+    }
+
+    private OrderOutput.OrderContact buildCreateContact(Long id){
+        return new OrderOutput.OrderContact(
+                id,
+                "Test",
+                "Contact",
+                "test.contact@example.com",
+                "Test Company");
+    }
+
+    private UpdateOrderOut.OrderContact buildUpdateContact(Long id){
+        return new UpdateOrderOut.OrderContact(
+                id,
+                "Test",
+                "Contact",
+                "Test Company");
     }
 
     @Test
@@ -120,14 +132,14 @@ class OrderControllerTest {
         // given
         Long expectedOrderId = 500L;
 
-        CreateOrderOut mockOutput = new CreateOrderOut(
+        OrderOutput mockOutput = new OrderOutput(
                 expectedOrderId,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
                 "Test notes",
                 OrderType.PURCHASE,
                 new BigDecimal("75.00"),
-                new CreateOrderOut.OrderCompany(10L, "Company Test"),
+                buildCreateContact(1L),
                 Set.of(buildCreateOrderItem(1L, 1L, 5)),
                 Instant.now());
 
@@ -135,15 +147,12 @@ class OrderControllerTest {
 
         Map<String, Object> item = Map.of(
                 "productId", 1L,
-                "quantity", 5
-        );
+                "quantity", 5);
 
         Map<String, Object> request = Map.of(
                 "notes", "Urgent restock order",
                 "type", "PURCHASE",
-                "companyId", 10L,
-                "items", Set.of(item)
-        );
+                "items", Set.of(item));
 
         // when & then
         mockMvc.perform(post("/api/v1/orders")
@@ -153,7 +162,8 @@ class OrderControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(header().string("Location", "http://localhost/api/v1/orders/" + expectedOrderId))
                 .andExpect(jsonPath("$.id").value(expectedOrderId))
-                .andExpect(jsonPath("$.type").value("PURCHASE"));
+                .andExpect(jsonPath("$.type").value("PURCHASE"))
+                .andExpect(jsonPath("$.contact.id").value(1L));
     }
 
     @Test
@@ -162,7 +172,6 @@ class OrderControllerTest {
         Map<String, Object> invalidRequest = Map.of(
                 "notes", "Empty order",
                 "type", "PURCHASE",
-                "companyId", 10L,
                 "items", List.of() // Violates @NotEmpty(message = "There must be at least one item")
         );
 
@@ -177,14 +186,14 @@ class OrderControllerTest {
     @Test
     void shouldReturn400BadRequestWhenItemQuantityIsLessThanOne() throws Exception {
 
-        CreateOrderOut mockOutput = new CreateOrderOut(
+        OrderOutput mockOutput = new OrderOutput(
                 1L,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
                 "Test notes",
                 OrderType.PURCHASE,
                 new BigDecimal("75.00"),
-                buildCompany(10L),
+                buildCreateContact(1L),
                 Set.of(buildCreateOrderItem(1L, 1L, 0)),
                 Instant.now());
 
@@ -198,7 +207,6 @@ class OrderControllerTest {
 
         Map<String, Object> invalidRequest = Map.of(
                 "type", "PURCHASE",
-                "companyId", 10L,
                 "items", Set.of(invalidItem)
         );
 
@@ -211,9 +219,12 @@ class OrderControllerTest {
     }
 
     @Test
-    void shouldReturn400BadRequestWhenTypeOrCompanyIdAreMissing() throws Exception {
+    void shouldReturn400BadRequestWhenTypeIsMissing() throws Exception {
         // given - Missing type and companyId
-        Map<String, Object> item = Map.of("productId", 1L, "quantity", 2);
+        Map<String, Object> item = Map.of(
+                "productId", 1L,
+                "quantity", 2);
+
         Map<String, Object> invalidRequest = Map.of(
                 "items", Set.of(item)
         );
@@ -237,7 +248,7 @@ class OrderControllerTest {
                 "Updated order notes",
                 OrderType.PURCHASE,
                 Instant.now(),
-                new UpdateOrderOut.OrderCompany(10L, "Test Company"),
+                buildUpdateContact(1L),
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 

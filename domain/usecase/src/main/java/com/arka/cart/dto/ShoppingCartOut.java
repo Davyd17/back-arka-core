@@ -9,10 +9,10 @@ import java.util.List;
 public record ShoppingCartOut(
 
         Long id,
+        String ownerEmail,
         ShoppingCartStatus status,
         BigDecimal totalAmount,
         List<ShoppingCartItemOut> items,
-        Instant createdAt,
-        Long userId
+        Instant createdAt
 ) {
 }

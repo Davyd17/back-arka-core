@@ -35,7 +35,7 @@ public class CreateOrderUseCase {
 
         Order newOrder = this.buildOrder(input, existingContact);
 
-        this.addItemsToOrder(newOrder, input.items());
+        addItemsToOrder(newOrder, input.items());
 
         return orderMapper.toCreateOut(orderGateway.save(newOrder));
 

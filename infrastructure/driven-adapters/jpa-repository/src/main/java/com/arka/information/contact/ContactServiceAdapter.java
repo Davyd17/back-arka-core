@@ -35,6 +35,7 @@ public class ContactServiceAdapter implements ContactGateway {
 
     @Override
     public Optional<Contact> findByEmail(String email) {
-        return repository.findByEmail(email);
+        return repository.findByEmail(email)
+                .map(mapper::toDomain);
     }
 }

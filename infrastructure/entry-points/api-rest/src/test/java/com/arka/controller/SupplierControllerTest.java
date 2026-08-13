@@ -59,9 +59,7 @@ class SupplierControllerTest {
                 expectedCompanyId,
                 "Acme Supplies Inc.",
                 CompanyRelationType.SUPPLIER,
-                List.of(),
-                List.of()
-        );
+                List.of());
 
         when(createSupplierUseCase.execute(any())).thenReturn(mockCompanyOutput);
 

@@ -2,6 +2,7 @@ package com.arka.cart;
 
 import com.arka.cart.item.ShoppingCartItemEntity;
 import com.arka.enums.ShoppingCartStatus;
+import com.arka.information.contact.ContactEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,6 +47,7 @@ public class ShoppingCartEntity {
     @JsonManagedReference
     private List<ShoppingCartItemEntity> items;
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id", nullable = false)
+    private ContactEntity contact;
 }

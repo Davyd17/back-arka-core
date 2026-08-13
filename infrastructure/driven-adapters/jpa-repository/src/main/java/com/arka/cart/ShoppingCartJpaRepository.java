@@ -10,5 +10,5 @@ public interface ShoppingCartJpaRepository extends JpaRepository<ShoppingCartEnt
 
     List<ShoppingCartEntity> findAllByStatus(ShoppingCartStatus status);
 
-    Optional<ShoppingCartEntity> findFirstByUserIdOrderByCreatedAtDesc(Long userId);
+    Optional<ShoppingCartEntity> findFirstByContactIdOrderByCreatedAtDesc(Long userId);
 }

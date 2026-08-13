@@ -1,9 +1,10 @@
 package com.arka.cart;
 
-import com.arka.cart.item.ShoppingCartItemEntityMapper;
 import com.arka.cart.item.ShoppingCartItemEntityMapperImpl;
 import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
+import com.arka.enums.ShoppingCartStatus;
 import com.arka.product.ProductEntityMapper;
 import com.arka.product.ProductEntityMapperImpl;
 import com.arka.product.ProductRepository;
@@ -13,15 +14,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -45,10 +42,25 @@ class ShoppingCartServiceAdapterTest {
     @Autowired
     private ProductEntityMapper productEntityMapper;
 
+    private static final String OWNER_EMAIL = "jhon.conor@example.com";
+
+    private Contact buildContact(Long id) {
+        return new Contact(
+                1L,
+                "Jhon",
+                "Conor",
+                "Test Position",
+                null,
+                OWNER_EMAIL,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
+    }
+
     @Test
     void shouldSaveShoppingCartAndMaintainBidirectionalRelationship() {
         // given
-        ShoppingCart domainCart = ShoppingCart.create(1L);
+        ShoppingCart domainCart = ShoppingCart.create(buildContact(1L));
 
         Product product = productEntityMapper.toDomain(
                 productRepository.findById(1L).orElseThrow());
@@ -63,7 +75,7 @@ class ShoppingCartServiceAdapterTest {
 
         // Verify it actually persisted in the DB through the repository
         Optional<ShoppingCartEntity> dbEntity =
-                repository.findFirstByUserIdOrderByCreatedAtDesc(1L);
+                repository.findFirstByContactIdOrderByCreatedAtDesc(1L);
         assertTrue(dbEntity.isPresent());
 
         //Verify items were linked to the shopping cart
@@ -75,6 +87,39 @@ class ShoppingCartServiceAdapterTest {
                     "The bidirectional relationship back to the shopping cart should be set.");
             assertEquals(dbEntity.get().getId(), item.getShoppingCart().getId());
         });
+    }
+
+    @Test
+    void shouldReturnLastCreatedCartForContact() {
+        // Given
+        Long ownerId = 1L;
+
+        // When
+        Optional<ShoppingCart> result =
+                shoppingCartServiceAdapter.getLastCreatedCart(ownerId);
+
+        // Then
+        assertThat(result).isPresent();
+
+        ShoppingCart cart = result.get();
+        assertThat(cart.getId()).isEqualTo(1L);
+        assertThat(cart.getStatus()).isEqualTo(ShoppingCartStatus.ACTIVE);
+        assertThat(cart.getContact()).isNotNull();
+        assertThat(cart.getContact().getId()).isEqualTo(ownerId);
+        assertThat(cart.getContact().getEmail()).isEqualTo("john.doe@arka.com");
+    }
+
+    @Test
+    void shouldReturnEmptyWhenNoCartExistsForContact() {
+        // Given
+        Long nonExistingOwnerId = 999L;
+
+        // When
+        Optional<ShoppingCart> result =
+                shoppingCartServiceAdapter.getLastCreatedCart(nonExistingOwnerId);
+
+        // Then
+        assertThat(result).isEmpty();
     }
 
 

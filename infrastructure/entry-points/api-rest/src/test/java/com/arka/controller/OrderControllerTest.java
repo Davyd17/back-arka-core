@@ -9,7 +9,8 @@ import com.arka.notification.SendEmailOrderStatusChangeUseCase;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
-import com.arka.order.dto.OrderOutput;
+import com.arka.order.dto.CreateOrderOut;
+import com.arka.order.dto.UpdateOrderOut;
 import com.arka.product.dto.ProductSummaryOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -71,9 +72,9 @@ class OrderControllerTest {
                 id, "PR-TEST-001", "Test product", "Test Category");
     }
 
-    private OrderOutput.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
+    private CreateOrderOut.Item buildCreateOrderItem(Long id, Long productId, int quantity) {
 
-        return new OrderOutput.Item(
+        return new CreateOrderOut.Item(
                 id, buildProductOutput(productId), quantity, new BigDecimal("75.00"),
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
     }
@@ -84,8 +85,8 @@ class OrderControllerTest {
                 new BigDecimal("75.00").multiply(BigDecimal.valueOf(quantity)));
     }
 
-    private OrderOutput.OrderContact buildCreateContact(Long id){
-        return new OrderOutput.OrderContact(
+    private CreateOrderOut.OrderContact buildCreateContact(Long id){
+        return new CreateOrderOut.OrderContact(
                 id,
                 "Test",
                 "Contact",
@@ -98,7 +99,8 @@ class OrderControllerTest {
                 id,
                 "Test",
                 "Contact",
-                "Test Company");
+                "Test Company",
+                "test.contact@example.com");
     }
 
     @Test
@@ -132,7 +134,7 @@ class OrderControllerTest {
         // given
         Long expectedOrderId = 500L;
 
-        OrderOutput mockOutput = new OrderOutput(
+        CreateOrderOut mockOutput = new CreateOrderOut(
                 expectedOrderId,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
@@ -186,7 +188,7 @@ class OrderControllerTest {
     @Test
     void shouldReturn400BadRequestWhenItemQuantityIsLessThanOne() throws Exception {
 
-        OrderOutput mockOutput = new OrderOutput(
+        CreateOrderOut mockOutput = new CreateOrderOut(
                 1L,
                 "ORD-2026-001",
                 OrderStatus.PENDING,
@@ -301,7 +303,7 @@ class OrderControllerTest {
                 "Updated order notes",
                 OrderType.PURCHASE,
                 Instant.now(),
-                new UpdateOrderOut.OrderCompany(10L, "Test Company"),
+                buildUpdateContact(1L),
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 
@@ -336,7 +338,7 @@ class OrderControllerTest {
                 "Updated order notes",
                 OrderType.PURCHASE,
                 Instant.now(),
-                new UpdateOrderOut.OrderCompany(10L, "Test Company"),
+                buildUpdateContact(1L),
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 

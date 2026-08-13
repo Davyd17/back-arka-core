@@ -83,6 +83,12 @@ public class GlobalExceptionHandler {
                         "NOT_FOUND", ex.getMessage(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientStock(InsufficientStockException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(
+                "INSUFFICIENT_STOCK", ex.getMessage(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(RuntimeException ex) {
         log.error("An unexpected error occurred while processing the request", ex);

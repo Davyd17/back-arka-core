@@ -34,10 +34,10 @@ public class AddItemToShoppingCartUseCase {
 
         Contact existingContact = contactService.findByEmail(callerEmail);
 
+        Product foundProduct = productService.findById(input.productId());
+
         inventoryService.validateGeneralStockAvailability(
                 input.productId(), input.quantity());
-
-        Product foundProduct = productService.findById(input.productId());
 
         ShoppingCart cart = getOrCreateCart(existingContact);
 

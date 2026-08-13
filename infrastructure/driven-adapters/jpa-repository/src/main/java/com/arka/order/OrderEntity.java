@@ -7,10 +7,7 @@ import com.arka.information.contact.ContactEntity;
 import com.arka.order.item.OrderItemEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor

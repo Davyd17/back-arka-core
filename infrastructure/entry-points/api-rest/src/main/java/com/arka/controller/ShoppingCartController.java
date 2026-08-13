@@ -10,6 +10,7 @@ import com.arka.cart.ListAbandonedShoppingCartsUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,17 +36,16 @@ public class ShoppingCartController {
                 .toList();
     }
 
-    @PostMapping("/{userId}/items")
-    public ResponseEntity<ShoppingCartResponse> addItem
-            (@PathVariable Long userId, @Valid @RequestBody AddItemShoppingCartRequest request) {
+    @PostMapping("/items")
+    public ResponseEntity<ShoppingCartResponse> addItem(
+            Authentication authentication,
+             @Valid @RequestBody AddItemShoppingCartRequest request) {
 
-        ShoppingCartOut shoppingCartOut =
-                addItemToShoppingCartUseCase.execute(
-                        new AddItemShoppingCartIn(
-                                userId,
-                                request.productId(),
-                                request.quantity()
-                        ));
+        String callerEmail = authentication.getName();
+
+        ShoppingCartOut shoppingCartOut = addItemToShoppingCartUseCase
+                .execute(new AddItemShoppingCartIn(request.productId(), request.quantity()),
+                        callerEmail);
 
         ShoppingCartResponse response
                 = mapper.toResponse(shoppingCartOut);

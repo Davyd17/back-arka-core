@@ -11,5 +11,5 @@ public interface ShoppingCartGateway {
 
     List<ShoppingCart> getAllAbandonedCarts();
 
-    Optional<ShoppingCart> getLastCreatedCart(Long userId);
+    Optional<ShoppingCart> getLastCreatedCart(Long ownerId);
 }

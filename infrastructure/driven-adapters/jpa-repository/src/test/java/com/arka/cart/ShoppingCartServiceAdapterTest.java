@@ -1,27 +1,33 @@
 package com.arka.cart;
 
-import com.arka.cart.item.ShoppingCartItemEntityMapper;
 import com.arka.cart.item.ShoppingCartItemEntityMapperImpl;
 import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
+import com.arka.enums.ShoppingCartStatus;
+import com.arka.factory.ContactTestDataFactory;
+import com.arka.factory.ProductTestDataFactory;
+import com.arka.factory.ShoppingCartTestDataFactory;
+import com.arka.information.address.AddressEntityMapperImpl;
+import com.arka.information.contact.ContactEntity;
+import com.arka.information.contact.ContactEntityMapper;
+import com.arka.information.contact.ContactEntityMapperImpl;
+import com.arka.information.phonenumber.PhoneNumberEntityMapperImpl;
+import com.arka.product.ProductEntity;
 import com.arka.product.ProductEntityMapper;
 import com.arka.product.ProductEntityMapperImpl;
-import com.arka.product.ProductRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -30,7 +36,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import({ShoppingCartServiceAdapter.class,
         ProductEntityMapperImpl.class,
         ShoppingCartEntityMapperImpl.class,
-        ShoppingCartItemEntityMapperImpl.class})
+        ShoppingCartItemEntityMapperImpl.class,
+        ContactEntityMapperImpl.class,
+        AddressEntityMapperImpl.class,
+        PhoneNumberEntityMapperImpl.class})
 class ShoppingCartServiceAdapterTest {
 
     @Autowired
@@ -40,19 +49,35 @@ class ShoppingCartServiceAdapterTest {
     private ShoppingCartJpaRepository repository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductEntityMapper productEntityMapper;
 
     @Autowired
-    private ProductEntityMapper productEntityMapper;
+    private ContactEntityMapper contactEntityMapper;
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    private ContactTestDataFactory contactTestDataFactory;
+    private ProductTestDataFactory productTestDataFactory;
+    private ShoppingCartTestDataFactory shoppingCartTestDataFactory;
+
+    @BeforeEach
+    void setUp() {
+        contactTestDataFactory = new ContactTestDataFactory(entityManager);
+        productTestDataFactory = new ProductTestDataFactory(entityManager);
+        shoppingCartTestDataFactory = new ShoppingCartTestDataFactory(entityManager);
+    }
 
     @Test
     void shouldSaveShoppingCartAndMaintainBidirectionalRelationship() {
         // given
-        ShoppingCart domainCart = ShoppingCart.create(1L);
+        ContactEntity contactEntity = contactTestDataFactory.createContact();
+        Contact domainContact = contactEntityMapper.toDomain(contactEntity);
 
-        Product product = productEntityMapper.toDomain(
-                productRepository.findById(1L).orElseThrow());
+        ProductEntity productEntity = productTestDataFactory.createProduct();
+        Product product = productEntityMapper.toDomain(productEntity);
 
+        ShoppingCart domainCart = ShoppingCart.create(domainContact);
         domainCart.addItem(product, 20);
 
         // when
@@ -63,10 +88,10 @@ class ShoppingCartServiceAdapterTest {
 
         // Verify it actually persisted in the DB through the repository
         Optional<ShoppingCartEntity> dbEntity =
-                repository.findFirstByUserIdOrderByCreatedAtDesc(1L);
+                repository.findFirstByContactIdOrderByCreatedAtDesc(contactEntity.getId());
         assertTrue(dbEntity.isPresent());
 
-        //Verify items were linked to the shopping cart
+        // Verify items were linked to the shopping cart
         assertFalse(dbEntity.get().getItems().isEmpty());
 
         // Verify that the helper method linked the parent back into the items
@@ -77,5 +102,42 @@ class ShoppingCartServiceAdapterTest {
         });
     }
 
+    @Test
+    void shouldReturnLastCreatedCartForContact() {
+        // Given
+        ContactEntity contactEntity = contactTestDataFactory.createContact();
+
+        // Populate an initial cart, flush, and then persist the latest cart
+        shoppingCartTestDataFactory.createShoppingCart(contactEntity);
+        entityManager.flush();
+        ShoppingCartEntity latestCart = shoppingCartTestDataFactory.createShoppingCart(contactEntity);
+
+        // When
+        Optional<ShoppingCart> result =
+                shoppingCartServiceAdapter.getLastCreatedCart(contactEntity.getId());
+
+        // Then
+        assertThat(result).isPresent();
+
+        ShoppingCart cart = result.get();
+        assertThat(cart.getId()).isEqualTo(latestCart.getId());
+        assertThat(cart.getStatus()).isEqualTo(ShoppingCartStatus.ACTIVE);
+        assertThat(cart.getContact()).isNotNull();
+        assertThat(cart.getContact().getId()).isEqualTo(contactEntity.getId());
+        assertThat(cart.getContact().getEmail()).isEqualTo(contactEntity.getEmail());
+    }
+
+    @Test
+    void shouldReturnEmptyWhenNoCartExistsForContact() {
+        // Given
+        Long nonExistingOwnerId = 999L;
+
+        // When
+        Optional<ShoppingCart> result =
+                shoppingCartServiceAdapter.getLastCreatedCart(nonExistingOwnerId);
+
+        // Then
+        assertThat(result).isEmpty();
+    }
 
 }

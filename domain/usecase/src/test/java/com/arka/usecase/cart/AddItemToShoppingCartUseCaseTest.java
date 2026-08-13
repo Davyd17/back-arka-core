@@ -3,11 +3,13 @@ package com.arka.usecase.cart;
 import com.arka.cart.AddItemToShoppingCartUseCase;
 import com.arka.cart.dto.AddItemShoppingCartIn;
 import com.arka.entities.cart.ShoppingCart;
+import com.arka.entities.information.Contact;
 import com.arka.entities.product.Product;
 import com.arka.entities.product.ProductCategory;
 import com.arka.enums.ShoppingCartStatus;
 import com.arka.cart.gateway.ShoppingCartGateway;
 import com.arka.cart.mapper.ShoppingCartMapper;
+import com.arka.party.service.ContactService;
 import com.arka.product.service.ProductService;
 import com.arka.inventory.service.WarehouseInventoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,12 +42,12 @@ class AddItemToShoppingCartUseCaseTest {
     private WarehouseInventoryService inventoryService;
 
     @Mock
-    private ShoppingCartMapper mapper;
+    private ContactService contactService;
 
     @InjectMocks
     private AddItemToShoppingCartUseCase useCase;
 
-    private Product product;
+    private final String OWNER_EMAIL = "jhon.conor@example.com" ;
 
     @BeforeEach
     void setUp() {
@@ -72,7 +74,20 @@ class AddItemToShoppingCartUseCaseTest {
                 new ArrayList<>(),
                 null,
                 null,
-                1L);
+                buildContact(1L));
+    }
+
+    private Contact buildContact(Long id) {
+        return new Contact(
+                1L,
+                "Jhon",
+                "Conor",
+                "Test Position",
+                null,
+                OWNER_EMAIL,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
     }
 
     //--- input validation --
@@ -81,25 +96,28 @@ class AddItemToShoppingCartUseCaseTest {
     void shouldThrowWhenInputIsNull() {
 
         assertThrows(IllegalArgumentException.class,
-                () -> useCase.execute(null));
+                () -> useCase.execute(null, null));
     }
 
     @Test
     void shouldAddNewItemToCartIfCartExistsAndIsActive() {
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
+        Contact contact = buildContact(1L);
+
         ShoppingCart existingCart =
                 buildCart(1L, ShoppingCartStatus.ACTIVE);
 
         AddItemShoppingCartIn input =
-                new AddItemShoppingCartIn(1L, 1L, 10);
+                new AddItemShoppingCartIn(1L, 10);
 
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(input.productId())).thenReturn(product);
-        when(cartGateway.getLastCreatedCart(input.userId()))
+        when(cartGateway.getLastCreatedCart(1L))
                 .thenReturn(Optional.of(existingCart));
         when(cartGateway.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         verify(inventoryService).validateGeneralStockAvailability(anyLong(), anyInt());
 
@@ -113,18 +131,20 @@ class AddItemToShoppingCartUseCaseTest {
     void shouldAddNewItemToCartIfCartExistsAndIsAbandoned() {
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
+        Contact contact = buildContact(1L);
+
         ShoppingCart existingCart =
                 buildCart(1L, ShoppingCartStatus.ABANDONED);
 
         AddItemShoppingCartIn input =
-                new AddItemShoppingCartIn(1L, 1L, 10);
+                new AddItemShoppingCartIn( 1L, 10);
 
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(input.productId())).thenReturn(product);
-        when(cartGateway.getLastCreatedCart(input.userId()))
-                .thenReturn(Optional.of(existingCart));
+        when(cartGateway.getLastCreatedCart(1L)).thenReturn(Optional.of(existingCart));
         when(cartGateway.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         verify(inventoryService).validateGeneralStockAvailability(anyLong(), anyInt());
 
@@ -137,15 +157,18 @@ class AddItemToShoppingCartUseCaseTest {
     void shouldCreateNewCartAndAddInputItemIfNotExists(){
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
-        AddItemShoppingCartIn input =
-                new AddItemShoppingCartIn(1L, 1L, 10);
+        Contact contact = buildContact(1L);
 
+        AddItemShoppingCartIn input =
+                new AddItemShoppingCartIn( 1L, 10);
+
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(input.productId())).thenReturn(product);
-        when(cartGateway.getLastCreatedCart(input.userId()))
+        when(cartGateway.getLastCreatedCart(1L))
                 .thenReturn(Optional.empty());
         when(cartGateway.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         verify(inventoryService).validateGeneralStockAvailability(anyLong(), anyInt());
 
@@ -159,18 +182,20 @@ class AddItemToShoppingCartUseCaseTest {
     void shouldCreateNewCartAndAddInputItemIfLastCartFoundProcessed(){
         Product product = buildProduct(1L, BigDecimal.valueOf(10.00));
 
+        Contact contact = buildContact(1L);
+
         ShoppingCart existingCart =
                 buildCart(1L, ShoppingCartStatus.PROCESSED);
 
         AddItemShoppingCartIn input =
-                new AddItemShoppingCartIn(1L, 1L, 10);
+                new AddItemShoppingCartIn(1L, 10);
 
+        when(contactService.findByEmail(OWNER_EMAIL)).thenReturn(contact);
         when(productService.findById(input.productId())).thenReturn(product);
-        when(cartGateway.getLastCreatedCart(input.userId()))
-                .thenReturn(Optional.empty());
+        when(cartGateway.getLastCreatedCart(1L)).thenReturn(Optional.of(existingCart));
         when(cartGateway.save(any())).thenAnswer(i -> i.getArgument(0));
 
-        useCase.execute(input);
+        useCase.execute(input, OWNER_EMAIL);
 
         verify(inventoryService).validateGeneralStockAvailability(anyLong(), anyInt());
 

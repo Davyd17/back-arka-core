@@ -2,13 +2,17 @@ package com.arka.product;
 
 import com.arka.entities.product.Product;
 import com.arka.entities.product.ProductCategory;
+import com.arka.factory.ProductTestDataFactory;
+import com.arka.product.category.ProductCategoryEntity;
 import com.arka.product.category.ProductCategoryMapper;
 import com.arka.product.category.ProductCategoryMapperImpl;
 import com.arka.product.category.ProductCategoryRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -31,28 +35,33 @@ class ProductServiceAdapterTest {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductCategoryRepository categoryRepository;
-
-    @Autowired
     private ProductCategoryMapper categoryMapper;
 
     @Autowired
     private ProductServiceAdapter productServiceAdapter;
 
+    @Autowired
+    private TestEntityManager entityManager;
+
+    private ProductTestDataFactory productTestDataFactory;
+
+    @BeforeEach
+    void setUp() {
+        productTestDataFactory = new ProductTestDataFactory(entityManager);
+    }
 
     @Test
     void shouldCreateProduct() {
-
         // given
-        ProductCategory category = categoryMapper.toDomain(
-                categoryRepository.findById(1L).orElseThrow());
+        ProductCategoryEntity categoryEntity = productTestDataFactory.createCategory();
+        ProductCategory domainCategory = categoryMapper.toDomain(categoryEntity);
 
         Product product = Product.create(
                 "TEST-PR-001",
                 "Testing Product",
                 "",
                 BigDecimal.valueOf(149.99),
-                category);
+                domainCategory);
 
         // when
         Product createdProduct = productServiceAdapter.create(product);
@@ -69,7 +78,5 @@ class ProductServiceAdapterTest {
         assertEquals(0, BigDecimal.valueOf(149.99).compareTo(entity.getBasePrice()));
         assertTrue(entity.isActive());
         assertNotNull(entity.getCategory(), "Product should maintain relationship with its Category");
-        assertEquals(1L, entity.getCategory().getId());
-    }
-
-}
+        assertEquals(categoryEntity.getId(), entity.getCategory().getId());
+    }}

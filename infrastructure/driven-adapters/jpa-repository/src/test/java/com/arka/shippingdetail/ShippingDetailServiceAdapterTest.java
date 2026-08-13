@@ -5,24 +5,33 @@ import com.arka.entities.ShippingDetail;
 import com.arka.entities.information.Address;
 import com.arka.entities.order.Order;
 import com.arka.enums.ShippingStatus;
+import com.arka.factory.ContactTestDataFactory;
+import com.arka.factory.OrderTestDataFactory;
+import com.arka.factory.WarehouseTestDataFactory;
+import com.arka.information.address.AddressEntity;
 import com.arka.information.address.AddressEntityMapper;
 import com.arka.information.address.AddressEntityMapperImpl;
 import com.arka.information.address.AddressEntityRepository;
+import com.arka.information.contact.ContactEntity;
 import com.arka.information.contact.ContactEntityMapperImpl;
 import com.arka.information.phonenumber.PhoneNumberEntityMapperImpl;
+import com.arka.order.OrderEntity;
 import com.arka.order.OrderEntityMapper;
 import com.arka.order.OrderEntityMapperImpl;
 import com.arka.order.OrderRepository;
 import com.arka.order.item.OrderItemEntityMapperImpl;
 import com.arka.product.ProductEntityMapperImpl;
 import com.arka.product.category.ProductCategoryMapperImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,12 +58,6 @@ class ShippingDetailServiceAdapterTest {
     private ShippingDetailRepository shippingDetailRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private AddressEntityRepository addressRepository;
-
-    @Autowired
     private OrderEntityMapper orderEntityMapper;
 
     @Autowired
@@ -63,24 +66,35 @@ class ShippingDetailServiceAdapterTest {
     @Autowired
     private ShippingDetailServiceAdapter shippingDetailServiceAdapter;
 
+    @Autowired
+    private TestEntityManager entityManager;
+
+    private ContactTestDataFactory contactTestDataFactory;
+    private OrderTestDataFactory orderTestDataFactory;
+
+    @BeforeEach
+    void setUp() {
+        contactTestDataFactory = new ContactTestDataFactory(entityManager);
+        orderTestDataFactory = new OrderTestDataFactory(entityManager);
+    }
 
     @Test
     void shouldSaveShippingDetailAndMaintainRelationships() {
-
         // given
-        Order order = orderEntityMapper.toDomain(
-                orderRepository.findById(1L).orElseThrow());
+        ContactEntity contactEntity = contactTestDataFactory.createContact();
+        OrderEntity orderEntity = orderTestDataFactory.createOrder(contactEntity, Instant.now());
+        Order domainOrder = orderEntityMapper.toDomain(orderEntity);
 
-        Address originAddress = addressEntityMapper.toDomain(
-                addressRepository.findById(1L).orElseThrow());
+        AddressEntity originEntity = contactTestDataFactory.createAddress(contactEntity);
+        AddressEntity destinationEntity = contactTestDataFactory.createAddress(contactEntity);
 
-        Address destinationAddress = addressEntityMapper.toDomain(
-                addressRepository.findById(2L).orElseThrow());
+        Address originAddress = addressEntityMapper.toDomain(originEntity);
+        Address destinationAddress = addressEntityMapper.toDomain(destinationEntity);
 
         ShippingDetail shippingDetail = ShippingDetail.create(
                 "FEDEX",
                 "TRACK-999888",
-                order,
+                domainOrder,
                 "",
                 originAddress,
                 destinationAddress);
@@ -100,8 +114,7 @@ class ShippingDetailServiceAdapterTest {
         assertEquals("TRACK-999888", entity.getTrackingNumber());
         assertEquals(ShippingStatus.PENDING, entity.getStatus());
 
-        assertEquals(1L, entity.getOrder().getId());
-        assertEquals(1L, entity.getOrigin().getId());
-        assertEquals(2L, entity.getDestination().getId());
-    }
-}
+        assertEquals(orderEntity.getId(), entity.getOrder().getId());
+        assertEquals(originEntity.getId(), entity.getOrigin().getId());
+        assertEquals(destinationEntity.getId(), entity.getDestination().getId());
+    }}

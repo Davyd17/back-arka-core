@@ -3,8 +3,6 @@ package com.arka.order.dto;
 import java.util.Set;
 
 public record UpdateOrderIn(
-
-        Long id,
         String notes,
         Set<Item> items
 ) {

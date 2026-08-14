@@ -57,13 +57,14 @@ public class OrderController {
 
     }
 
-    @PatchMapping
+    @PatchMapping("/{orderId}")
     public ResponseEntity<UpdateOrderResponse> update(@Valid @RequestBody UpdateOrderRequest request,
+                                                      @PathVariable @NotNull Long orderId,
                                                       Authentication authentication) {
 
         String email = authentication.getName();
         UpdateOrderOut updatedOrder = modifyOrderUseCase.execute(
-                mapper.toDomain(request), email);
+                mapper.toDomain(request), orderId, email);
 
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }

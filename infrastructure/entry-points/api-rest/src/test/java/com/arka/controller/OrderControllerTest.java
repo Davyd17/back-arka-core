@@ -107,7 +107,7 @@ class OrderControllerTest {
     void shouldReturn403WhenCallerIsNotOrderOwner() throws Exception {
         Long orderId = 1L;
 
-        when(modifyOrderUseCase.execute(any(), eq("intruder@example.com")))
+        when(modifyOrderUseCase.execute(any(), eq(orderId), eq("intruder@example.com")))
                 .thenThrow(new UnauthorizedException("You don't have access to this order"));
 
         Map<String, Object> item = Map.of(
@@ -116,12 +116,11 @@ class OrderControllerTest {
         );
 
         Map<String, Object> request = Map.of(
-                "id", orderId,
                 "notes", "Updated order notes",
                 "items", Set.of(item)
         );
 
-        mockMvc.perform(patch("/api/v1/orders")
+        mockMvc.perform(patch("/api/v1/orders/" + orderId)
                         .with(jwt().jwt(builder -> builder.subject("intruder@example.com")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -254,7 +253,7 @@ class OrderControllerTest {
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 
-        when(modifyOrderUseCase.execute(any(), eq(OWNER_EMAIL))).thenReturn(mockOutput);
+        when(modifyOrderUseCase.execute(any(), eq(orderId), eq(OWNER_EMAIL))).thenReturn(mockOutput);
 
         Map<String, Object> item = Map.of(
                 "productId", 1L,
@@ -262,13 +261,12 @@ class OrderControllerTest {
         );
 
         Map<String, Object> request = Map.of(
-                "id", orderId,
                 "notes", "Updated order notes",
                 "items", Set.of(item)
         );
 
         // when & then
-        mockMvc.perform(patch("/api/v1/orders")
+        mockMvc.perform(patch("/api/v1/orders/" + orderId)
                         .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -280,10 +278,11 @@ class OrderControllerTest {
     @Test
     void shouldReturn400BadRequestWhenUpdateOrderPayloadIsInvalid() throws Exception {
         // given - Empty payload violating @Valid constraints on UpdateOrderRequest
+        Long orderId = 1L;
         Map<String, Object> invalidRequest = Map.of();
 
         // when & then
-        mockMvc.perform(patch("/api/v1/orders")
+        mockMvc.perform(patch("/api/v1/orders/" + orderId)
                         .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidRequest)))

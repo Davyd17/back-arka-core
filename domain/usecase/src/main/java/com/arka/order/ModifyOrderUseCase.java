@@ -27,12 +27,13 @@ public class ModifyOrderUseCase {
 
     private final OrderGateway orderGateway;
 
-    public UpdateOrderOut execute(UpdateOrderIn input, String callerEmail) {
+    public UpdateOrderOut execute(UpdateOrderIn input, Long orderId, String callerEmail) {
 
         NullValidator.validate(input, "orderInput");
         NullValidator.validate(callerEmail, "userEmail");
+        NullValidator.validate(orderId, "orderId");
 
-        Order existingOrder = orderService.findById(input.id());
+        Order existingOrder = orderService.findById(orderId);
 
         String ownerEmail = existingOrder.getContact().getEmail();
         verifyOwnership(ownerEmail, callerEmail);

@@ -89,9 +89,15 @@ public class GlobalExceptionHandler {
                 "INSUFFICIENT_STOCK", ex.getMessage(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyExists(AlreadyExistsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
+                "ALREADY_EXISTS", ex.getMessage(), LocalDateTime.now()));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(RuntimeException ex) {
-        log.error("An unexpected error occurred while processing the request", ex);
+        log.error("Unexpected runtime error: {}", ex.getMessage(), ex);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("UNEXPECTED_ERROR",

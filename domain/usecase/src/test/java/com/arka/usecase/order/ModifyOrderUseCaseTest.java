@@ -1,6 +1,5 @@
 package com.arka.usecase.order;
 
-import com.arka.entities.Company;
 import com.arka.entities.information.Contact;
 import com.arka.entities.order.Order;
 import com.arka.entities.order.OrderItem;
@@ -9,10 +8,8 @@ import com.arka.entities.product.ProductCategory;
 import com.arka.exceptions.UnauthorizedException;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.dto.UpdateOrderIn;
-import com.arka.enums.CompanyRelationType;
 import com.arka.enums.OrderType;
 import com.arka.order.gateway.OrderGateway;
-import com.arka.order.mapper.OrderMapper;
 import com.arka.order.service.OrderItemService;
 import com.arka.order.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,14 +81,14 @@ class ModifyOrderUseCaseTest {
     @Test
     void shouldThrowUnauthorizedWhenCallerIsNotOwner() {
         //given
-        UpdateOrderIn input = new UpdateOrderIn(1L, "New notes", Set.of());
+        UpdateOrderIn input = new UpdateOrderIn("New notes", Set.of());
         String invalidOwner = "not.jhon.conor@example.com";
 
         when(orderService.findById(1L)).thenReturn(order);
 
         //when & then
         assertThrows(UnauthorizedException.class,
-                () -> useCase.execute(input, invalidOwner));
+                () -> useCase.execute(input, 1L, invalidOwner));
 
         verify(orderGateway, never()).save(any());
     }
@@ -101,7 +98,7 @@ class ModifyOrderUseCaseTest {
     @Test
     void shouldThrowWhenInputIsNull() {
         assertThrows(IllegalArgumentException.class,
-                () -> useCase.execute(null, null));
+                () -> useCase.execute(null, null, null));
     }
 
     @Test
@@ -109,12 +106,12 @@ class ModifyOrderUseCaseTest {
 
         String notOwnerEmail = "not.jhon.conor@example.com";
 
-        UpdateOrderIn input = new UpdateOrderIn(1L, "new notes", Set.of());
+        UpdateOrderIn input = new UpdateOrderIn("new notes", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
 
         assertThrows(UnauthorizedException.class,
-                () -> useCase.execute(input, notOwnerEmail));
+                () -> useCase.execute(input, 1L, notOwnerEmail));
     }
 
     // --- Notes ---
@@ -123,13 +120,13 @@ class ModifyOrderUseCaseTest {
     void shouldUpdateNotesWhenNotBlank() {
 
         //Arrange
-        UpdateOrderIn input = new UpdateOrderIn(1L, "new notes", Set.of());
+        UpdateOrderIn input = new UpdateOrderIn("new notes", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.save(order)).thenReturn(order);
 
         //Act
-        useCase.execute(input, EMAIL_ORDER_OWNER);
+        useCase.execute(input, 1L, EMAIL_ORDER_OWNER);
 
         //Assert
         assertEquals("new notes", order.getNotes());
@@ -139,13 +136,13 @@ class ModifyOrderUseCaseTest {
     void shouldNotUpdateNotesWhenBlank(){
 
         //Arrange
-        UpdateOrderIn input = new UpdateOrderIn(1L, " ", Set.of());
+        UpdateOrderIn input = new UpdateOrderIn(" ", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.save(order)).thenReturn(order);
 
         //Act
-        useCase.execute(input, EMAIL_ORDER_OWNER);
+        useCase.execute(input, 1L, EMAIL_ORDER_OWNER);
 
         //Assert
         assertEquals("old notes", order.getNotes());
@@ -166,7 +163,7 @@ class ModifyOrderUseCaseTest {
         Set<UpdateOrderIn.Item> itemsInput =
                 Set.of(new UpdateOrderIn.Item(null, 1L, 3));
 
-        UpdateOrderIn orderInput = new UpdateOrderIn(1L, "", itemsInput);
+        UpdateOrderIn orderInput = new UpdateOrderIn("", itemsInput);
 
         when(orderService.findById(1L)).thenReturn(order);
 
@@ -176,7 +173,7 @@ class ModifyOrderUseCaseTest {
         when(orderGateway.save(order)).thenReturn(order);
 
         //Act
-        useCase.execute(orderInput, EMAIL_ORDER_OWNER);
+        useCase.execute(orderInput, 1L, EMAIL_ORDER_OWNER);
 
         //Asser
         assertEquals(2, order.getItems().size());
@@ -203,7 +200,7 @@ class ModifyOrderUseCaseTest {
                 OrderItem.create(product1, 3);
 
         UpdateOrderIn orderInput =
-                new UpdateOrderIn(1L, "", Set.of(
+                new UpdateOrderIn("", Set.of(
                         new UpdateOrderIn.Item(null, 1L, 3)));
 
         when(orderService.findById(1L)).thenReturn(order);
@@ -214,7 +211,7 @@ class ModifyOrderUseCaseTest {
         when(orderGateway.save(order)).thenReturn(order);
 
         //Act
-        useCase.execute(orderInput, EMAIL_ORDER_OWNER);
+        useCase.execute(orderInput, 1L, EMAIL_ORDER_OWNER);
 
         //AsserThat
         assertEquals(1, order.getItems().size());
@@ -245,7 +242,7 @@ class ModifyOrderUseCaseTest {
         OrderItem incomingItem2 = OrderItem.create(product2, 8);
 
         UpdateOrderIn orderInput;
-        orderInput = new UpdateOrderIn(1L, "", Set.of(
+        orderInput = new UpdateOrderIn("", Set.of(
                 new UpdateOrderIn.Item(null, 1L, 3),
                 new UpdateOrderIn.Item(null, 2L, 8)));
 
@@ -257,7 +254,7 @@ class ModifyOrderUseCaseTest {
         when(orderGateway.save(order)).thenReturn(order);
 
         //Act
-        useCase.execute(orderInput, EMAIL_ORDER_OWNER);
+        useCase.execute(orderInput, 1L, EMAIL_ORDER_OWNER);
 
         //AsserThat
         assertEquals(2, order.getItems().size());
@@ -266,12 +263,12 @@ class ModifyOrderUseCaseTest {
 
     @Test
     void shouldAlwaysCallGatewayUpdate() {
-        UpdateOrderIn input = new UpdateOrderIn(1L, "", Set.of());
+        UpdateOrderIn input = new UpdateOrderIn("", Set.of());
 
         when(orderService.findById(1L)).thenReturn(order);
         when(orderGateway.save(order)).thenReturn(order);
 
-        useCase.execute(input, EMAIL_ORDER_OWNER);
+        useCase.execute(input, 1L, EMAIL_ORDER_OWNER);
 
         verify(orderGateway).save(order);
     }

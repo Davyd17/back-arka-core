@@ -43,8 +43,8 @@ public class ShoppingCartServiceAdapter implements ShoppingCartGateway {
     }
 
     @Override
-    public Optional<ShoppingCart> getLastCreatedCart(Long userId) {
-        return repository.findFirstByUserIdOrderByCreatedAtDesc(userId)
+    public Optional<ShoppingCart> getLastCreatedCart(Long ownerId) {
+        return repository.findFirstByContactIdOrderByCreatedAtDesc(ownerId)
                 .map(mapper::toDomain);
     }
 }

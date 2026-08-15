@@ -39,7 +39,7 @@ public class SendEmailOrderStatusChangeUseCase {
         return htmlTemplate
                 .replace("{{orderId}}", input.number())
                 .replace("{{newStatus}}", input.status().toString())
-                .replace("{{customerName}}", input.company())
+                .replace("{{customerName}}", input.companyName())
                 //TODO: Change the statusDescription: status, for an actual status description
                 .replace("{{statusDescription}}", input.status().toString());
     }

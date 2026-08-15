@@ -7,7 +7,6 @@ import java.util.List;
 public record CreateOrderIn (
         String notes,
         OrderType type,
-        Long companyId,
         List<Item> items
 ){
 

@@ -1,15 +1,20 @@
-package com.arka.adapters;
+package com.arka.information.contact;
 
+import com.arka.company.CompanyEntity;
+import com.arka.company.CompanyEntityMapper;
+import com.arka.company.CompanyEntityMapperImpl;
+import com.arka.entities.Company;
 import com.arka.entities.information.Contact;
+import com.arka.factory.CompanyTestDataFactory;
 import com.arka.information.address.AddressEntityMapperImpl;
-import com.arka.information.contact.ContactEntityMapperImpl;
-import com.arka.information.contact.ContactRepository;
-import com.arka.information.contact.ContactServiceAdapter;
 import com.arka.information.phonenumber.PhoneNumberEntityMapperImpl;
+import com.arka.product.category.ProductCategoryMapperImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,14 +26,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({ContactServiceAdapter.class,
         ContactEntityMapperImpl.class,
         AddressEntityMapperImpl.class,
-        PhoneNumberEntityMapperImpl.class})
+        PhoneNumberEntityMapperImpl.class,
+        CompanyEntityMapperImpl.class,
+        ProductCategoryMapperImpl.class})
 class ContactServiceAdapterTest {
-
     @Autowired
     private ContactServiceAdapter contactAdapter;
 
     @Autowired
     private ContactRepository repository;
+
+    @Autowired
+    private CompanyEntityMapper companyEntityMapper;
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    private CompanyTestDataFactory companyTestDataFactory;
+
+    @BeforeEach
+    void setUp() {
+        companyTestDataFactory = new CompanyTestDataFactory(entityManager);
+    }
 
     @Test
     void shouldSaveAndPersistNewContactSuccessfully() {
@@ -38,7 +57,6 @@ class ContactServiceAdapterTest {
                 "Doe",
                 "john@arka.com"
         );
-        newContact.setCompanyPosition("Lead Software Engineer");
 
         // when
         Contact savedContact = contactAdapter.save(newContact);
@@ -57,7 +75,11 @@ class ContactServiceAdapterTest {
 
     @Test
     void shouldUpdateExistingContactSuccessfully() {
-        // given: persist initial contact
+        // given: persist initial company via factory
+        CompanyEntity companyEntity = companyTestDataFactory.createCompany("TestCompany");
+        Company company = companyEntityMapper.toDomain(companyEntity);
+
+        // persist initial contact
         Contact initialContact = Contact.create(
                 "Jane",
                 "Smith",
@@ -68,7 +90,7 @@ class ContactServiceAdapterTest {
 
         // when: deactivate domain object and save updates
         persistedContact.deactivate();
-        persistedContact.setCompanyPosition("CTO");
+        persistedContact.assignCompany(company, "CTO");
 
         Long repositoryCountBeforeUpdate = repository.count();
         Contact updatedContact = contactAdapter.save(persistedContact);
@@ -78,7 +100,6 @@ class ContactServiceAdapterTest {
         assertThat(updatedContact.isActive()).isFalse();
         assertThat(updatedContact.getCompanyPosition()).isEqualTo("CTO");
 
-        // Verify count remains the same before updated in database
+        // Verify count remains the same before/after update in database
         assertThat(repository.count()).isEqualTo(repositoryCountBeforeUpdate);
-    }
-}
+    }}

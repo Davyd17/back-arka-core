@@ -16,7 +16,7 @@ public record CreateOrderOut (
         String notes,
         OrderType type,
         BigDecimal totalPrice,
-        OrderCompany company,
+        OrderContact contact,
         Set<Item> items,
         Instant createdAt
 ){
@@ -29,9 +29,12 @@ public record CreateOrderOut (
     ){
     }
 
-    public record OrderCompany(
+    public record OrderContact(
             Long id,
-            String name
+            String name,
+            String lastName,
+            String email,
+            String companyName
     ){
 
     }

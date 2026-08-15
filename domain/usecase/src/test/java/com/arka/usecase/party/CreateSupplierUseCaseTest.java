@@ -40,8 +40,15 @@ class CreateSupplierUseCaseTest {
     private CreateSupplierUseCase useCase;
 
     private Contact buildContact(Long id) {
-        return new Contact(id, "John", "Doe", "CEO", "john@test.com",
-                new ArrayList<>(), new ArrayList<>(), true);
+        return new Contact(id,
+                "John",
+                "Doe",
+                "CEO",
+                null,
+                "john@test.com",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                true);
     }
 
     // --- input validation ---
@@ -55,22 +62,19 @@ class CreateSupplierUseCaseTest {
     // --- supplier creation ---
 
     @Test
-    void shouldCreateSupplierWithCorrectContactsAndCategories() {
-        List<Contact> contacts = List.of(buildContact(1L));
+    void shouldCreateSupplierWithCorrectCategories() {
         List<ProductCategory> categories = List.of(ProductCategory.create("Electronics"));
 
         CreateSupplierIn input = new CreateSupplierIn(
                 "Supplier", Set.of(1L), Set.of(1L));
 
-        when(contactService.findAllByIds(any())).thenReturn(contacts);
         when(categoryService.findAllByIds(any())).thenReturn(categories);
         when(supplierGateway.createCompany(any())).thenAnswer(i -> i.getArgument(0));
 
         useCase.execute(input);
 
         verify(supplierGateway).createCompany(argThat(company ->
-                company.getContacts().size() == 1 &&
-                        company.getProductCategories().size() == 1 &&
+                company.getProductCategories().size() == 1 &&
                         company.getRelation().equals(CompanyRelationType.SUPPLIER)
         ));
     }
@@ -79,7 +83,6 @@ class CreateSupplierUseCaseTest {
 
     @Test
     void shouldAlwaysCallGatewayCreate() {
-        when(contactService.findAllByIds(any())).thenReturn(List.of(buildContact(1L)));
         when(categoryService.findAllByIds(any())).thenReturn(
                 List.of(ProductCategory.create("Electronics")));
         when(supplierGateway.createCompany(any())).thenAnswer(i -> i.getArgument(0));

@@ -35,9 +35,6 @@ import static org.mockito.Mockito.when;
 class RegisterInventoryMovementUseCaseTest {
 
     @Mock
-    private InventoryMovementMapper movementMapper;
-
-    @Mock
     private WarehouseInventoryGateway inventoryGateway;
 
     @Mock
@@ -58,7 +55,7 @@ class RegisterInventoryMovementUseCaseTest {
 
         Contact contact =
                 new Contact(1L, "Jhon", "Doe", "warehouse manager",
-                        "employee@arka.com", new ArrayList<>(), new ArrayList<>(), true);
+                        null, "employee@arka.com", new ArrayList<>(), new ArrayList<>(), true);
 
         employee = new Employee(1L, 1234, contact);
 

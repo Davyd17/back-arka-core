@@ -18,10 +18,7 @@ public record CreateOrderRequest(
 
         @NotEmpty(message = "There must be at least one item")
         @Valid
-        Set<Item> items,
-
-        @Required(field = "company id")
-        Long companyId
+        Set<Item> items
 ) {
 
         public record Item(

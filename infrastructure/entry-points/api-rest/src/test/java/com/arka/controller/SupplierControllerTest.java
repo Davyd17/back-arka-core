@@ -1,5 +1,6 @@
 package com.arka.controller;
 
+import com.arka.JwtService;
 import com.arka.enums.CompanyRelationType;
 import com.arka.exceptions.GlobalExceptionHandler;
 import com.arka.mappers.CompanyRestMapperImpl;
@@ -11,8 +12,7 @@ import com.arka.request.CreateCompanyRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -28,11 +28,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = SupplierController.class,
-        excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
-        })
+@WebMvcTest(controllers = SupplierController.class)
+@AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @Import({CompanyRestMapperImpl.class,
         GlobalExceptionHandler.class,
@@ -44,6 +41,9 @@ class SupplierControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private CreateSupplierUseCase createSupplierUseCase;
@@ -59,9 +59,7 @@ class SupplierControllerTest {
                 expectedCompanyId,
                 "Acme Supplies Inc.",
                 CompanyRelationType.SUPPLIER,
-                List.of(),
-                List.of()
-        );
+                List.of());
 
         when(createSupplierUseCase.execute(any())).thenReturn(mockCompanyOutput);
 

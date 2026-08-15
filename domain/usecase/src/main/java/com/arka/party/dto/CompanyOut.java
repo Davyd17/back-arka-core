@@ -10,7 +10,6 @@ public record CompanyOut(
         Long id,
         String name,
         CompanyRelationType relation,
-        List<ProductCategoryOut> productCategories,
-        List<ContactOut> contacts
+        List<ProductCategoryOut> productCategories
 ){
 }

@@ -3,6 +3,7 @@ package com.arka.party.gateway;
 import com.arka.entities.information.Contact;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ContactGateway {
 
@@ -11,4 +12,6 @@ public interface ContactGateway {
     boolean existsByEmail(String email);
 
     Contact save(Contact contact);
+
+    Optional<Contact> findByEmail(String email);
 }

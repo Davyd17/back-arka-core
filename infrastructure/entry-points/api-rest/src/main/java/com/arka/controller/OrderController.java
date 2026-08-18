@@ -84,7 +84,7 @@ public class OrderController {
     @CommonApiResponses
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Order updated successfully",
-                    content = @Content(schema = @Schema(implementation = CreateOrderResponse.class))),
+                    content = @Content(schema = @Schema(implementation = UpdateOrderResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request or validation error",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Order not found")
@@ -110,7 +110,7 @@ public class OrderController {
     @CommonApiResponses
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Order status updated successfully",
-                    content = @Content(schema = @Schema(implementation = CreateOrderResponse.class))),
+                    content = @Content(schema = @Schema(implementation = UpdateOrderResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid transition or validation error",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Order not found")

@@ -93,12 +93,16 @@ public class ProductController {
     })
     @GetMapping
     public ResponseEntity<PageWrapper<ProductSummaryResponse>> findAll(
+
             @Parameter(description = "Zero-based page index", example = "0")
             @RequestParam(defaultValue = "0") int page,
+
             @Parameter(description = "Number of records per page", example = "20")
             @RequestParam(defaultValue = "20") int size,
+
             @Parameter(description = "Field name to sort by", example = "name")
             @RequestParam(defaultValue = "name") String sortBy,
+
             @Parameter(description = "Sort direction (ASC or DESC)", example = "DESC")
             @RequestParam(defaultValue = "DESC") PageSortDirection sortDirection
     ) {
@@ -123,7 +127,7 @@ public class ProductController {
                     @ArraySchema(schema = @Schema(implementation = ProductCategory.class)))
             )
     })
-    @GetMapping
+    @GetMapping("/categories")
     public List<ProductCategory> listAll(){
         return listCategoriesUseCase.execute();
     }

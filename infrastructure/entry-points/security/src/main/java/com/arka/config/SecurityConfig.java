@@ -43,8 +43,7 @@ public class SecurityConfig {
 
                         //PUBLIC BROWSING
                         .requestMatchers(HttpMethod.GET,
-                                "/api/v1/products/**",
-                                "/api/v1/product-categories/**").permitAll()
+                                "/api/v1/products/**").permitAll()
 
                         //PUBLIC INTERNAL
                         .requestMatchers(HttpMethod.POST,

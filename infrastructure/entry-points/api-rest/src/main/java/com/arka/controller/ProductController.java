@@ -1,9 +1,11 @@
-package com.arka.controller.product;
+package com.arka.controller;
 
 import com.arka.docs.CommonApiResponses;
+import com.arka.entities.product.ProductCategory;
 import com.arka.exceptions.ErrorResponse;
 import com.arka.mappers.ProductRestMapper;
 import com.arka.product.ListAllProductsUseCase;
+import com.arka.product.ListProductCategoriesUseCase;
 import com.arka.product.dto.CreateProductOut;
 import com.arka.product.dto.ProductSummaryOut;
 import com.arka.request.CreateProductRequest;
@@ -16,6 +18,7 @@ import com.arka.util.pagination.PageWrapper;
 import com.arka.util.pagination.PageableIn;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/products")
@@ -35,6 +39,7 @@ import java.net.URI;
 @Tag(name = "Products", description = "Product management operations")
 public class ProductController {
 
+    private final ListProductCategoriesUseCase listCategoriesUseCase;
     private final CreateProductUseCase createProductUsecase;
     private final ListAllProductsUseCase listAllProductsUseCase;
     private final ProductRestMapper productMapper;
@@ -103,5 +108,23 @@ public class ProductController {
                         page, size, sortBy, sortDirection));
 
         return ResponseEntity.ok(pageOut.map(productMapper::toSummaryResponse));
+    }
+
+    @Operation(
+            summary = "List all product categories",
+            description = "Retrieves a list of all registered product categories in the system."
+    )
+    @CommonApiResponses
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Product categories retrieved successfully",
+                    content = @Content(array =
+                    @ArraySchema(schema = @Schema(implementation = ProductCategory.class)))
+            )
+    })
+    @GetMapping
+    public List<ProductCategory> listAll(){
+        return listCategoriesUseCase.execute();
     }
 }

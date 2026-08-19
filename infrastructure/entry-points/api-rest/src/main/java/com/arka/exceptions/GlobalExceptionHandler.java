@@ -1,8 +1,8 @@
 package com.arka.exceptions;
 
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -28,6 +28,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEmailDeliveryError(EmailDeliveryException ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ErrorResponse("ERROR_SENDIND_EMAIL", ex.getMessage(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReference(PropertyReferenceException ex) {
+        String message = String.format("Invalid property '%s' for resource '%s'",
+                ex.getPropertyName(), ex.getType().getType().getSimpleName());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("INVALID_PROPERTY", message, LocalDateTime.now()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

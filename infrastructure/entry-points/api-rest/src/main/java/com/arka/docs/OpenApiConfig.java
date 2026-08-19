@@ -1,4 +1,4 @@
-package com.arka.config;
+package com.arka.docs;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,35 @@ public class OpenApiConfig {
 
     @Value("${api.base-url}")
     String apiBaseUrl;
+
+    @Bean
+    public GroupedOpenApi internalApi(){
+        return GroupedOpenApi.builder()
+                .group("internal-api")
+                .pathsToMatch(
+                        "/api/v1/internal/**",
+                        "/api/v1/reports/internal/**")
+                .addOpenApiCustomizer(openApi -> openApi.info(new Info()
+                        .title("Arka Internal Administrative API")
+                        .description("**Restricted Access**: Operations intended solely for internal network calls.")
+                        .version("v1.0.0")))
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi publicApi(){
+        return GroupedOpenApi.builder()
+                .group("public-api")
+                .pathsToMatch("/api/v1/**")
+                .pathsToExclude(
+                        "/api/v1/reports/internal/**",
+                        "/api/v1/internal/**")
+                .addOpenApiCustomizer(openApi -> openApi.info(new Info()
+                        .title("Arka Public REST API")
+                        .description("Public and client-facing endpoints.")
+                        .version("v1.0.0")))
+                .build();
+    }
 
     @Bean
     public OpenAPI customOpenAPI() {

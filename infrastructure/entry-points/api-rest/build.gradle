@@ -5,6 +5,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.15")
+    implementation 'org.springframework.data:spring-data-commons'
 
     // Spring DAO exceptions (DataIntegrityViolationException, etc.)
     implementation 'org.springframework:spring-tx'

@@ -1,20 +1,19 @@
 package com.arka.controller.product;
 
 import com.arka.JwtService;
+import com.arka.controller.ProductController;
 import com.arka.mappers.ProductRestMapperImpl;
 import com.arka.product.CreateProductUseCase;
 import com.arka.product.ListAllProductsUseCase;
+import com.arka.product.ListProductCategoriesUseCase;
 import com.arka.product.dto.CreateProductOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,6 +47,9 @@ class ProductControllerTest {
 
     @MockitoBean
     private ListAllProductsUseCase listAllProductsUseCase;
+
+    @MockitoBean
+    private ListProductCategoriesUseCase listProductCategoriesUseCase;
 
     @Test
     void shouldCreateProduct() throws Exception {

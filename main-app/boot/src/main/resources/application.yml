@@ -64,6 +64,8 @@ springdoc:
     tagsSorter: alpha
     docExpansion: none
     defaultModelsExpandDepth: -1
+    default-group: public-api
+    groups-order: DESC
   api-docs:
     path: /v3/api-docs
 

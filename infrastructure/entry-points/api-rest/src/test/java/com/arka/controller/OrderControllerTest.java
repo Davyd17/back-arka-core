@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -38,7 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = OrderController.class) // drop excludeAutoConfiguration
+@WebMvcTest(controllers = OrderController.class)
 @ActiveProfiles("test")
 @Import({OrderRestMapperImpl.class,
         JwtService.class})
@@ -293,7 +292,7 @@ class OrderControllerTest {
     void shouldUpdateOrderStatusAndNotifyUser() throws Exception {
         // given
         Long orderId = 1L;
-        String userEmail = "admin@arka.com";
+        UpdateOrderOut.OrderContact owner = buildUpdateContact(1L);
 
         UpdateOrderOut mockOutput = new UpdateOrderOut(
                 orderId,
@@ -302,7 +301,7 @@ class OrderControllerTest {
                 "Updated order notes",
                 OrderType.PURCHASE,
                 Instant.now(),
-                buildUpdateContact(1L),
+                owner,
                 List.of(buildUpdateOrderItem(1L, 1L, 5))
         );
 
@@ -313,8 +312,7 @@ class OrderControllerTest {
 
         // when & then
         mockMvc.perform(patch("/api/v1/orders/{orderId}/status", orderId)
-                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
-                        .requestAttr("userEmail", userEmail)
+                        .with(jwt().jwt(builder -> builder.subject("arka.admin@example.com")))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -323,38 +321,7 @@ class OrderControllerTest {
 
         // Verifies status update and email notification were both called
         verify(updateOrderStatusUsecase).execute(eq(orderId), eq(OrderStatus.AUTHORIZED));
-        verify(notifyChangeStatusUsecase).execute(eq(userEmail), any());
-    }
-
-    @Test
-    void shouldHandleNullUserEmailAttributeWhenUpdatingStatus() throws Exception {
-        // given
-        Long orderId = 1L;
-        UpdateOrderOut mockOutput = new UpdateOrderOut(
-                orderId,
-                "ORD-2026-001",
-                OrderStatus.CANCELLED,
-                "Updated order notes",
-                OrderType.PURCHASE,
-                Instant.now(),
-                buildUpdateContact(1L),
-                List.of(buildUpdateOrderItem(1L, 1L, 5))
-        );
-
-        when(updateOrderStatusUsecase.execute(eq(orderId), eq(OrderStatus.CANCELLED)))
-                .thenReturn(mockOutput);
-
-        Map<String, Object> request = Map.of("status", "CANCELLED");
-
-        // when & then - Request without setting "userEmail" attribute (passes null to notify use case)
-        mockMvc.perform(patch("/api/v1/orders/{orderId}/status", orderId)
-                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL)))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("CANCELLED"));
-
-        verify(notifyChangeStatusUsecase).execute(eq(null), any());
+        verify(notifyChangeStatusUsecase).execute(eq(owner.email()), any());
     }
 }
 

@@ -5,6 +5,7 @@ import com.arka.controller.ProductController;
 import com.arka.mappers.ProductRestMapperImpl;
 import com.arka.product.CreateProductUseCase;
 import com.arka.product.ListAllProductsUseCase;
+import com.arka.product.ListProductCategoriesUseCase;
 import com.arka.product.dto.CreateProductOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,9 @@ class ProductControllerTest {
 
     @MockitoBean
     private ListAllProductsUseCase listAllProductsUseCase;
+
+    @MockitoBean
+    private ListProductCategoriesUseCase listProductCategoriesUseCase;
 
     @Test
     void shouldCreateProduct() throws Exception {

@@ -119,14 +119,14 @@ public class OrderController {
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<UpdateOrderResponse> updateStatus(
             @PathVariable @NotNull Long orderId,
-            @RequestBody UpdateOrderStatusRequest request,
-            Authentication authentication) {
+            @RequestBody UpdateOrderStatusRequest request) {
 
-        String email = authentication.getName();
         UpdateOrderOut updatedOrder =
                 updateOrderStatusUsecase.execute(orderId, request.status());
 
-        notifyChangeStatusUsecase.execute(email, mapper.toEmailData(updatedOrder));
+        String orderOwnerEmail = updatedOrder.contact().email();
+
+        notifyChangeStatusUsecase.execute(orderOwnerEmail, mapper.toEmailData(updatedOrder));
 
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }

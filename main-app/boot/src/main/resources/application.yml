@@ -59,11 +59,18 @@ cloud-provider:
 
 springdoc:
   swagger-ui:
+    urls:
+      - name: 'auth-service'
+        url: "${AUTH_SERVICE_BASE_URL:}/v3/api-docs/auth-api"
+      - name: 'public-api'
+        url: '/v3/api-docs/public-api'
+      - name: 'internal-api'
+        url: '/v3/api-docs/internal-api'
     path: "/swagger-ui.html"
-    operationsSorter: method
-    tagsSorter: alpha
-    docExpansion: none
-    defaultModelsExpandDepth: -1
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+    default-models-expand-depth: -1
     default-group: public-api
     groups-order: DESC
   api-docs:

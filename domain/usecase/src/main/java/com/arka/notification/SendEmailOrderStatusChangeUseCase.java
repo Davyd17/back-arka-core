@@ -1,8 +1,9 @@
 package com.arka.notification;
 
 import com.arka.notification.dto.EmailMessage;
-import com.arka.order.dto.OrderEmailDataIn;
-import com.arka.order.mapper.OrderMapper;
+import com.arka.notification.gateway.EmailGateway;
+import com.arka.notification.gateway.TemplateStorageGateway;
+import com.arka.notification.dto.OrderEmailDataIn;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

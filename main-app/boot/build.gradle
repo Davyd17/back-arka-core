@@ -8,6 +8,7 @@ dependencies {
     implementation project(":security")
     implementation project(":export-data")
     implementation project(":aws-provider")
+    implementation project(":sqs-listener")
 
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     implementation ("org.springframework.boot:spring-boot-starter")

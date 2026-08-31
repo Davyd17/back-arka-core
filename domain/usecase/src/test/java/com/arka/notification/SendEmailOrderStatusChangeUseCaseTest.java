@@ -2,11 +2,12 @@ package com.arka.notification;
 
 import com.arka.enums.OrderStatus;
 import com.arka.notification.dto.EmailMessage;
-import com.arka.order.dto.OrderEmailDataIn;
+import com.arka.notification.gateway.EmailGateway;
+import com.arka.notification.gateway.TemplateStorageGateway;
+import com.arka.notification.dto.OrderEmailDataIn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.commons.util.ReflectionUtils;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

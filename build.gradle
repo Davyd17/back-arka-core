@@ -26,6 +26,11 @@ subprojects {
         }
     }
 
+    dependencyManagement {
+        imports {
+            mavenBom "io.awspring.cloud:spring-cloud-aws-dependencies:3.4.2"
+        }
+    }
 
     dependencies {
         compileOnly("org.projectlombok:lombok:1.18.42")

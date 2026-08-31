@@ -1,4 +1,4 @@
-package com.arka.order.dto;
+package com.arka.notification.dto;
 
 import com.arka.enums.OrderStatus;
 

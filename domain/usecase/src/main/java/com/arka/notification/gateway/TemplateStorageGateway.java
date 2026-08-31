@@ -1,4 +1,4 @@
-package com.arka.notification;
+package com.arka.notification.gateway;
 
 public interface TemplateStorageGateway {
 

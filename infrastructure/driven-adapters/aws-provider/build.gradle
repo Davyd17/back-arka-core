@@ -7,5 +7,7 @@ dependencies {
     implementation("software.amazon.awssdk:ses")
     implementation("org.eclipse.angus:jakarta.mail")
 
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+
     implementation (platform("software.amazon.awssdk:bom:2.41.4"))
 }

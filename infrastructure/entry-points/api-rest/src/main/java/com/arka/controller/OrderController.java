@@ -124,10 +124,6 @@ public class OrderController {
         UpdateOrderOut updatedOrder =
                 updateOrderStatusUsecase.execute(orderId, request.status());
 
-        String orderOwnerEmail = updatedOrder.contact().email();
-
-        notifyChangeStatusUsecase.execute(orderOwnerEmail, mapper.toEmailData(updatedOrder));
-
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }
 

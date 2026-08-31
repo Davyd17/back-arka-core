@@ -1,7 +1,7 @@
 package com.arka;
 
 import com.arka.exceptions.EmailDeliveryException;
-import com.arka.notification.EmailGateway;
+import com.arka.notification.gateway.EmailGateway;
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
 import jakarta.activation.DataHandler;

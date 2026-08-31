@@ -13,6 +13,16 @@ spring:
     deserialization:
       accept_empty_string_as_null_object: true
 
+  cloud:
+    aws:
+      region: ${AWS_REGION}
+    sqs:
+      enabled: true
+      listener:
+        max-messages-per-poll: 10
+        max-concurrent-messages: 10
+        poll-timeout: 20s
+
   application:
     name: arka
 
@@ -55,7 +65,8 @@ cloud-provider:
         html-template-order-state-email: ${S3_KEY_HTML_TEMPLATE_ORDER_STATE_EMAIL}
     ses:
       sender: ${SES_SENDER_EMAIL}
-
+    sqs:
+      events-queue: ${EVENTS_QUEUE}
 
 springdoc:
   swagger-ui:

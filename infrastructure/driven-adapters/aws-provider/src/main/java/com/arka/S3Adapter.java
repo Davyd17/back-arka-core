@@ -1,6 +1,6 @@
 package com.arka;
 
-import com.arka.notification.TemplateStorageGateway;
+import com.arka.notification.gateway.TemplateStorageGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

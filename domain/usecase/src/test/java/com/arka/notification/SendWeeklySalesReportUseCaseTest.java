@@ -2,6 +2,7 @@ package com.arka.notification;
 
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
+import com.arka.notification.gateway.EmailGateway;
 import com.arka.report.ExportFormat;
 import com.arka.report.dto.SalesReportData;
 import com.arka.report.gateway.ExportGateway;

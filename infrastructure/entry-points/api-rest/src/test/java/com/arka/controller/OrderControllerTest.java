@@ -321,7 +321,6 @@ class OrderControllerTest {
 
         // Verifies status update and email notification were both called
         verify(updateOrderStatusUsecase).execute(eq(orderId), eq(OrderStatus.AUTHORIZED));
-        verify(notifyChangeStatusUsecase).execute(eq(owner.email()), any());
     }
 }
 

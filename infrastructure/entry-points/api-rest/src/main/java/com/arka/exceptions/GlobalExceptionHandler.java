@@ -104,6 +104,13 @@ public class GlobalExceptionHandler {
                 "ALREADY_EXISTS", ex.getMessage(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
+                "INVALID_ARGUMENT", ex.getMessage(), LocalDateTime.now()
+        ));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleUnexpected(RuntimeException ex) {
         log.error("Unexpected runtime error: {}", ex.getMessage(), ex);

@@ -19,6 +19,7 @@ spring:
     sqs:
       enabled: true
       listener:
+        queue-not-found-strategy: FAIL
         max-messages-per-poll: 10
         max-concurrent-messages: 10
         poll-timeout: 20s

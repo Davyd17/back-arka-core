@@ -17,7 +17,7 @@ public class CorsConfig {
         corsConfiguration.setAllowedOrigins(List.of(
                 "http://localhost:8080", "https://arkadistributions.co"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "OPTIONS"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "OPTIONS", "PATCH"));
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

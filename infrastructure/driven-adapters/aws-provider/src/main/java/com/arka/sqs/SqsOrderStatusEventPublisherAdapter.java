@@ -1,4 +1,4 @@
-package com.arka;
+package com.arka.sqs;
 
 import com.arka.notification.dto.OrderStatusChangeRequestedEvent;
 import com.arka.notification.gateway.OrderStatusEventPublisherGateway;
@@ -15,7 +15,7 @@ public class SqsOrderStatusEventPublisherAdapter implements OrderStatusEventPubl
 
     private final SqsTemplate sqsTemplate;
 
-    @Value("${cloud-provider.aws.sqs.events-queue}")
+    @Value("${cloud-provider.aws.sqs.order-status-notify-queue}")
     private String queueName;
 
     @Override

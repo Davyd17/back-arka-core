@@ -13,6 +13,4 @@ public record AppResponse<T> (
     public static <T> AppResponse<T> success(String code, String message){
         return new AppResponse<>(code, message, null);
     }
-
-
 }

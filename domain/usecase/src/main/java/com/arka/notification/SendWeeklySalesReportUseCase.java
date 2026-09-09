@@ -19,7 +19,7 @@ public class SendWeeklySalesReportUseCase {
 
     public void execute(EmailMessage email, ExportFormat format){
 
-        NullValidator.validate(email, "Input");
+        NullValidator.validate(email, "Email");
         NullValidator.validate(format, "ExportFormat");
 
         SalesReportData salesData = salesReportService.getWeekSalesReport();

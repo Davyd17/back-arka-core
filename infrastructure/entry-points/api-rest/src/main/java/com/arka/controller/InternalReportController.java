@@ -1,10 +1,12 @@
 package com.arka.controller;
 
+import com.arka.events.RequestWeekSalesReportUseCase;
 import com.arka.mappers.EmailRestMapper;
 import com.arka.notification.SendWeeklyLowStockReportUseCase;
 import com.arka.notification.SendWeeklySalesReportUseCase;
 import com.arka.report.ExportFormat;
 import com.arka.request.EmailMessageRequest;
+import com.arka.response.AppResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,43 +34,44 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Internal Reports", description = "Internal network operations for scheduled tasks. (Restricted access)")
 public class InternalReportController {
 
-    private final SendWeeklySalesReportUseCase salesReportUseCase;
+    private final RequestWeekSalesReportUseCase requestWeekSalesReportUseCase;
     private final SendWeeklyLowStockReportUseCase lowStockReportUseCase;
     private final EmailRestMapper emailMapper;
 
     @Operation(
             summary = "[INTERNAL] Trigger weekly sales report",
-            description = "**Restricted**: Triggers generation and emailing of weekly sales reports. " +
-                    "Accessible only via internal network/port.",
-            deprecated = true
+            description = "**Restricted**: Requests generation and emailing of the weekly sales report. " +
+                    "Processing happens asynchronously; Accessible only via internal network/port."
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Weekly report generated and email sent successfully",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    responseCode = "202",
+                    description = "Report generation request accepted for asynchronous processing",
+                    content = @Content(schema = @Schema(implementation = AppResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request payload",
+                    content = @Content(schema = @Schema(implementation = AppResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Failed to generate report"
+                    description = "Failed to accept report generation request",
+                    content = @Content(schema = @Schema(implementation = AppResponse.class))
             )
     })
     @PostMapping("/sales/weekly")
-    public ResponseEntity<String> triggerWeeklySalesReport(
+    public ResponseEntity<AppResponse<String>> triggerWeeklySalesReport(
             @Parameter(description = "Export format for the generated report", example = "CSV")
             @RequestParam(defaultValue = "CSV") ExportFormat format,
             @Valid @RequestBody EmailMessageRequest emailRequest) {
 
-        try {
-
-            salesReportUseCase.execute(emailMapper.toDomain(emailRequest), format);
-            return ResponseEntity.ok(
-                    "Weekly report generated and email sent successfully.");
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to generate report: " + e.getMessage());
-        }
+            requestWeekSalesReportUseCase.execute(emailMapper.toDomain(emailRequest), format);
+            return ResponseEntity.accepted().body(
+                    AppResponse.success(
+                        "REPORT_REQUESTED",
+                            "Report generation and email delivery have been requested"
+            ));
     }
 
 

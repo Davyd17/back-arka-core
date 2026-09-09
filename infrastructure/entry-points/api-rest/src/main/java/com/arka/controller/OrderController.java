@@ -104,8 +104,9 @@ public class OrderController {
 
     @Operation(
             summary = "Update order status by ID",
-            description = "Update status following this transition order = " +
-                    " PENDING -> PROCESSING | PROCESSING -> AUTHORIZED OR CANCELLED"
+            description = "Update status and send email confirmation to the order's owner" +
+                    " following this transition order = " +
+                    " PENDING > PROCESSING | PROCESSING > AUTHORIZED OR CANCELLED"
     )
     @CommonApiResponses
     @ApiResponses({

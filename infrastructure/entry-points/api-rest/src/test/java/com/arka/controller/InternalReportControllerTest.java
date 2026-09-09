@@ -3,6 +3,7 @@ package com.arka.controller;
 import com.arka.JwtAuthenticationFilter;
 import com.arka.JwtService;
 import com.arka.config.SecurityConfig;
+import com.arka.events.RequestWeekSalesReportUseCase;
 import com.arka.mappers.EmailRestMapperImpl;
 import com.arka.notification.SendWeeklyLowStockReportUseCase;
 import com.arka.notification.SendWeeklySalesReportUseCase;
@@ -16,6 +17,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAut
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -28,8 +30,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = InternalReportController.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -50,6 +51,9 @@ class InternalReportControllerTest {
     private SendWeeklySalesReportUseCase salesReportUseCase;
 
     @MockitoBean
+    private RequestWeekSalesReportUseCase requestWeekSalesReportUseCase;
+
+    @MockitoBean
     private SendWeeklyLowStockReportUseCase lowStockReportUseCase;
 
     @Test
@@ -64,11 +68,11 @@ class InternalReportControllerTest {
         mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Weekly report generated and email sent successfully."));
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"));
 
         // Verifies default format CSV was applied
-        verify(salesReportUseCase).execute(any(), eq(ExportFormat.CSV));
+        verify(requestWeekSalesReportUseCase).execute(any(), eq(ExportFormat.CSV));
     }
 
     @Test
@@ -80,14 +84,13 @@ class InternalReportControllerTest {
         );
 
         doThrow(new RuntimeException("Mail server unavailable"))
-                .when(salesReportUseCase).execute(any(), any());
+                .when(requestWeekSalesReportUseCase).execute(any(), any());
 
         // when & then
         mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to generate report: Mail server unavailable"));
+                .andExpect(status().isInternalServerError());
     }
 
     @Test

@@ -16,7 +16,7 @@ public class OrderStatusChangeSqsListener {
     private final SendEmailOrderStatusChangeUseCase
             sendEmailOrderStatusChangeUseCase;
 
-    @SqsListener("${cloud-provider.aws.sqs.events-queue}")
+    @SqsListener("${cloud-provider.aws.sqs.order-status-notify-queue}")
     public void handleOrderStatusChangeEvent(OrderStatusChangeRequestedEvent event){
 
         log.info("Received OrderStatusChangeRequestEvent from SQS for email: {}", event.recipient());

@@ -3,6 +3,7 @@ package com.arka.controller;
 import com.arka.JwtAuthenticationFilter;
 import com.arka.JwtService;
 import com.arka.config.SecurityConfig;
+import com.arka.events.RequestWeekSalesReportUseCase;
 import com.arka.mappers.EmailRestMapperImpl;
 import com.arka.notification.SendWeeklyLowStockReportUseCase;
 import com.arka.notification.SendWeeklySalesReportUseCase;
@@ -50,6 +51,9 @@ class InternalReportControllerTest {
     private SendWeeklySalesReportUseCase salesReportUseCase;
 
     @MockitoBean
+    private RequestWeekSalesReportUseCase requestWeekSalesReportUseCase;
+
+    @MockitoBean
     private SendWeeklyLowStockReportUseCase lowStockReportUseCase;
 
     @Test
@@ -68,7 +72,7 @@ class InternalReportControllerTest {
                 .andExpect(content().string("Weekly report generated and email sent successfully."));
 
         // Verifies default format CSV was applied
-        verify(salesReportUseCase).execute(any(), eq(ExportFormat.CSV));
+        verify(requestWeekSalesReportUseCase).execute(any(), eq(ExportFormat.CSV));
     }
 
     @Test
@@ -80,7 +84,7 @@ class InternalReportControllerTest {
         );
 
         doThrow(new RuntimeException("Mail server unavailable"))
-                .when(salesReportUseCase).execute(any(), any());
+                .when(requestWeekSalesReportUseCase).execute(any(), any());
 
         // when & then
         mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")

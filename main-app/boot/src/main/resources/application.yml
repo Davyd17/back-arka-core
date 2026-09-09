@@ -67,7 +67,8 @@ cloud-provider:
     ses:
       sender: ${SES_SENDER_EMAIL}
     sqs:
-      events-queue: ${EVENTS_QUEUE}
+      order-status-notify-queue: ${ORDER_STATUS_NOTIFY_QUEUE}
+      sales-report-queue: ${SALES_REPORT_QUEUE}
 
 springdoc:
   swagger-ui:

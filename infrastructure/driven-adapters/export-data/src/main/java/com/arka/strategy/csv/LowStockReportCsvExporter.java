@@ -1,6 +1,5 @@
 package com.arka.strategy.csv;
 
-import com.arka.report.dto.LowStockItem;
 import com.arka.report.dto.LowStockReportData;
 import org.springframework.stereotype.Component;
 
@@ -25,11 +24,11 @@ public class LowStockReportCsvExporter
         // Add CSV header
         csvBuilder.append("name,sku,category,stock\n");
 
-        for(LowStockItem item : report.items()){
+        for(LowStockReportData.Item item : report.items()){
 
-            csvBuilder.append(escape(item.product().name())).append(",");
-            csvBuilder.append(escape(item.product().sku())).append(",");
-            csvBuilder.append(escape(item.product().category())).append(",");
+            csvBuilder.append(escape(item.name())).append(",");
+            csvBuilder.append(escape(item.sku())).append(",");
+            csvBuilder.append(escape(item.category())).append(",");
             csvBuilder.append(item.stock()).append("\n");
 
         }

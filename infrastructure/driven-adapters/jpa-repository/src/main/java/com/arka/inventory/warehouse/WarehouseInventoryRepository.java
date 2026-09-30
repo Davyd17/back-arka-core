@@ -22,10 +22,16 @@ public interface WarehouseInventoryRepository
 
 
     @Query("""
-            SELECT i FROM WarehouseInventoryEntity i
-            WHERE i.warehouse.id = :warehouseId AND i.stock <= :threshold
-            """)
-    List<WarehouseInventoryEntity> findLowStockInventoryByWarehouseId(
+        SELECT
+            i.product.id AS productId,
+            i.stock AS stock,
+            i.product.name AS productName,
+            i.product.sku AS sku,
+            i.product.category.name AS productCategory
+        FROM WarehouseInventoryEntity i
+        WHERE i.warehouse.id = :warehouseId AND i.stock <= :threshold
+        """)
+    List<LowStockInventoryView> findLowStockInventoryByWarehouseId(
             @Param("warehouseId") Long warehouseId,
             @Param("threshold") int threshold);
 

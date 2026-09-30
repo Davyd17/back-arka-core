@@ -1,8 +1,8 @@
-package com.arka.events.dto;
+package com.arka.report.dto;
 
 import com.arka.report.ExportFormat;
 
-public record SalesReportRequestedEvent(
+public record SalesReportCommand(
         String recipient,
         ExportFormat attachmentFormat
 ) {

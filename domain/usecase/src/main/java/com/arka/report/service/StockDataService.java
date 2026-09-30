@@ -2,13 +2,10 @@ package com.arka.report.service;
 
 import com.arka.exceptions.NotFoundException;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
-import com.arka.inventory.mapper.WarehouseInventoryMapper;
 import com.arka.inventory.service.WarehouseService;
-import com.arka.report.dto.LowStockItem;
 import com.arka.report.dto.LowStockReportData;
 import com.arka.util.NullValidator;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -19,19 +16,13 @@ public class StockDataService {
 
     private final WarehouseInventoryGateway inventoryGateway;
 
-    private final WarehouseInventoryMapper mapper =
-            Mappers.getMapper(WarehouseInventoryMapper.class);
-
     public LowStockReportData getLowStockByWarehouse(Long warehouseId,
                                                      int threshold) {
 
         validateArgs(warehouseId, threshold);
 
-        List<LowStockItem> items = inventoryGateway
-                .listLowStockInventoryByWarehouseId(warehouseId, threshold)
-                .stream()
-                .map(mapper::toOutDTO)
-                .toList();
+        List<LowStockReportData.Item> items = inventoryGateway
+                .listLowStockInventoryByWarehouseId(warehouseId, threshold);
 
         if (items.isEmpty())
             throw new NotFoundException(

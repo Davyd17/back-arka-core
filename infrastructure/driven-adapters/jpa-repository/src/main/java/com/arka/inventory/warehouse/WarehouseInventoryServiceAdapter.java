@@ -3,6 +3,7 @@ package com.arka.inventory.warehouse;
 import com.arka.entities.inventory.WarehouseInventory;
 import com.arka.inventory.gateway.WarehouseInventoryGateway;
 import com.arka.inventory.movements.InventoryMovementEntity;
+import com.arka.report.dto.LowStockReportData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +37,18 @@ public class WarehouseInventoryServiceAdapter implements WarehouseInventoryGatew
     }
 
     @Override
-    public List<WarehouseInventory> listLowStockInventoryByWarehouseId(
-            Long warehouseInventoryId, int threshold) {
+    public List<LowStockReportData.Item> listLowStockInventoryByWarehouseId(
+            Long warehouseId, int threshold) {
 
-        return repository.findLowStockInventoryByWarehouseId(warehouseInventoryId, threshold)
+        return repository.findLowStockInventoryByWarehouseId(warehouseId, threshold)
                 .stream()
-                .map(mapper::toDomain)
+                .map(view -> new LowStockReportData.Item(
+                        view.getProductId(),
+                        view.getStock(),
+                        view.getSku(),
+                        view.getProductName(),
+                        view.getProductCategory()
+                ))
                 .toList();
     }
 

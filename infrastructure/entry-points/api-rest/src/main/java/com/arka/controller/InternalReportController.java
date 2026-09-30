@@ -1,10 +1,10 @@
 package com.arka.controller;
 
+import com.arka.events.RequestLowStockReportUseCase;
 import com.arka.events.RequestWeekSalesReportUseCase;
-import com.arka.mappers.EmailRestMapper;
-import com.arka.notification.SendWeeklyLowStockReportUseCase;
-import com.arka.notification.SendWeeklySalesReportUseCase;
 import com.arka.report.ExportFormat;
+import com.arka.report.dto.LowStockReportCommand;
+import com.arka.report.dto.SalesReportCommand;
 import com.arka.request.EmailMessageRequest;
 import com.arka.response.AppResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,13 +34,12 @@ import org.springframework.web.bind.annotation.*;
 public class InternalReportController {
 
     private final RequestWeekSalesReportUseCase requestWeekSalesReportUseCase;
-    private final SendWeeklyLowStockReportUseCase lowStockReportUseCase;
-    private final EmailRestMapper emailMapper;
+    private final RequestLowStockReportUseCase requestLowStockReportUseCase;
 
     @Operation(
             summary = "[INTERNAL] Trigger weekly sales report",
-            description = "**Restricted**: Requests generation and emailing of the weekly sales report. " +
-                    "Processing happens asynchronously; Accessible only via internal network/port."
+            description = "**Restricted**: Enqueues an asynchronous request to generate and email a" +
+                    "weekly sales report. Accessible only via internal network/port."
     )
     @ApiResponses({
             @ApiResponse(
@@ -62,62 +60,60 @@ public class InternalReportController {
     })
     @PostMapping("/sales/weekly")
     public ResponseEntity<AppResponse<String>> triggerWeeklySalesReport(
-            @Parameter(description = "Export format for the generated report", example = "CSV")
+            @Parameter(description = "Export attachmentFormat for the generated report", example = "CSV")
             @RequestParam(defaultValue = "CSV") ExportFormat format,
-            @Valid @RequestBody EmailMessageRequest emailRequest) {
+            @Valid @RequestBody EmailMessageRequest emailMessageRequest) {
 
-            requestWeekSalesReportUseCase.execute(emailMapper.toDomain(emailRequest), format);
-            return ResponseEntity.accepted().body(
-                    AppResponse.success(
+        requestWeekSalesReportUseCase.execute(new SalesReportCommand(
+                emailMessageRequest.recipient(), format));
+
+        return ResponseEntity.accepted().body(
+                AppResponse.success(
                         "REPORT_REQUESTED",
-                            "Report generation and email delivery have been requested"
-            ));
+                        "Sales report generation and email delivery have been requested"
+                ));
     }
 
 
     @Operation(
-            summary = "[INTERNAL] Trigger weekly low stock report",
-            description = "**Restricted**: Triggers generation and emailing of low stock alerts for a specific warehouse. " +
-                    "Accessible only via internal network/port.",
-            deprecated = true
+            summary = "[INTERNAL] Request weekly low stock report",
+            description = "**Restricted**: Enqueues an asynchronous request to generate and email low stock alerts " +
+                    "for a specific warehouse. Accessible only via internal network/port."
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Weekly low stock report generated successfully",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    responseCode = "202",
+                    description = "Low stock report request accepted and queued for processing",
+                    content = @Content(schema = @Schema(implementation = AppResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request — missing or malformed email data"
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Failed to generate report"
+                    description = "Failed to enqueue report request"
             )
     })
     @PostMapping("warehouse/{warehouseId}/low-stock/weekly")
-    public ResponseEntity<String> triggerWeeklyLowStockReport(
+    public ResponseEntity<AppResponse<String>> triggerWeeklyLowStockReport(
             @Parameter(description = "Stock quantity threshold trigger", example = "40")
             @RequestParam(defaultValue = "40") int threshold,
-            @Parameter(description = "Export format for the generated report", example = "CSV")
+            @Parameter(description = "Export attachmentFormat for the generated report", example = "CSV")
             @RequestParam(defaultValue = "CSV") ExportFormat format,
             @PathVariable Long warehouseId,
             @Valid @RequestBody EmailMessageRequest emailMessageRequest
-    ){
+    ) {
+        requestLowStockReportUseCase.execute(new LowStockReportCommand(
+                emailMessageRequest.recipient(),
+                format,
+                warehouseId,
+                threshold));
 
-        try{
-
-            lowStockReportUseCase.execute(
-                    emailMapper.toDomain(emailMessageRequest),
-                    format,
-                    warehouseId,
-                    threshold);
-
-            return ResponseEntity.ok(
-                    "Weekly report generated and email sent successfully.");
-
-        } catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to generate report: " + e.getMessage());
-        }
-
+        return ResponseEntity.accepted().body(AppResponse.success(
+                "REPORT_REQUESTED",
+                "Low stock report generation and email delivery have been requested"
+        ));
     }
 }
 

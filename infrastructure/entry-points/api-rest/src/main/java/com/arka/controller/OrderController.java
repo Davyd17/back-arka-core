@@ -3,7 +3,7 @@ package com.arka.controller;
 import com.arka.docs.CommonApiResponses;
 import com.arka.exceptions.ErrorResponse;
 import com.arka.mappers.OrderRestMapper;
-import com.arka.notification.SendEmailOrderStatusChangeUseCase;
+import com.arka.notification.SendOrderStatusUpdatedEmailUseCase;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
 import com.arka.order.dto.CreateOrderOut;
@@ -41,7 +41,7 @@ public class OrderController {
     private final CreateOrderUseCase createOrderUseCase;
     private final ModifyOrderUseCase modifyOrderUseCase;
     private final UpdateOrderStatusUseCase updateOrderStatusUsecase;
-    private final SendEmailOrderStatusChangeUseCase notifyChangeStatusUsecase;
+    private final SendOrderStatusUpdatedEmailUseCase notifyChangeStatusUsecase;
 
     private final OrderRestMapper mapper;
 

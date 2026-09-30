@@ -1,9 +1,10 @@
-package com.arka;
+package com.arka.ses;
 
 import com.arka.exceptions.EmailDeliveryException;
 import com.arka.notification.gateway.EmailGateway;
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
+import com.arka.ses.factory.EmailStrategyFactory;
 import jakarta.activation.DataHandler;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -33,18 +34,21 @@ public class SESEmailAdapter implements EmailGateway {
             LoggerFactory.getLogger(SESEmailAdapter.class);
 
     private final SesClient client;
-
-    @Override
-    public void send(EmailMessage email, EmailAttachment attachment) {
-        sendRaw(email, attachment);
-    }
+    private final EmailStrategyFactory strategyFactory;
 
     @Override
     public void send(EmailMessage email) {
-        sendRaw(email, null);
+        sendRaw(from(email));
     }
 
-    private void sendRaw(EmailMessage email, EmailAttachment attachment){
+    private SesEmailMessage from(EmailMessage emailMessage){
+        return strategyFactory
+                .getEmailContentFor(emailMessage.getSubject())
+                .format(emailMessage);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private void sendRaw(SesEmailMessage sesEmail){
 
         try{
 
@@ -53,30 +57,30 @@ public class SESEmailAdapter implements EmailGateway {
             MimeMessage message = new MimeMessage(session);
             MimeMultipart multipart = new MimeMultipart("mixed");
 
-            setEmailHeaders(message, email);
-            addEmailTextBody(email.body(), multipart);
+            setEmailHeaders(message, sesEmail);
+            addEmailTextBody(sesEmail.getBody(), multipart);
 
-            if(attachment != null)
-                addEmailAttachment(attachment, multipart);
+            if(sesEmail.hasAttachment())
+                addEmailAttachment(sesEmail.getAttachment(), multipart);
 
             message.setContent(multipart);
 
             sendEmail(mimeToRawMessage(message));
 
         } catch (Exception e) {
-            log.error("SES error sending to {}: {}", email.recipient(), e.getMessage());
+            log.error("SES error sending to {}: {}", sesEmail.getRecipient(), e.getMessage());
             throw new EmailDeliveryException("Failed to send email via AWS SES", e);
         }
     }
 
     private void setEmailHeaders(MimeMessage message,
-                                 EmailMessage input) throws MessagingException {
+                                 SesEmailMessage sesEmail) throws MessagingException {
 
-        message.setSubject(input.subject(), "UTF-8");
-        message.setFrom(new InternetAddress(input.sender()));
+        message.setSubject(sesEmail.getSubject(), "UTF-8");
+        message.setFrom(new InternetAddress(sesEmail.getSender()));
         message.setRecipients(
                 Message.RecipientType.TO,
-                InternetAddress.parse(input.recipient()));
+                InternetAddress.parse(sesEmail.getRecipient()));
     }
 
     private void addEmailTextBody(String textBody, MimeMultipart multiPart)

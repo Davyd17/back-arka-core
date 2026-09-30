@@ -35,6 +35,7 @@ public abstract class WarehouseInventoryEntityMapper {
         }
 
         Deque<InventoryMovement> deque = new ArrayDeque<>();
+
         list.forEach(movement ->
                 deque.add(movementMapper.toDomain(movement)));
 

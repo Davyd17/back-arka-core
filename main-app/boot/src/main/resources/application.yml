@@ -10,6 +10,7 @@ spring:
 
   jackson:
     time-zone: UTC
+    default-property-inclusion: non_null
     deserialization:
       accept_empty_string_as_null_object: true
 
@@ -69,6 +70,18 @@ cloud-provider:
     sqs:
       order-status-notify-queue: ${ORDER_STATUS_NOTIFY_QUEUE}
       sales-report-queue: ${SALES_REPORT_QUEUE}
+      low-stock-report-queue: ${LOW_STOCK_REPORT_QUEUE}
+
+notifications:
+  email-settings:
+    low-stock-report:
+      sender: notificationsarka@gmail.com
+      subject: Low stock report
+    sales-report:
+      sender: notificationsarka@gmail.com
+      subject: Weekly sales report
+    order-status-updated:
+      sender: notificationsarka@gmail.com
 
 springdoc:
   swagger-ui:

@@ -1,5 +1,6 @@
 package com.arka.sqs;
 
+import com.arka.events.dto.LowStockReportRequestedEvent;
 import com.arka.events.dto.SalesReportRequestedEvent;
 import com.arka.events.gateway.ReportsEventPublisherGateway;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
@@ -18,6 +19,9 @@ public class SqsReportsEventPublisherAdapter implements ReportsEventPublisherGat
     @Value("${cloud-provider.aws.sqs.sales-report-queue}")
     private String salesReportQueueName;
 
+    @Value("${cloud-provider.aws.sqs.low-stock-report-queue}")
+    private String lowStockReportQueueName;
+
     @Override
     public void publishSalesReport(SalesReportRequestedEvent event) {
 
@@ -25,5 +29,14 @@ public class SqsReportsEventPublisherAdapter implements ReportsEventPublisherGat
                 event.recipient());
 
         sqsTemplate.send(to -> to.queue(salesReportQueueName).payload(event));
+    }
+
+    @Override
+    public void publishLowStockReport(LowStockReportRequestedEvent event) {
+
+        log.info("Publishing LowStockReportRequestedEvent to SQS for email: {}",
+                event.recipient());
+
+        sqsTemplate.send(to -> to.queue(lowStockReportQueueName).payload(event));
     }
 }

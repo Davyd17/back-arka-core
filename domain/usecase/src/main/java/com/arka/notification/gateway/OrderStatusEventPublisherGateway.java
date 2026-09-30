@@ -1,8 +1,8 @@
 package com.arka.notification.gateway;
 
-import com.arka.notification.dto.OrderStatusChangeRequestedEvent;
+import com.arka.notification.dto.OrderStatusEmailRequestedEvent;
 
 public interface OrderStatusEventPublisherGateway {
 
-    void publish(OrderStatusChangeRequestedEvent event);
+    void publish(OrderStatusEmailRequestedEvent event);
 }

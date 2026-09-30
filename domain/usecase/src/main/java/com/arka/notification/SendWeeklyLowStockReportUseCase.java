@@ -2,8 +2,10 @@ package com.arka.notification;
 
 import com.arka.notification.dto.EmailAttachment;
 import com.arka.notification.dto.EmailMessage;
+import com.arka.notification.dto.MessageSubject;
 import com.arka.notification.gateway.EmailGateway;
 import com.arka.report.ExportFormat;
+import com.arka.report.dto.LowStockReportCommand;
 import com.arka.report.dto.LowStockReportData;
 import com.arka.report.gateway.ExportGateway;
 import com.arka.report.service.StockDataService;
@@ -17,28 +19,36 @@ public class SendWeeklyLowStockReportUseCase {
     private final EmailGateway emailGateway;
     private final StockDataService stockDataService;
 
-    public void execute(EmailMessage email,
-                        ExportFormat attachmentFormat,
-                        Long warehouseId,
-                        int threshold){
+    public void execute(LowStockReportCommand command){
 
-        validateInput(email, attachmentFormat);
+        validateInput(command);
 
         LowStockReportData data = stockDataService
-                .getLowStockByWarehouse(warehouseId, threshold);
+                .getLowStockByWarehouse(command.warehouseId(), command.threshold());
 
-        byte[] exportedData = exportGateway.export(data, attachmentFormat);
+        byte[] formattedData = exportGateway.export(data, command.attachmentFormat());
+
+        EmailMessage email = buildEmail(
+                command.recipient(), command.attachmentFormat(), formattedData);
+
+        emailGateway.send(email);
+    }
+
+    private EmailMessage buildEmail(String recipient,
+                                    ExportFormat attachmentFormat,
+                                    byte[] formattedData){
 
         EmailAttachment attachment = new EmailAttachment(
-                exportedData,
+                formattedData,
                 "low-stock-weekly-report",
                 attachmentFormat);
 
-        emailGateway.send(email, attachment);
+        return new EmailMessage(recipient, MessageSubject.LOW_STOCK_REPORT)
+                .toBuilder().attachment(attachment).build();
     }
 
-    private void validateInput(EmailMessage email, ExportFormat attachmentFormat){
-        NullValidator.validate(email, "Email Message");
-        NullValidator.validate(attachmentFormat, "AttachmentFormat");
+    private void validateInput(LowStockReportCommand command){
+        NullValidator.validate(command, "LowStockReportCommand");
+        NullValidator.validate(command.attachmentFormat(), "AttachmentFormat");
     }
 }

@@ -2,9 +2,7 @@ package com.arka.events;
 
 import com.arka.events.dto.SalesReportRequestedEvent;
 import com.arka.events.gateway.ReportsEventPublisherGateway;
-import com.arka.notification.dto.EmailMessage;
-import com.arka.report.ExportFormat;
-import com.arka.util.NullValidator;
+import com.arka.report.dto.SalesReportCommand;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -12,19 +10,11 @@ public class RequestWeekSalesReportUseCase {
 
     private final ReportsEventPublisherGateway reportsEventPublisher;
 
-    public void execute(EmailMessage email, ExportFormat format){
+    public void execute(SalesReportCommand command){
 
-        NullValidator.validate(email, "Email");
-        NullValidator.validate(format, "ExportFormat");
-
-        SalesReportRequestedEvent requested = new SalesReportRequestedEvent(
-                email.sender(),
-                email.recipient(),
-                email.subject(),
-                email.body(),
-                format
-        );
-
-        reportsEventPublisher.publishSalesReport(requested);
+        reportsEventPublisher.publishSalesReport(new SalesReportRequestedEvent(
+                command.recipient(),
+                command.attachmentFormat()
+        ));
     }
 }

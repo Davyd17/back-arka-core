@@ -1,41 +1,30 @@
 package com.arka.controller;
 
-import com.arka.JwtAuthenticationFilter;
 import com.arka.JwtService;
-import com.arka.config.SecurityConfig;
+import com.arka.events.RequestLowStockReportUseCase;
 import com.arka.events.RequestWeekSalesReportUseCase;
-import com.arka.mappers.EmailRestMapperImpl;
-import com.arka.notification.SendWeeklyLowStockReportUseCase;
-import com.arka.notification.SendWeeklySalesReportUseCase;
 import com.arka.report.ExportFormat;
+import com.arka.report.dto.LowStockReportCommand;
+import com.arka.report.dto.SalesReportCommand;
+import com.arka.request.EmailMessageRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.web.JsonPath;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = InternalReportController.class)
+@WebMvcTest(InternalReportController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-@Import({EmailRestMapperImpl.class})
 class InternalReportControllerTest {
 
     @MockitoBean
@@ -48,88 +37,119 @@ class InternalReportControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private SendWeeklySalesReportUseCase salesReportUseCase;
-
-    @MockitoBean
     private RequestWeekSalesReportUseCase requestWeekSalesReportUseCase;
 
     @MockitoBean
-    private SendWeeklyLowStockReportUseCase lowStockReportUseCase;
+    private RequestLowStockReportUseCase requestLowStockReportUseCase;
 
-    @Test
-    void shouldTriggerWeeklySalesReportWithDefaultFormat() throws Exception {
-        // given
-        Map<String, Object> request = Map.of(
-                "recipientEmail", "reports@arka.com",
-                "subject", "Weekly Sales"
-        );
+    private EmailMessageRequest emailMessageRequest;
 
-        // when & then
-        mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"));
-
-        // Verifies default format CSV was applied
-        verify(requestWeekSalesReportUseCase).execute(any(), eq(ExportFormat.CSV));
+    @BeforeEach
+    void setUp(){
+        emailMessageRequest = new EmailMessageRequest(
+                "reports@arka.com");
     }
 
     @Test
-    void shouldReturn500WhenSalesReportFails() throws Exception {
-        // given
-        Map<String, Object> request = Map.of(
-                "recipientEmail", "reports@arka.com",
-                "subject", "Weekly Sales"
-        );
-
-        doThrow(new RuntimeException("Mail server unavailable"))
-                .when(requestWeekSalesReportUseCase).execute(any(), any());
+    void shouldTriggerWeeklySalesReportWithDefaultFormat() throws Exception {
 
         // when & then
         mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError());
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(emailMessageRequest)))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"))
+                .andExpect(jsonPath("$.message")
+                        .value("Sales report generation and email delivery have been requested"));
+
+        // then
+        verify(requestWeekSalesReportUseCase).execute(
+                argThat(command ->
+                        command instanceof SalesReportCommand(String recipient, ExportFormat attachmentFormat)
+                                && recipient.equals("reports@arka.com")
+                                && attachmentFormat == ExportFormat.CSV
+                )
+        );
+    }
+
+    @Test
+    void shouldTriggerWeeklySalesReportWithProvidedFormat() throws Exception {
+        // when & then
+        mockMvc.perform(post("/api/v1/reports/internal/sales/weekly")
+                        .param("format", "CSV")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(emailMessageRequest)))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"));
+
+        // then
+        verify(requestWeekSalesReportUseCase).execute(
+                argThat(command ->
+                        command instanceof SalesReportCommand(String recipient, ExportFormat attachmentFormat)
+                                && recipient.equals("reports@arka.com")
+                                && attachmentFormat == ExportFormat.CSV
+                )
+        );
     }
 
     @Test
     void shouldTriggerWeeklyLowStockReportWithDefaultParameters() throws Exception {
         // given
         Long warehouseId = 5L;
-        Map<String, Object> request = Map.of(
-                "recipientEmail", "inventory@arka.com",
-                "subject", "Low Stock Alert"
-        );
 
         // when & then
-        mockMvc.perform(post("/api/v1/reports/internal/warehouse/{warehouseId}/low-stock/weekly", warehouseId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Weekly report generated and email sent successfully."));
+        mockMvc.perform(post(
+                        "/api/v1/reports/internal/warehouse/{warehouseId}/low-stock/weekly",
+                        warehouseId)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(emailMessageRequest)))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"))
+                .andExpect(jsonPath("$.message")
+                        .value("Low stock report generation and email delivery have been requested"));
 
-        // Verifies default query params: threshold = 40, format = CSV
-        verify(lowStockReportUseCase).execute(any(), eq(ExportFormat.CSV), eq(warehouseId), eq(40));
+        // then
+        verify(requestLowStockReportUseCase).execute(
+                argThat(command ->
+                        command instanceof LowStockReportCommand(
+                                String recipient, ExportFormat attachmentFormat, Long id, int threshold
+                        )
+                                && recipient.equals("reports@arka.com")
+                                && attachmentFormat == ExportFormat.CSV
+                                && id.equals(warehouseId)
+                                && threshold == 40
+                )
+        );
     }
 
     @Test
-    void shouldReturn500WhenLowStockReportFails() throws Exception {
+    void shouldTriggerWeeklyLowStockReportWithProvidedParameters() throws Exception {
         // given
-        Long warehouseId = 5L;
-        Map<String, Object> request = Map.of(
-                "recipientEmail", "inventory@arka.com",
-                "subject", "Low Stock Alert"
-        );
-
-        doThrow(new RuntimeException("Warehouse not found"))
-                .when(lowStockReportUseCase).execute(any(), any(), eq(warehouseId), any(Integer.class));
+        Long warehouseId = 10L;
+        int threshold = 25;
 
         // when & then
-        mockMvc.perform(post("/api/v1/reports/internal/warehouse/{warehouseId}/low-stock/weekly", warehouseId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to generate report: Warehouse not found"));
+        mockMvc.perform(post(
+                        "/api/v1/reports/internal/warehouse/{warehouseId}/low-stock/weekly",
+                        warehouseId)
+                        .param("threshold", String.valueOf(threshold))
+                        .param("format", "CSV")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(emailMessageRequest)))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.code").value("REPORT_REQUESTED"));
+
+        // then
+        verify(requestLowStockReportUseCase).execute(
+                argThat(command ->
+                        command instanceof LowStockReportCommand(
+                                String recipient, ExportFormat attachmentFormat, Long id, int threshold1
+                        )
+                                && recipient.equals("reports@arka.com")
+                                && attachmentFormat == ExportFormat.CSV
+                                && id.equals(warehouseId)
+                                && threshold1 == threshold
+                )
+        );
     }
 }

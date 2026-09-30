@@ -2,8 +2,9 @@ package com.arka.notification.dto;
 
 import com.arka.enums.OrderStatus;
 
-public record OrderEmailDataIn(
-        String number,
+public record OrderStatusEmailCommand(
+        String recipient,
+        String orderNumber,
         OrderStatus status,
         String companyName
 ) {

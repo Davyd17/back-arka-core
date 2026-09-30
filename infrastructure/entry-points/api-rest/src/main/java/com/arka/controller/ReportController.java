@@ -44,7 +44,7 @@ public class ReportController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid threshold or export format",
+                    description = "Invalid threshold or export attachmentFormat",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
@@ -59,7 +59,7 @@ public class ReportController {
             @PathVariable Long warehouseInventoryId,
             @Parameter(description = "Stock threshold value", example = "40")
             @RequestParam(defaultValue = "40") int threshold,
-            @Parameter(description = "Export file format only CSV for now", example = "CSV")
+            @Parameter(description = "Export file attachmentFormat only CSV for now", example = "CSV")
             @RequestParam(defaultValue = "CSV") ExportFormat format){
 
         byte[] file = generateLowStockReportUseCase.execute(
@@ -90,13 +90,13 @@ public class ReportController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid export format",
+                    description = "Invalid export attachmentFormat",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     @GetMapping("sales/seven-days")
     public ResponseEntity<byte[]> generateWeekSalesReport(
-            @Parameter(description = "Export file format only CSV for now", example = "CSV")
+            @Parameter(description = "Export file attachmentFormat only CSV for now", example = "CSV")
             @RequestParam(defaultValue = "CSV") ExportFormat format
     ){
         byte[] file = generateSalesReportUseCase.execute(format);

@@ -5,7 +5,7 @@ import com.arka.enums.OrderStatus;
 import com.arka.enums.OrderType;
 import com.arka.exceptions.UnauthorizedException;
 import com.arka.mappers.OrderRestMapperImpl;
-import com.arka.notification.SendEmailOrderStatusChangeUseCase;
+import com.arka.notification.SendOrderStatusUpdatedEmailUseCase;
 import com.arka.order.CreateOrderUseCase;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
@@ -62,7 +62,7 @@ class OrderControllerTest {
     private UpdateOrderStatusUseCase updateOrderStatusUsecase;
 
     @MockitoBean
-    private SendEmailOrderStatusChangeUseCase notifyChangeStatusUsecase;
+    private SendOrderStatusUpdatedEmailUseCase notifyChangeStatusUsecase;
 
     private final String OWNER_EMAIL = "john.wick@example.com";
 

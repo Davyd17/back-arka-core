@@ -1,6 +1,6 @@
 package com.arka.sqs;
 
-import com.arka.notification.dto.OrderStatusChangeRequestedEvent;
+import com.arka.notification.dto.OrderStatusEmailRequestedEvent;
 import com.arka.notification.gateway.OrderStatusEventPublisherGateway;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class SqsOrderStatusEventPublisherAdapter implements OrderStatusEventPubl
     private String queueName;
 
     @Override
-    public void publish(OrderStatusChangeRequestedEvent event) {
+    public void publish(OrderStatusEmailRequestedEvent event) {
         log.info("Publishing OrderStatusChangeRequestedEvent to SQS for email: {}", event.recipient());
         sqsTemplate.send(to -> to.queue(queueName).payload(event));
     }

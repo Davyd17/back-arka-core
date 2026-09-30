@@ -5,6 +5,7 @@ import com.arka.employee.EmployeeEntityMapper;
 import com.arka.employee.EmployeeEntityMapperImpl;
 import com.arka.entities.Employee;
 import com.arka.entities.inventory.WarehouseInventory;
+import com.arka.entities.product.Product;
 import com.arka.factory.EmployeeTestDataFactory;
 import com.arka.factory.ProductTestDataFactory;
 import com.arka.factory.WarehouseTestDataFactory;
@@ -12,6 +13,7 @@ import com.arka.inventory.movements.InventoryMovementEntityMapperImpl;
 import com.arka.product.ProductEntity;
 import com.arka.product.ProductEntityMapper;
 import com.arka.product.ProductEntityMapperImpl;
+import com.arka.report.dto.LowStockReportData;
 import com.arka.warehouse.WarehouseEntity;
 import com.arka.warehouse.WarehouseEntityMapper;
 import com.arka.warehouse.WarehouseEntityMapperImpl;
@@ -24,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -129,4 +132,52 @@ class WarehouseInventoryServiceAdapterTest {
         movement.getInventoryMovements().forEach(m ->
                 assertNotNull(m.getWarehouseInventory(),
                         "Each movement should reference back to its warehouse inventory"));
-    }}
+    }
+
+    @Test
+    void shouldListLowStockInventoryByWarehouseId() {
+        // Given
+        WarehouseInventory lowStockInventory =
+                WarehouseInventory.create(
+                        warehouseEntityMapper.toDomain(persistedWarehouse),
+                        productEntityMapper.toDomain(persistedProduct),
+                        5);
+
+        ProductEntity normalStockProduct =
+                productTestDataFactory.createProduct();
+
+        WarehouseInventory normalStockInventory =
+                WarehouseInventory.create(
+                        warehouseEntityMapper.toDomain(persistedWarehouse),
+                        productEntityMapper.toDomain(normalStockProduct),
+                        50);
+
+        warehouseInventoryServiceAdapter.save(lowStockInventory);
+        warehouseInventoryServiceAdapter.save(normalStockInventory);
+
+        int threshold = 10;
+
+        // When
+        List<LowStockReportData.Item> result =
+                warehouseInventoryServiceAdapter
+                        .listLowStockInventoryByWarehouseId(
+                                persistedWarehouse.getId(),
+                                threshold);
+
+        // Then
+        assertEquals(1, result.size());
+
+        LowStockReportData.Item item = result.getFirst();
+
+        assertEquals(persistedProduct.getId(), item.productId());
+        assertEquals(5, item.stock());
+        assertEquals(persistedProduct.getSku(), item.sku());
+        assertEquals(persistedProduct.getName(), item.name());
+        assertEquals(persistedProduct.getCategory().getName(), item.category());
+    }
+}
+
+
+
+
+

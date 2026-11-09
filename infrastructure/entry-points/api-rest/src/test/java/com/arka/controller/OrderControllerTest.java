@@ -7,9 +7,11 @@ import com.arka.exceptions.UnauthorizedException;
 import com.arka.mappers.OrderRestMapperImpl;
 import com.arka.notification.SendOrderStatusUpdatedEmailUseCase;
 import com.arka.order.CreateOrderUseCase;
+import com.arka.order.FindOrdersByEmailUseCase;
 import com.arka.order.ModifyOrderUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
 import com.arka.order.dto.CreateOrderOut;
+import com.arka.order.dto.OrderOut;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.product.dto.ProductSummaryOut;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,8 +35,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = OrderController.class)
@@ -63,6 +64,9 @@ class OrderControllerTest {
 
     @MockitoBean
     private SendOrderStatusUpdatedEmailUseCase notifyChangeStatusUsecase;
+
+    @MockitoBean
+    private FindOrdersByEmailUseCase findOrdersByEmailUseCase;
 
     private final String OWNER_EMAIL = "john.wick@example.com";
 
@@ -321,6 +325,33 @@ class OrderControllerTest {
 
         // Verifies status update and email notification were both called
         verify(updateOrderStatusUsecase).execute(eq(orderId), eq(OrderStatus.AUTHORIZED));
+    }
+
+    @Test
+    void shouldReturnOrdersForAuthenticatedUserAndReturn200() throws Exception {
+        // given
+        OrderOut mockOrderOut = new OrderOut(
+                1L,
+                "ORD-2026-001",
+                OrderStatus.PENDING,
+                new BigDecimal("75.00"),
+                "Test notes",
+                Instant.now(),
+                Instant.now()
+        );
+
+        when(findOrdersByEmailUseCase.execute(OWNER_EMAIL)).thenReturn(List.of(mockOrderOut));
+
+        // when & then
+        mockMvc.perform(get("/api/v1/orders/me/orders")
+                        .with(jwt().jwt(builder -> builder.subject(OWNER_EMAIL))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", org.hamcrest.Matchers.hasSize(1)))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].number").value("ORD-2026-001"))
+                .andExpect(jsonPath("$[0].status").value("PENDING"));
+
+        verify(findOrdersByEmailUseCase).execute(OWNER_EMAIL);
     }
 }
 

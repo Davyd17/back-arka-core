@@ -2,6 +2,7 @@ package com.arka.order.mapper;
 
 import com.arka.entities.order.Order;
 import com.arka.order.dto.CreateOrderOut;
+import com.arka.order.dto.OrderOut;
 import com.arka.order.dto.OrderSummaryOut;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.product.mapper.ProductMapper;
@@ -18,4 +19,6 @@ public interface OrderMapper {
 
     @Mapping(target = "contact.companyName", source = "contact.company.name")
     UpdateOrderOut toUpdateDTO(Order domain);
+
+    OrderOut toFindDTO(Order domain);
 }

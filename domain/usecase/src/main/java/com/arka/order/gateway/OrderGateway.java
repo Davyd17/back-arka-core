@@ -4,6 +4,7 @@ import com.arka.entities.order.Order;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 public interface OrderGateway {
@@ -13,4 +14,6 @@ public interface OrderGateway {
     Optional<Order> findById(Long id);
 
     BigDecimal getTotalRevenueFromDateRange(Instant since, Instant until);
+
+    List<Order> findByContact(String contactEmail);
 }

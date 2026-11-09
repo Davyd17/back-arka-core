@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,5 +39,12 @@ public class OrderServiceAdapter implements OrderGateway {
     @Override
     public BigDecimal getTotalRevenueFromDateRange(Instant since, Instant until) {
         return repository.getTotalRevenueFromDateRange(since, until);
+    }
+
+    @Override
+    public List<Order> findByContact(String email) {
+        return repository.findOrdersByContactEmail(email).stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }

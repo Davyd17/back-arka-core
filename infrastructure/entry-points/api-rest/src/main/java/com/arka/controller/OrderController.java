@@ -5,12 +5,15 @@ import com.arka.exceptions.ErrorResponse;
 import com.arka.mappers.OrderRestMapper;
 import com.arka.notification.SendOrderStatusUpdatedEmailUseCase;
 import com.arka.order.CreateOrderUseCase;
+import com.arka.order.FindOrdersByEmailUseCase;
 import com.arka.order.UpdateOrderStatusUseCase;
 import com.arka.order.dto.CreateOrderOut;
+import com.arka.order.dto.OrderOut;
 import com.arka.order.dto.UpdateOrderOut;
 import com.arka.request.CreateOrderRequest;
 import com.arka.request.UpdateOrderRequest;
 import com.arka.request.UpdateOrderStatusRequest;
+import com.arka.response.OrderResponse;
 import com.arka.response.update.UpdateOrderResponse;
 import com.arka.response.save.CreateOrderResponse;
 import com.arka.order.ModifyOrderUseCase;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/orders")
@@ -41,7 +45,7 @@ public class OrderController {
     private final CreateOrderUseCase createOrderUseCase;
     private final ModifyOrderUseCase modifyOrderUseCase;
     private final UpdateOrderStatusUseCase updateOrderStatusUsecase;
-    private final SendOrderStatusUpdatedEmailUseCase notifyChangeStatusUsecase;
+    private final FindOrdersByEmailUseCase findOrdersByEmailUseCase;
 
     private final OrderRestMapper mapper;
 
@@ -128,5 +132,24 @@ public class OrderController {
         return ResponseEntity.ok(mapper.toResponse(updatedOrder));
     }
 
+    @Operation(
+            summary = "Get orders for authenticated user",
+            description = "Retrieves all orders associated with the authenticated user's email address"
+    )
+    @CommonApiResponses
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Orders retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = OrderResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Contact not found for email",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/me/orders")
+    public ResponseEntity<List<OrderResponse>> getOrderByEmail(Authentication authentication) {
+
+        return ResponseEntity.ok(
+                findOrdersByEmailUseCase.execute(authentication.getName()).stream()
+                        .map(mapper::toResponse)
+                        .toList());
+    }
 
 }

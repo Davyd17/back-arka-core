@@ -65,8 +65,6 @@ cloud-provider:
       bucket-name: ${BUCKET_NAME}
       templates:
         html-template-order-state-email: ${S3_KEY_HTML_TEMPLATE_ORDER_STATE_EMAIL}
-    ses:
-      sender: ${SES_SENDER_EMAIL}
     sqs:
       order-status-notify-queue: ${ORDER_STATUS_NOTIFY_QUEUE}
       sales-report-queue: ${SALES_REPORT_QUEUE}

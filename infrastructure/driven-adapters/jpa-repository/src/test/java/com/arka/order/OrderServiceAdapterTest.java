@@ -28,6 +28,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,4 +115,42 @@ class OrderServiceAdapterTest {
         foundEntity.getItems().forEach(item ->
                 assertNotNull(item.getOrder(),
                         "Each order item should reference back to its order"));
-    }}
+    }
+
+    @Test
+    void shouldFindOrdersByContactEmail() {
+        // given
+        ContactEntity contactEntity = contactTestDataFactory.createContact();
+        Contact domainContact = contactEntityMapper.toDomain(contactEntity);
+
+        Order order1 = Order.create("First Order", OrderType.SALES, domainContact);
+        Order order2 = Order.create("Second Order", OrderType.SALES, domainContact);
+
+        orderServiceAdapter.save(order1);
+        orderServiceAdapter.save(order2);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        // when
+        List<Order> foundOrders = orderServiceAdapter.findByContact(contactEntity.getEmail());
+
+        // then
+        assertEquals(2, foundOrders.size());
+        assertTrue(foundOrders.stream()
+                .allMatch(order -> order.getContact().getEmail().equals(contactEntity.getEmail())));
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoOrdersExistForContactEmail() {
+        // given
+        String nonExistentEmail = "nonexistent@arka.com";
+
+        // when
+        List<Order> foundOrders = orderServiceAdapter.findByContact(nonExistentEmail);
+
+        // then
+        assertTrue(foundOrders.isEmpty());
+    }
+
+}

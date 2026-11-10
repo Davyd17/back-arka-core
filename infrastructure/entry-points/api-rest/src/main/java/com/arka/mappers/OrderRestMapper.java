@@ -4,6 +4,7 @@ import com.arka.notification.dto.OrderStatusEmailCommand;
 import com.arka.order.dto.*;
 import com.arka.request.CreateOrderRequest;
 import com.arka.request.UpdateOrderRequest;
+import com.arka.response.OrderResponse;
 import com.arka.response.save.CreateOrderResponse;
 import com.arka.response.update.UpdateOrderResponse;
 import org.mapstruct.Mapper;
@@ -20,6 +21,5 @@ public interface OrderRestMapper {
 
     UpdateOrderResponse toResponse(UpdateOrderOut output);
 
-    @Mapping(target = "companyName", source = "contact.companyName")
-    OrderStatusEmailCommand toEmailData(UpdateOrderOut output);
+    OrderResponse toResponse(OrderOut output);
 }
